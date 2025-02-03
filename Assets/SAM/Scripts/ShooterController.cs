@@ -44,12 +44,11 @@ public class ShooterController : MonoBehaviour
         //När du håller in aim
         if (input.aim && _typeRacer.readyToShoot)
         {
-            //if (input.shoot)
-            //{
-            //    Vector3 aimDir = (mouseWorldPosition - bulletSpawnPosition.position).normalized;
-            //    Instantiate(bulletPrefab, bulletSpawnPosition.position, Quaternion.LookRotation(aimDir, Vector3.up));
-            //    input.shoot = false;
-            //}
+            if (input.shoot)
+            {
+                Vector3 aimDir = (debugTransform.position - bulletSpawnPosition.position).normalized;
+                ShootBullet(aimDir);
+            }
 
 
             aimVirtualCamera.gameObject.SetActive(true);
@@ -70,16 +69,23 @@ public class ShooterController : MonoBehaviour
             crossHair.gameObject.SetActive(false);
         }
 
-        if (input.shoot)
-        {
-            Vector3 aimDir = (mouseWorldPosition - bulletSpawnPosition.position).normalized;
-            Instantiate(bulletPrefab, bulletSpawnPosition.position, Quaternion.LookRotation(aimDir, Vector3.up));
-            //Instantiate(bulletPrefab, bulletSpawnPosition.position, Quaternion.identity);
-            input.shoot = false;
-        }
 
 
 
+
+    }
+    private void ShootBullet(Vector3 aimDir)
+    {
+        //GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPosition.position, Quaternion.identity);
+        //Rigidbody rb = bullet.GetComponent<Rigidbody>();
+
+        //if (rb != null)
+        //{
+        //    rb.AddForce(aimDir * 200, ForceMode.Impulse);
+        //}
+        //Vector3 aimDir = (mouseWorldPosition - bulletSpawnPosition.position).normalized;
+        Instantiate(bulletPrefab, bulletSpawnPosition.position, Quaternion.LookRotation(aimDir, Vector3.up));
+        input.shoot = false;
     }
 
 }
