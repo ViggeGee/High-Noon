@@ -9,11 +9,11 @@ public class PlayerCamera : MonoBehaviour
     private StarterAssetsInputs _input;
     private const float _threshold = 0.01f;
     public bool LockCameraPosition = false;
+    public float sensitivity = 1f;
 
     private float _cinemachineTargetYaw;
     private float _cinemachineTargetPitch;
 
-    [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
     public GameObject CinemachineCameraTarget;
 
     [Tooltip("How far in degrees can you move the camera up")]
@@ -59,8 +59,8 @@ public class PlayerCamera : MonoBehaviour
             //Don't multiply mouse input by Time.deltaTime;
             float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-            _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
-            _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
+            _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier * sensitivity;
+            _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier * sensitivity;
         }
 
         // clamp our rotations so our values are limited 360 degrees
@@ -77,5 +77,10 @@ public class PlayerCamera : MonoBehaviour
         if (lfAngle < -360f) lfAngle += 360f;
         if (lfAngle > 360f) lfAngle -= 360f;
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
+    }
+
+    public void SetSensitivity(float newSensitivity)
+    {
+        sensitivity = newSensitivity;
     }
 }
