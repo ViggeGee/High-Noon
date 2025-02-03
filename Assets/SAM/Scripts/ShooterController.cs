@@ -5,8 +5,12 @@ using UnityEngine.UI;
 public class ShooterController : MonoBehaviour
 {
     [SerializeField] private GameObject typeRacerObject;
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Transform bulletSpawnPosition;
+
     private typeRacer _typeRacer;
     public Image crossHair;
+
 
     [SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
     [SerializeField] private float normalSensitivity;
@@ -40,6 +44,14 @@ public class ShooterController : MonoBehaviour
         //När du håller in aim
         if (input.aim && _typeRacer.readyToShoot)
         {
+            //if (input.shoot)
+            //{
+            //    Vector3 aimDir = (mouseWorldPosition - bulletSpawnPosition.position).normalized;
+            //    Instantiate(bulletPrefab, bulletSpawnPosition.position, Quaternion.LookRotation(aimDir, Vector3.up));
+            //    input.shoot = false;
+            //}
+
+
             aimVirtualCamera.gameObject.SetActive(true);
             crossHair.gameObject.SetActive(true);
             playerCamera.SetSensitivity(aimSensitivity);
@@ -58,8 +70,16 @@ public class ShooterController : MonoBehaviour
             crossHair.gameObject.SetActive(false);
         }
 
+        if (input.shoot)
+        {
+            Vector3 aimDir = (mouseWorldPosition - bulletSpawnPosition.position).normalized;
+            Instantiate(bulletPrefab, bulletSpawnPosition.position, Quaternion.LookRotation(aimDir, Vector3.up));
+            //Instantiate(bulletPrefab, bulletSpawnPosition.position, Quaternion.identity);
+            input.shoot = false;
+        }
 
-        
+
+
     }
 
 }
