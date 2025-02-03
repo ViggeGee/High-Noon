@@ -23,11 +23,11 @@ public class typeRacer : MonoBehaviour
 
     public Transform spawnPoint; // Set a spawn point in the scene
 
-    public TextMeshProUGUI canvasText;
+    //public TextMeshProUGUI canvasText;
 
     int completedWords = 0;
     string playerTyped;
-    bool gameStarted = false;
+    //bool gameStarted = false;
     public bool readyToShoot = false;
 
     public AudioSource startGameSound;
@@ -35,7 +35,7 @@ public class typeRacer : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(CountDown());
+        //StartCoroutine(CountDown());
         LoadWordsFromFile();
         // Populate dictionary (Assumes prefab names are "A", "B", "C", etc.)
         foreach (Sprite texture in letterextures)
@@ -47,43 +47,33 @@ public class typeRacer : MonoBehaviour
 
     }
 
-    IEnumerator CountDown()
-    {
-        yield return StartCoroutine(FadeText("3"));
-        yield return StartCoroutine(FadeText("2"));
-        yield return StartCoroutine(FadeText("1"));
-        yield return StartCoroutine(FadeText("DRAW"));
+    
 
-        canvasText.text = "";
-        startGameSound.Play();
-        gameStarted = true;
-    }
+    //IEnumerator FadeText(string newText)
+    //{
+    //    // Scale down
+    //    for (float t = 0; t < 0.2f; t += Time.deltaTime)
+    //    {
+    //        float scale = Mathf.Lerp(1, 0, t / 0.2f);
+    //        canvasText.transform.localScale = new Vector3(scale, scale, scale);
+    //        yield return null;
+    //    }
+    //    canvasText.transform.localScale = Vector3.zero;
 
-    IEnumerator FadeText(string newText)
-    {
-        // Scale down
-        for (float t = 0; t < 0.2f; t += Time.deltaTime)
-        {
-            float scale = Mathf.Lerp(1, 0, t / 0.2f);
-            canvasText.transform.localScale = new Vector3(scale, scale, scale);
-            yield return null;
-        }
-        canvasText.transform.localScale = Vector3.zero;
+    //    // Change the text
+    //    canvasText.text = newText;
 
-        // Change the text
-        canvasText.text = newText;
+    //    // Scale back up
+    //    for (float t = 0; t < 0.3f; t += Time.deltaTime)
+    //    {
+    //        float scale = Mathf.Lerp(0, 1, t / 0.3f);
+    //        canvasText.transform.localScale = new Vector3(scale, scale, scale);
+    //        yield return null;
+    //    }
+    //    canvasText.transform.localScale = Vector3.one;
 
-        // Scale back up
-        for (float t = 0; t < 0.3f; t += Time.deltaTime)
-        {
-            float scale = Mathf.Lerp(0, 1, t / 0.3f);
-            canvasText.transform.localScale = new Vector3(scale, scale, scale);
-            yield return null;
-        }
-        canvasText.transform.localScale = Vector3.one;
-
-        yield return new WaitForSeconds(1.5f); // Stay visible before next fade
-    }
+    //    yield return new WaitForSeconds(1.5f); // Stay visible before next fade
+    //}
 
     public void PickRandomWord()
     {
@@ -125,7 +115,7 @@ public class typeRacer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(gameStarted)
+        //if(gameStarted)
         playerInput.Select();
 
         // Check if player finished the word
