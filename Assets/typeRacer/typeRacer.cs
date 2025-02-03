@@ -33,6 +33,8 @@ public class typeRacer : MonoBehaviour
     public AudioSource startGameSound;
     public AudioSource finnishRaceSound;
 
+    [HideInInspector] public int nrFailLetters;
+
     void Start()
     {
         StartCoroutine(CountDown());
