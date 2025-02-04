@@ -62,7 +62,7 @@ public class GameManager : NetworkBehaviour
 
     private void Start()
     {
-                //StartCoroutine(CountDown());
+        StartCoroutine(CountDown());
         countdownStarted.OnValueChanged += (oldValue, newValue) =>
         {
             if (newValue)

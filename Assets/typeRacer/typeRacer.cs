@@ -22,6 +22,8 @@ public class typeRacer : MonoBehaviour
     private Dictionary<char, Sprite> letterDictionary = new Dictionary<char, Sprite>();
     private List<string> wordsList = new List<string>();
 
+    public GameObject[] cinematicCameras;
+
     public Transform spawnPoint; // Set a spawn point in the scene
 
     //public TextMeshProUGUI canvasText;
@@ -47,10 +49,12 @@ public class typeRacer : MonoBehaviour
             letterDictionary[letter] = texture;
         }
         PickRandomWord();
+        StartCoroutine(PlayCinematic());
+
 
     }
 
-    
+
 
     //IEnumerator FadeText(string newText)
     //{
@@ -120,6 +124,7 @@ public class typeRacer : MonoBehaviour
     {
         if (!GameManager.bHasGameStarted || !GameManager.Instance.bIsPlayer1Ready || GameManager.Instance.bIsPlayer2Ready) return;
 
+
         playerInput.Select();
 
         // Check if player finished the word
@@ -184,11 +189,33 @@ public class typeRacer : MonoBehaviour
                 letterImage.color = Color.white; // Reset color for remaining letters
             }
         }
-
-        
-    
     }
+    public IEnumerator PlayCinematic()
+    {
+        while (!readyToShoot) // Keep looping until readyToShoot is true
+        {
+            for (int i = 0; i < cinematicCameras.Length; i++)
+            {
+                if (readyToShoot) break; // Stop early if readyToShoot is true
 
- 
+                // Activate the current camera and deactivate all others
+                for (int j = 0; j < cinematicCameras.Length; j++)
+                {
+                    if (cinematicCameras[j] != null)
+                    cinematicCameras[j].SetActive(j == i);
+                }
 
+                yield return new WaitForSeconds(2f); // Wait 1 second before switching
+            }
+        }
+
+        // Deactivate all cameras once readyToShoot is true
+        foreach (GameObject cam in cinematicCameras)
+        {
+            cam.SetActive(false);
+        }
+        yield return null;
+
+    }
 }
+
