@@ -62,12 +62,14 @@ public class GameManager : NetworkBehaviour
 
     private void Start()
     {
+                StartCoroutine(CountDown());
         countdownStarted.OnValueChanged += (oldValue, newValue) =>
         {
             if (newValue)
             {
-                // Once countdown starts, trigger the countdown function
                 StartCoroutine(CountDown());
+
+                // Once countdown starts, trigger the countdown function
             }
         };
 
