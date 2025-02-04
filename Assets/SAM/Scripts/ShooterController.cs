@@ -16,7 +16,7 @@ public class ShooterController : MonoBehaviour
     [SerializeField] private float normalSensitivity;
     [SerializeField] private float aimSensitivity;
     [SerializeField] private LayerMask aimColliderLayerMask = new LayerMask();
-    [SerializeField] private Transform debugTransform;
+    //[SerializeField] private Transform debugTransform;
 
     private float lastBulletShot;
     private float fireRate = 0.5f;
@@ -42,7 +42,7 @@ public class ShooterController : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
         if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask))
         {
-            debugTransform.position = raycastHit.point;
+            //debugTransform.position = raycastHit.point;
             mouseWorldPosition = raycastHit.point;
         }
 
@@ -90,7 +90,7 @@ public class ShooterController : MonoBehaviour
 
         if (input.shoot && _typeRacer.readyToShoot)
         {
-            Vector3 aimDir = (debugTransform.position - bulletSpawnPosition.position).normalized;
+            Vector3 aimDir = (mouseWorldPosition - bulletSpawnPosition.position).normalized;
             if (Time.time > lastBulletShot + fireRate)
             {
                 lastBulletShot = Time.time;

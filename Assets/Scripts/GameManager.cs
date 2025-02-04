@@ -148,6 +148,7 @@ public class GameManager : NetworkBehaviour
         countDownText.text = "";
         //startGameSound.Play();
         bHasGameStarted = true;
+        Cursor.lockState = CursorLockMode.Locked;
         if(OwnerClientId == 0)
         {
             bIsPlayer1Ready = true;
