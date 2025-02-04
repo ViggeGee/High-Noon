@@ -23,6 +23,7 @@ public class typeRacer : MonoBehaviour
     private List<string> wordsList = new List<string>();
 
     public GameObject[] cinematicCameras;
+    public GameObject cinematicCanvas;
 
     public Transform spawnPoint; // Set a spawn point in the scene
 
@@ -87,19 +88,49 @@ public class typeRacer : MonoBehaviour
         ClearWords();
 
         randomWord = wordsList[Random.Range(0, wordsList.Count)];
+        float letterSpacing = 60f;  // Spacing between letters
+        float spaceSpacing = letterSpacing * 1.2f; // Double spacing for spaces between words
+
+        List<float> letterPositions = new List<float>();
+        float totalWidth = 0f;
+
+        // Calculate total width of the sentence
+        for (int i = 0; i < randomWord.Length; i++)
+        {
+            if (randomWord[i] == ' ')
+            {
+                totalWidth += spaceSpacing;
+            }
+            else
+            {
+                totalWidth += letterSpacing;
+            }
+            letterPositions.Add(totalWidth);
+        }
+
+        // Center the sentence on the X-axis
+        float startX = spawnPoint.position.x - (totalWidth / 2f);
 
         for (int i = 0; i < randomWord.Length; i++)
         {
-            GameObject newLetter = Instantiate(letterPrefab, new Vector3(spawnPoint.position.x + (i * 80), spawnPoint.position.y, spawnPoint.position.z), Quaternion.identity, canvas.transform);
+            if (randomWord[i] == ' ')
+            {
+                continue; // Skip rendering actual space characters
+            }
 
-            char letter = randomWord[i];
+            Vector3 letterPosition = new Vector3(startX + letterPositions[i], spawnPoint.position.y, spawnPoint.position.z);
+            GameObject newLetter = Instantiate(letterPrefab, letterPosition, Quaternion.identity, canvas.transform);
 
-            newLetter.GetComponent<Image>().sprite = letterDictionary[letter];
+            char letter = char.ToLower(randomWord[i]); // Ensure lowercase lookup
+            if (letterDictionary.ContainsKey(letter))
+            {
+                newLetter.GetComponent<Image>().sprite = letterDictionary[letter];
+            }
 
             PrefabLettersInWord.Add(newLetter);
             charLettersInWord.Add(letter);
-
         }
+
         playerInput.onValueChanged.AddListener(delegate { CheckInput(); });
     }
 
@@ -205,7 +236,7 @@ public class typeRacer : MonoBehaviour
                     cinematicCameras[j].SetActive(j == i);
                 }
 
-                yield return new WaitForSeconds(2f); // Wait 1 second before switching
+                yield return new WaitForSeconds(4f); // Wait 1 second before switching
             }
         }
 
@@ -214,6 +245,7 @@ public class typeRacer : MonoBehaviour
         {
             cam.SetActive(false);
         }
+        cinematicCanvas.SetActive(false);
         yield return null;
 
     }

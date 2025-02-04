@@ -1,198 +1,205 @@
-hat
-boots
-lasso
-spur
-chaps
-saddle
-bridle
-rope
-ranch
-horse
-cattle
-steer
-bronco
-mustang
-wrangler
-outlaw
-sheriff
-deputy
-posse
-bandit
-gunslinger
-sixgun
-rifle
-revolver
-holster
-saloon
-bartender
-whiskey
-spittoon
-poker
-rodeo
-cattleman
-cowboy
-cowgirl
-rustler
-desperado
-campfire
-trail
-wagon
-stagecoach
-herd
-branding
-roundup
-stockyard
-bull
-heifer
-grazing
-pasture
-rancher
-foreman
-corral
-paddock
-saddlebag
-hitching
-feedlot
-haybale
-fence
-barn
-tack
-stirrup
-livestock
-prairie
-plains
-cattle drive
-broncbuster
-gunsmoke
-quickdraw
-bandana
-coyote
-buffalo
-bounty
-marshal
-horseshoe
-blacksmith
-buckaroo
-frontier
-goldrush
-panhandle
-stampede
-dusty
-railroad
-homestead
-cowpoke
-longhorn
-desert
-wildwest
-spurs
-peacemaker
-roundup
-trailboss
-silverado
-colt
-winchester
-fandango
-sarsaparilla
-maverick
-rodeoclown
-roping
-gunfight
-sundown
-buckskin
-hitchingpost
-rawhide
-tumbleweed
-outpost
-trainrobber
-jailhouse
-mustang
-sodbuster
-bucking
-goldpan
-chuckwagon
-wheellock
-sharpshooter
-barbedwire
-sodbuster
-stetson
-longride
-duststorm
-yonder
-campstove
-homesteader
-range
-drygulch
-sarsparilla
-gunsight
-highnoon
-stampeder
-coffeepot
-canyon
-firingpin
-bootspur
-rivercrossing
-shovel
-leadrope
-calico
-warbonnet
-brandiron
-gallop
-horselore
-silvermine
-trailride
-shanty
-ironhorse
-buffalohide
-deadringer
-saloonkeeper
-rattlesnake
-stagehand
-knapsack
-shootout
-rawhider
-chuckwagon
-hardtack
-snakeoil
-jangle
-spurtrack
-rustproof
-bunkhouse
-buckboard
-horsewhip
-longride
-spurleather
-outhouse
-frontiersman
-rangeland
-wheatfield
-outfit
-posseman
-leatherwork
-barrelrace
-lassorope
-gunbelt
-sidearm
-sundown
-warpath
-oldwest
-wildhorse
-homesteader
-highwayman
-rattler
-sagebrush
-broncorider
-cowtrail
-cowpony
-quicksand
-duel
-tackroom
-coyoterun
-buckinbronco
-stampeder
-wranglers
-deadeye
-broncbuster
-cattleranch
-gunsmoke
-tinbadge
-longhorns
+Riding into the sunset
+
+Draw your six-shooter
+
+The sheriff is coming
+
+Wanted: Dead or Alive
+
+Gold rush in Texas
+
+Spurs jingle with pride
+
+High noon showdown time
+
+Whiskey at the saloon
+
+Lasso that wild stallion
+
+Tumbleweeds roll by slow
+
+Dust settles on boots
+
+The outlaw rides fast
+
+Saddle up, cowboy
+
+Giddy up, we ride
+
+Campfire under the stars
+
+The ranch needs fixing
+
+Lost in the badlands
+
+Gunpowder in the air
+
+A lone rider watches
+
+Card game turns deadly
+
+Boots covered in dust
+
+Bar fight getting rough
+
+The cattle are restless
+
+Desert heat beats down
+
+The bandits are near
+
+Rope that runaway steer
+
+The train is coming
+
+Storm rolling through town
+
+The law rides tonight
+
+A new sheriff arrives
+
+Coyotes howling at dawn
+
+Whiskey burns the throat
+
+The posse rides fast
+
+Smoke from the pistol
+
+A hat tipped low
+
+Horse gallops through town
+
+Money for the bounty
+
+Poker hand turns deadly
+
+The bell tolls noon
+
+A rattlesnake hisses loud
+
+Rifles line the ridge
+
+The frontier is harsh
+
+Moonlight on the prairie
+
+Rusted spurs on boots
+
+Gunfight in the saloon
+
+Thunder echoes through hills
+
+Dust storm approaches fast
+
+The blacksmith hammers steel
+
+The river runs dry
+
+The gang wants revenge
+
+Cattle rustlers in sight
+
+The desert takes all
+
+Saddle leather creaks slow
+
+A horse drinks deep
+
+A cowboy’s last ride
+
+The range calls again
+
+Steady hands, steady aim
+
+The bartender pours slow
+
+Hoofbeats shake the ground
+
+The canyon hides secrets
+
+Lonely trails stretch far
+
+A boot print in mud
+
+The wind whispers low
+
+A duel at dawn
+
+Tied up in the barn
+
+The lonesome rider waits
+
+A feather in the hat
+
+A sharp knife glistens
+
+The fire crackles loud
+
+Whispers in the dark
+
+The train whistle blows
+
+The hat stays on
+
+Blood stains the dust
+
+Ride hard, ride fast
+
+Keep your gun loaded
+
+The last bullet counts
+
+Pistols spin with ease
+
+The prairie dog watches
+
+A cowboy never quits
+
+The mustang runs free
+
+The cattle keep moving
+
+The sheriff don’t blink
+
+A bandana covers dust
+
+A stranger in town
+
+The well runs dry
+
+Boots echo on wood
+
+The barn door creaks
+
+The gambler never folds
+
+Cigar smoke drifts high
+
+A shot breaks silence
+
+The lone wolf waits
+
+The whiskey runs out
+
+A rattler in the grass
+
+The dust won’t settle
+
+A hat blown away
+
+Gunslinger walks away
+
+The outlaw’s last breath
+
+Riding under the stars
+
+The fire glows warm
+
+Rain falls on leather
+
+A deal made quick
+
+The colt still smokes
+
+The canyon echoes loud
