@@ -5074,11 +5074,13 @@ GameObject:
   m_Component:
   - component: {fileID: 6349648981048390837}
   - component: {fileID: 6183986622529525490}
+  - component: {fileID: 5694141872316647821}
   - component: {fileID: 69411315451178830}
   - component: {fileID: 1923011903233108162}
   - component: {fileID: 1983205938798143786}
   - component: {fileID: 6881845101557174818}
   - component: {fileID: 3511055363151065604}
+  - component: {fileID: 5803891180136301418}
   m_Layer: 8
   m_Name: Player1
   m_TagString: Untagged
@@ -5147,6 +5149,31 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5694141872316647821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7300726634220589030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 0
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &69411315451178830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5159,6 +5186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b0b2a6d1dfab524fb6b73387700da29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   typeRacerObject: {fileID: 0}
   bulletPrefab: {fileID: 6863857337172796869, guid: 9fc5deab5fef94d41b92a7112049f302, type: 3}
   bulletSpawnPosition: {fileID: 5082999282803743758}
@@ -5169,7 +5197,6 @@ MonoBehaviour:
   aimColliderLayerMask:
     serializedVersion: 2
     m_Bits: 375
-  debugTransform: {fileID: 0}
 --- !u!114 &1923011903233108162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5262,6 +5289,21 @@ CapsuleCollider:
   m_Height: 1.78
   m_Direction: 1
   m_Center: {x: 0, y: 0.94, z: -0.04}
+--- !u!114 &5803891180136301418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7300726634220589030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 6183986622529525490}
 --- !u!1 &7477315558716214687
 GameObject:
   m_ObjectHideFlags: 0

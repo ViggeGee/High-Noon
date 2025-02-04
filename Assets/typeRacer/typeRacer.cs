@@ -32,7 +32,7 @@ public class typeRacer : MonoBehaviour
     int completedWords = 0;
     string playerTyped;
     //bool gameStarted = false;
-    public bool readyToShoot = false;
+    //public bool readyToShoot = false;
 
     public AudioSource startGameSound;
     public AudioSource finnishRaceSound;
@@ -88,8 +88,8 @@ public class typeRacer : MonoBehaviour
         ClearWords();
 
         randomWord = wordsList[Random.Range(0, wordsList.Count)];
-        float letterSpacing = 60f;  // Spacing between letters
-        float spaceSpacing = letterSpacing * 1.2f; // Double spacing for spaces between words
+        float letterSpacing = 30f;  // Spacing between letters
+        float spaceSpacing = letterSpacing * 1.1f; // Double spacing for spaces between words
 
         List<float> letterPositions = new List<float>();
         float totalWidth = 0f;
@@ -149,29 +149,37 @@ public class typeRacer : MonoBehaviour
             Debug.LogError("Words file not found!");
         }
     }
-
+    private bool hasDeactivatedCinematic = false;
     // Update is called once per frame
     void Update()
     {
         if (!GameManager.bHasGameStarted || !GameManager.Instance.bIsPlayer1Ready || GameManager.Instance.bIsPlayer2Ready) return;
 
+        if(GameManager.Instance.readyToShoot && !hasDeactivatedCinematic)
+        {
+            StopCoroutine(PlayCinematic());
+            Cursor.lockState = CursorLockMode.Locked;
+            foreach (GameObject cam in cinematicCameras)
+            {
+                cam.SetActive(false);
+            }
+            cinematicCanvas.SetActive(false);
+            hasDeactivatedCinematic = true;
+        }
 
         playerInput.Select();
 
         // Check if player finished the word
-        if (playerTyped == randomWord.ToUpper())
+        if (playerTyped.Replace(" ", "") == randomWord.ToUpper().Replace(" ", ""))
         {
             Debug.Log("Correct! Word completed: " + randomWord);
             playerInput.text = ""; // Clear input for next word
             completedWords++;
-            if (completedWords <= 2)
-            {
-                PickRandomWord();
-            }
-            if(completedWords >= 3)
+           
+            if(completedWords >= 1)
             {
                 finnishRaceSound.Play();
-                readyToShoot = true;
+                GameManager.Instance.readyToShoot = true;
                 ClearWords();
             }
         }
@@ -223,11 +231,11 @@ public class typeRacer : MonoBehaviour
     }
     public IEnumerator PlayCinematic()
     {
-        while (!readyToShoot) // Keep looping until readyToShoot is true
+        while (!GameManager.Instance.readyToShoot) // Keep looping until readyToShoot is true
         {
             for (int i = 0; i < cinematicCameras.Length; i++)
             {
-                if (readyToShoot) break; // Stop early if readyToShoot is true
+                if (GameManager.Instance.readyToShoot) break; // Stop early if readyToShoot is true
 
                 // Activate the current camera and deactivate all others
                 for (int j = 0; j < cinematicCameras.Length; j++)
@@ -241,11 +249,7 @@ public class typeRacer : MonoBehaviour
         }
 
         // Deactivate all cameras once readyToShoot is true
-        foreach (GameObject cam in cinematicCameras)
-        {
-            cam.SetActive(false);
-        }
-        cinematicCanvas.SetActive(false);
+        
         yield return null;
 
     }

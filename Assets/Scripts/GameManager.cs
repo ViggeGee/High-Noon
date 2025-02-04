@@ -26,6 +26,8 @@ public class GameManager : NetworkBehaviour
 
     private bool challengeSelected = false;
 
+    public bool readyToShoot { get; set; } = false;
+
     #region UI variables
 
     [SerializeField] private TextMeshProUGUI countDownText;
@@ -79,7 +81,7 @@ public class GameManager : NetworkBehaviour
             NetworkManager.Singleton.OnClientDisconnectCallback += Singleton_OnClientDisconnect;
         }
     }
-    private void OnDestroy()
+    public override void OnDestroy()
     {
         NetworkManager.Singleton.OnClientConnectedCallback -= Singleton_OnClientConnect;
         NetworkManager.Singleton.OnClientDisconnectCallback -= Singleton_OnClientDisconnect;
@@ -148,7 +150,7 @@ public class GameManager : NetworkBehaviour
         countDownText.text = "";
         //startGameSound.Play();
         bHasGameStarted = true;
-        Cursor.lockState = CursorLockMode.Locked;
+        
         if(OwnerClientId == 0)
         {
             bIsPlayer1Ready = true;

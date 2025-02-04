@@ -88,7 +88,7 @@ public class ShooterController : MonoBehaviour
         transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
      
 
-        if (input.shoot && _typeRacer.readyToShoot)
+        if (input.shoot && GameManager.Instance.readyToShoot)
         {
             Vector3 aimDir = (mouseWorldPosition - bulletSpawnPosition.position).normalized;
             if (Time.time > lastBulletShot + fireRate)
