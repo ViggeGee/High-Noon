@@ -4,7 +4,8 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - TypeRacer
+  - CinemachineTarget
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -12,9 +13,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Ground
+  - Ragdoll
+  - Player
   - 
   - 
   - 

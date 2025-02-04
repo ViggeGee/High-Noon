@@ -34,6 +34,8 @@ public class typeRacer : MonoBehaviour
     public AudioSource startGameSound;
     public AudioSource finnishRaceSound;
 
+    [HideInInspector] public int nrFailLetters;
+
     void Start()
     {
         //StartCoroutine(CountDown());
@@ -173,6 +175,8 @@ public class typeRacer : MonoBehaviour
                 else if (char.ToLower(playerTyped[i]) != charLettersInWord[i])
                 {
                     letterImage.color = Color.red; // Incorrect letter
+                    nrFailLetters++;
+                    
                 }
             }
             else
