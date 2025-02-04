@@ -18,6 +18,9 @@ public class ShooterController : MonoBehaviour
     [SerializeField] private LayerMask aimColliderLayerMask = new LayerMask();
     [SerializeField] private Transform debugTransform;
 
+    private float lastBulletShot;
+    private float fireRate = 0.5f;
+
 
     private StarterAssetsInputs input;
     private PlayerCamera playerCamera;
@@ -31,6 +34,8 @@ public class ShooterController : MonoBehaviour
     }
     private void Update()
     {
+        float crossHairSize = 50 + _typeRacer.nrFailLetters * 10f;
+        crossHair.rectTransform.sizeDelta = new Vector2(crossHairSize, crossHairSize);
         Vector3 mouseWorldPosition = Vector3.zero;
 
         Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
@@ -42,34 +47,58 @@ public class ShooterController : MonoBehaviour
         }
 
         //När du håller in aim
-        if (input.aim && _typeRacer.readyToShoot)
+        //if (input.aim && _typeRacer.readyToShoot)
+        //{
+        //    if (input.shoot)
+        //    {
+        //        Vector3 aimDir = (debugTransform.position - bulletSpawnPosition.position).normalized;
+        //        ShootBullet(aimDir);
+        //    }
+
+
+        //    aimVirtualCamera.gameObject.SetActive(true);
+        //    crossHair.gameObject.SetActive(true);
+        //    playerCamera.SetSensitivity(aimSensitivity);
+
+        //    Vector3 worldAimTarget = mouseWorldPosition;
+        //    worldAimTarget.y = transform.position.y;
+        //    Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
+
+        //    transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
+
+        //}
+        //else
+        //{
+        //    aimVirtualCamera.gameObject.SetActive(false);
+        //    playerCamera.SetSensitivity(normalSensitivity);
+        //    crossHair.gameObject.SetActive(false);
+        //}
+
+  
+
+
+        //aimVirtualCamera.gameObject.SetActive(true);
+        //crossHair.gameObject.SetActive(true);
+        //playerCamera.SetSensitivity(aimSensitivity);
+
+        Vector3 worldAimTarget = mouseWorldPosition;
+        worldAimTarget.y = transform.position.y;
+        Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
+
+        transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
+     
+
+        if (input.shoot && _typeRacer.readyToShoot)
         {
-            if (input.shoot)
+            Vector3 aimDir = (debugTransform.position - bulletSpawnPosition.position).normalized;
+            if (Time.time > lastBulletShot + fireRate)
             {
-                Vector3 aimDir = (debugTransform.position - bulletSpawnPosition.position).normalized;
+                lastBulletShot = Time.time;
                 ShootBullet(aimDir);
+                playerCamera.AddRecoil();
             }
-
-
-            aimVirtualCamera.gameObject.SetActive(true);
-            crossHair.gameObject.SetActive(true);
-            playerCamera.SetSensitivity(aimSensitivity);
-
-            Vector3 worldAimTarget = mouseWorldPosition;
-            worldAimTarget.y = transform.position.y;
-            Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
-
-            transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
-
+            
         }
-        else
-        {
-            aimVirtualCamera.gameObject.SetActive(false);
-            playerCamera.SetSensitivity(normalSensitivity);
-            crossHair.gameObject.SetActive(false);
-        }
-
-
 
 
 

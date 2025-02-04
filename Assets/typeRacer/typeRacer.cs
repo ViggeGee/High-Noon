@@ -183,6 +183,8 @@ public class typeRacer : MonoBehaviour
                 else if (char.ToLower(playerTyped[i]) != charLettersInWord[i])
                 {
                     letterImage.color = Color.red; // Incorrect letter
+                    nrFailLetters++;
+                    
                 }
             }
             else
