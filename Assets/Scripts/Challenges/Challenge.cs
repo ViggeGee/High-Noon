@@ -4,7 +4,7 @@ public class Challenge : MonoBehaviour
 {
     public enum ChallengeType
     {
-        ERROR,
+        None,
 
         typeRacer,
         PointAndClick,

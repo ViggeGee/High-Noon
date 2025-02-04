@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -115,7 +116,8 @@ public class typeRacer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if(gameStarted)
+        if (!GameManager.bHasGameStarted || !GameManager.Instance.bIsPlayer1Ready || GameManager.Instance.bIsPlayer2Ready) return;
+
         playerInput.Select();
 
         // Check if player finished the word

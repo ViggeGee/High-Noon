@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47733ff7d704a364bb4b2b61f074be1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  challengeType: 3
+  challengeType: 1
 --- !u!1 &2778471760164707584
 GameObject:
   m_ObjectHideFlags: 0
@@ -252,7 +252,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47733ff7d704a364bb4b2b61f074be1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  challengeType: 2
+  challengeType: 1
 --- !u!1 &2956022275343045410
 GameObject:
   m_ObjectHideFlags: 0
@@ -613,7 +613,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47733ff7d704a364bb4b2b61f074be1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  challengeType: 5
+  challengeType: 1
 --- !u!1 &4518257232845287391
 GameObject:
   m_ObjectHideFlags: 0
@@ -715,6 +715,7 @@ GameObject:
   - component: {fileID: 4201222893404016346}
   - component: {fileID: 8978539234800011123}
   - component: {fileID: 5466291384752725938}
+  - component: {fileID: 2210101934483678816}
   m_Layer: 5
   m_Name: Challenge Wheel Canvas
   m_TagString: Untagged
@@ -808,6 +809,31 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &2210101934483678816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4661895938850771348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 2320841768
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &5585817971924633918
 GameObject:
   m_ObjectHideFlags: 0
@@ -896,7 +922,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47733ff7d704a364bb4b2b61f074be1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  challengeType: 6
+  challengeType: 1
 --- !u!1 &7154137730345093897
 GameObject:
   m_ObjectHideFlags: 0
@@ -1026,7 +1052,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47733ff7d704a364bb4b2b61f074be1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  challengeType: 4
+  challengeType: 1
 --- !u!1 &9047500324602333786
 GameObject:
   m_ObjectHideFlags: 0
@@ -1116,6 +1142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce2080faf2f511042b300a38b66b8bb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   challengeWheelRect: {fileID: 9082763164942190369}
   pickChallengeArrow: {fileID: 8443729816486828482}
   availableChallenges:

@@ -1,13 +1,12 @@
-using Newtonsoft.Json.Bson;
+using System;
 using System.Collections;
 using TMPro;
 using Unity.Netcode;
-using Unity.Netcode.Components;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ChallengeWheel : MonoBehaviour
+
+public class ChallengeWheel : NetworkBehaviour
 {
     [SerializeField] private RectTransform challengeWheelRect;
     [SerializeField] private Image pickChallengeArrow;
@@ -15,127 +14,137 @@ public class ChallengeWheel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI challengeText;
 
     private float rotatePower;
-    private float stopPower; 
+    private float stopPower;
     private float rotationSpeed;
 
     private bool isRotating = false;
-    private bool challengeSet = false;
+
+    private float maxScale = 10f;
+    private float scalingSpeed = 1f;
+
+    public event Action<GameObject> OnChallengeSelected;
+
+    private Canvas parentCanvas;
+
+    private NetworkVariable<int> selectedChallengeIndex = new NetworkVariable<int>(-1); // Store challenge index
+    private NetworkVariable<float> currentRotation = new NetworkVariable<float>(0);  // Sync rotation angle across the network
 
     private void Start()
     {
         challengeText.gameObject.SetActive(false);
-        Rotate();
-    }
+        parentCanvas = transform.parent.gameObject.GetComponent<Canvas>();
 
-    private float maxScale = 10f;  // Set the maximum scale factor
-    private float scalingSpeed = 1f; // Speed at which the object scales up
-    private Vector3 targetScale = Vector3.zero; // To store the target scale during scaling
+        // Listen for challenge selection changes
+        selectedChallengeIndex.OnValueChanged += (oldValue, newValue) =>
+        {
+            if (newValue != -1)
+            {
+                DisplayChallengeClientRpc(newValue);
+            }
+        };
+    }
 
     void Update()
     {
-        if (isRotating)
+        if (Input.GetKeyDown(KeyCode.Space) && IsHost)
         {
+            RotateServerRpc();
+        }
+
+        if (IsServer && isRotating)
+        {
+            // Rotate the wheel locally for the server
+            rotationSpeed -= stopPower * Time.deltaTime;
             challengeWheelRect.Rotate(0, 0, rotationSpeed * Time.deltaTime);
-            rotationSpeed -= stopPower * Time.deltaTime;  // Slow down rotation
+            currentRotation.Value = challengeWheelRect.eulerAngles.z;  // Sync the current rotation
 
             if (rotationSpeed <= 0)
             {
                 rotationSpeed = 0;
                 isRotating = false;
-                SetCurrentChallenge();
+                DetermineChallengeServerRpc();
             }
         }
-
-        if(challengeSet)
+        else if (IsClient)
         {
-            targetScale = Vector3.Lerp(challengeText.transform.localScale, new Vector3(maxScale, maxScale, 1), Time.deltaTime * scalingSpeed);
-            challengeText.transform.localScale = Vector3.ClampMagnitude(targetScale, maxScale);
-
-            if(challengeText.transform.localScale == targetScale)
-            {
-                StartCoroutine(DisableChallengeWheel());
-            }
+            // Update the rotation on the client with the synced value
+            challengeWheelRect.rotation = Quaternion.Euler(0, 0, currentRotation.Value);
         }
     }
 
-    public void Rotate()
+    [ServerRpc]
+    public void RotateServerRpc()
     {
         if (!isRotating)
         {
-            stopPower = Random.Range(300, 500);
-            rotatePower = Random.Range(1300, 1500);
+            stopPower = UnityEngine.Random.Range(300, 500);
+            rotatePower = UnityEngine.Random.Range(1300, 1500);
             rotationSpeed = rotatePower;
             isRotating = true;
         }
     }
 
-    private Challenge.ChallengeType ReturnPickedChallenge()
+    [ServerRpc]
+    private void DetermineChallengeServerRpc()
     {
         float rot = transform.eulerAngles.z;
+        int challengeIndex = Mathf.FloorToInt(rot / 60f); // Divide wheel into 6 equal parts
 
-        if (rot > 0 && rot <= 60)
+        if (challengeIndex >= 0 && challengeIndex < availableChallenges.Length)
         {
-            challengeText.gameObject.SetActive(true);
-            challengeSet = true;
-            challengeText.text = availableChallenges[0].gameObject.GetComponent<Challenge>().challengeType.ToString();
-            return availableChallenges[0].gameObject.GetComponent<Challenge>().challengeType;
-        }
-        else if (rot > 60 && rot <= 120)
-        {
-            challengeText.gameObject.SetActive(true);
-            challengeSet = true;
-            challengeText.text = availableChallenges[1].gameObject.GetComponent<Challenge>().challengeType.ToString();
-            return availableChallenges[1].gameObject.GetComponent<Challenge>().challengeType;
-        }
-        else if (rot > 120 && rot <= 180)
-        {
-            challengeText.gameObject.SetActive(true);
-            challengeSet = true;
-            challengeText.text = availableChallenges[2].gameObject.GetComponent<Challenge>().challengeType.ToString();
-            return availableChallenges[2].gameObject.GetComponent<Challenge>().challengeType;
-        }
-        else if (rot > 180 && rot <= 240)
-        {
-            challengeText.gameObject.SetActive(true);
-            challengeSet = true;
-            challengeText.text = availableChallenges[3].gameObject.GetComponent<Challenge>().challengeType.ToString();
-            return availableChallenges[3].gameObject.GetComponent<Challenge>().challengeType;
-        }
-        else if (rot > 240 && rot <= 300)
-        {
-            challengeText.gameObject.SetActive(true);
-            challengeSet = true;
-            challengeText.text = availableChallenges[4].gameObject.GetComponent<Challenge>().challengeType.ToString();
-            return availableChallenges[4].gameObject.GetComponent<Challenge>().challengeType;
-        }
-        else if (rot > 300 && rot <= 360)
-        {
-            challengeText.gameObject.SetActive(true);
-            challengeSet = true;
-            challengeText.text = availableChallenges[5].gameObject.GetComponent<Challenge>().challengeType.ToString();
-            return availableChallenges[5].gameObject.GetComponent<Challenge>().challengeType;
-        }
-        else
-        {
-            return Challenge.ChallengeType.ERROR;
+            selectedChallengeIndex.Value = challengeIndex; // Sync challenge selection to clients
+            SetCurrentChallengeServerRpc(challengeIndex);
         }
     }
 
-    public void SetCurrentChallenge()
+    [ServerRpc]
+    public void SetCurrentChallengeServerRpc(int challengeIndex)
     {
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.currentChallengeType = ReturnPickedChallenge();
+            GameManager.Instance.currentChallengeType.Value = availableChallenges[challengeIndex].GetComponent<Challenge>().challengeType;
         }
         else
         {
             Debug.LogError("GameManager is null");
         }
     }
-    
-    private IEnumerator DisableChallengeWheel()
+
+    [ClientRpc]
+    private void DisplayChallengeClientRpc(int challengeIndex)
     {
+        if (challengeIndex >= 0 && challengeIndex < availableChallenges.Length)
+        {
+            challengeText.gameObject.SetActive(true);
+            challengeText.text = availableChallenges[challengeIndex].GetComponent<Challenge>().challengeType.ToString();
+            StartCoroutine(ScaleChallengeText());
+        }
+    }
+
+    private IEnumerator ScaleChallengeText()
+    {
+        Vector3 initialScale = Vector3.one;
+        Vector3 targetScale = new Vector3(maxScale, maxScale, 1);
+
+        float timeElapsed = 0f;
+        while (timeElapsed < 1f)
+        {
+            challengeText.transform.localScale = Vector3.Lerp(initialScale, targetScale, timeElapsed);
+            timeElapsed += Time.deltaTime * scalingSpeed;
+            yield return null;
+        }
+
         yield return new WaitForSeconds(3);
-        transform.parent.gameObject.SetActive(false);
+        challengeText.transform.localScale = Vector3.one;
+        challengeText.gameObject.SetActive(false);
+
+        OnChallengeSelected?.Invoke(gameObject);
+
+        parentCanvas.gameObject.SetActive(false);
+        
+
     }
 }
+
+
+
