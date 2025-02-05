@@ -356,10 +356,12 @@ MonoBehaviour:
   letterPrefab: {fileID: 6927989232799045905, guid: 424b2a6bd6310054daf4fe7f0ebd2fd9, type: 3}
   playerInput: {fileID: 5027857819161501665}
   randomWord: Not Working
+  cinematicCameras: []
+  cinematicCanvas: {fileID: 0}
   spawnPoint: {fileID: 873628187793844235}
-  readyToShoot: 0
   startGameSound: {fileID: 6443644958296213860}
   finnishRaceSound: {fileID: 6443644958296213860}
+  nrFailLetters: 0
 --- !u!82 &6443644958296213860
 AudioSource:
   m_ObjectHideFlags: 0
@@ -566,7 +568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 0
+  GlobalObjectIdHash: 2363519016
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
