@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -19,10 +19,14 @@ public class GameManager : NetworkBehaviour
     public static GameManager Instance { get; private set; }
     public GameState currentGameState { get; private set; } = GameState.WaitingForPlayers;
 
+    [SerializeField] private GameObject playerObject;
+
+    private GameObject player1SpawnPoint, player2SpawnPoint;
+
     private const int MAX_NUMBER_OF_PLAYERS = 2;
 
     public static bool bHasGameStarted = false;
-    private static int playersJoined = 0;
+    public static int playersJoined { get; private set; } = 0;
 
     private bool challengeSelected = false;
 
@@ -64,7 +68,7 @@ public class GameManager : NetworkBehaviour
 
     private void Start()
     {
-        StartCoroutine(CountDown());
+        //StartCoroutine(CountDown());
         countdownStarted.OnValueChanged += (oldValue, newValue) =>
         {
             if (newValue)
@@ -91,6 +95,15 @@ public class GameManager : NetworkBehaviour
 
     private void Update()
     {
+        if(player1SpawnPoint == null)
+        {
+            player1SpawnPoint = GameObject.FindGameObjectWithTag("Player1Spawn");
+        }
+        if(player2SpawnPoint == null)
+        {
+            player2SpawnPoint = GameObject.FindGameObjectWithTag("Player2Spawn");
+        }
+
         switch(currentGameState)
         {
             case GameState.MainMenu:
@@ -218,12 +231,43 @@ public class GameManager : NetworkBehaviour
 
     private void Singleton_OnClientConnect(ulong clientId)
     {
-        if(playersJoined < MAX_NUMBER_OF_PLAYERS)
+        if (IsServer)
         {
-            Debug.Log($"Player{clientId} joined");
-            playersJoined++;
+            if (playersJoined < MAX_NUMBER_OF_PLAYERS)
+            {
+                Debug.Log($"Player {clientId} joined");
+
+                // Determine spawn point based on the player count
+                Transform spawnPoint = playersJoined == 0 ? player1SpawnPoint.transform : player2SpawnPoint.transform;
+
+                // Spawn the player object via NetworkManager
+                GameObject playerInstance = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(clientId)?.gameObject;
+
+                if (playerInstance == null)
+                {
+                    Debug.LogError("No player object found for this client!");
+                }
+                else
+                {
+                    // Before spawning, position the player at the correct spawn point
+                    playerInstance.transform.position = spawnPoint.position;
+                    playerInstance.transform.rotation = spawnPoint.rotation;
+
+                    // No need to call SpawnAsPlayerObject again, it’s already handled by the NetworkManager
+                    // NetworkObject will automatically have ownership when the player connects
+
+                    playersJoined++;
+                }
+            }
         }
+
+        // Disable spawn points after players join
+        player1SpawnPoint.SetActive(false);
+        player2SpawnPoint.SetActive(false);
     }
+
+
+
     private void Singleton_OnClientDisconnect(ulong clientId)
     {
         Debug.Log($"Player{clientId} disconnected");
