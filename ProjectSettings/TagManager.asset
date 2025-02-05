@@ -7,10 +7,8 @@ TagManager:
   - CinemachineTarget
   - Ground
   - TypeRacer
-  - Player1Spawn
-  - Player2Spawn
-  - Crosshair
-  - VirtualCamera
+  - Plank
+  - Barrel
   layers:
   - Default
   - TransparentFX
@@ -31,8 +29,8 @@ TagManager:
   - 
   - 
   - 
-  - Player0
-  - Player1
+  - 
+  - 
   - 
   - 
   - 

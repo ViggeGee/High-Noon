@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using Cinemachine;
 using StarterAssets;
 using UnityEngine.UI;
@@ -41,19 +41,13 @@ public class ShooterController : NetworkBehaviour
 
             if (OwnerClientId == 0)
             {
-                
-                    characterToActivatePlayer1.SetActive(true);
-                    Debug.Log("Activated Player 1 character");
-                
-               
+                characterToActivatePlayer1.SetActive(true);
+                Debug.Log("Activated Player 1 character");
             }
             else if (OwnerClientId == 1)
             {
-                
-                    characterToActivatePlayer2.SetActive(true);
-                    Debug.Log("Activated Player 2 character");
-                
-               
+                characterToActivatePlayer2.SetActive(true);
+                Debug.Log("Activated Player 2 character");
             }
 
             // Set up the input and player camera
@@ -93,7 +87,6 @@ public class ShooterController : NetworkBehaviour
 
     private void Update()
     {
-
         if (!IsOwner) return; // Only allow the local player to shoot
 
         Vector3 mouseWorldPosition = Vector3.zero;
@@ -107,43 +100,32 @@ public class ShooterController : NetworkBehaviour
 
         if (input.shoot && GameManager.Instance.readyToShoot)
         {
+            input.shoot = false;
             Vector3 aimDir = (mouseWorldPosition - bulletSpawnPosition.position).normalized;
 
             if (Time.time > lastBulletShot + fireRate)
             {
                 lastBulletShot = Time.time;
-                ShootBullet(aimDir); // Spawn locally
-                ShootBulletClientRpc(bulletSpawnPosition.position, aimDir); // Sync with others
+
+                ShootBulletServerRpc(bulletSpawnPosition.position, aimDir);
+
                 playerCamera.AddRecoil();
             }
         }
     }
 
-    private void ShootBullet(Vector3 aimDir)
+    [ServerRpc]
+    private void ShootBulletServerRpc(Vector3 spawnPosition, Vector3 aimDir)
     {
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPosition.position, Quaternion.LookRotation(aimDir, Vector3.up));
-        NetworkObject bulletNetObj = bullet.GetComponent<NetworkObject>();
-
-        if (bulletNetObj != null)
-        {
-            bulletNetObj.Spawn(true); // Client owns this bullet
-            bullet.GetComponent<Rigidbody>().AddForce(aimDir * 200, ForceMode.Impulse);
-        }
-    }
-
-    [ClientRpc]
-    private void ShootBulletClientRpc(Vector3 spawnPosition, Vector3 aimDir)
-    {
-        if (IsOwner) return; // Skip spawning on the shooter’s client (already spawned locally)
-
         GameObject bullet = Instantiate(bulletPrefab, spawnPosition, Quaternion.LookRotation(aimDir, Vector3.up));
         NetworkObject bulletNetObj = bullet.GetComponent<NetworkObject>();
 
         if (bulletNetObj != null)
         {
-            bulletNetObj.Spawn(false); // The client does NOT own this bullet
+            bulletNetObj.Spawn(); // Server owns the bullet, syncs to all clients
             bullet.GetComponent<Rigidbody>().AddForce(aimDir * 200, ForceMode.Impulse);
         }
     }
+
 
 }

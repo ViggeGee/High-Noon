@@ -87,7 +87,7 @@ public class PlayerCamera : NetworkBehaviour // ✅ Make it networked
 
     void Update()
     {
-        if (!IsOwner) return; // ✅ Ensure only local player can rotate camera
+        if (!IsOwner || !GameManager.Instance.readyToShoot) return; // ✅ Ensure only local player can rotate camera
         CameraRotation();
     }
 

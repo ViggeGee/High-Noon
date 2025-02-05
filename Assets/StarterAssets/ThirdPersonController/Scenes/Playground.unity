@@ -1545,7 +1545,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 28f4e41dd9c92f74da965a57562a2701, type: 2}
   m_sharedMaterial: {fileID: 4626367629381079744, guid: 28f4e41dd9c92f74da965a57562a2701, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 4626367629381079744, guid: 28f4e41dd9c92f74da965a57562a2701, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -1846,7 +1847,6 @@ MonoBehaviour:
   aimColliderLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  debugTransform: {fileID: 857243754}
 --- !u!1001 &1762682258
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2760,9 +2760,9 @@ MonoBehaviour:
   letterPrefab: {fileID: 6927989232799045905, guid: 424b2a6bd6310054daf4fe7f0ebd2fd9, type: 3}
   playerInput: {fileID: 2145650930}
   randomWord: Not Working
+  cinematicCameras: []
+  cinematicCanvas: {fileID: 0}
   spawnPoint: {fileID: 1562542381}
-  canvasText: {fileID: 1583600683}
-  readyToShoot: 0
   startGameSound: {fileID: 1991491252}
   finnishRaceSound: {fileID: 1991491251}
   nrFailLetters: 0
