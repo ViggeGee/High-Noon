@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 public class MainMenu : MonoBehaviour
@@ -18,6 +19,8 @@ public class MainMenu : MonoBehaviour
     {
         gunShotAudio.Play();
         StartCoroutine(Plankfalling(i));
+        if (i == 0)
+            StartCoroutine(StartGame());
     }
 
     public void BreakBarrel(int i)
@@ -26,7 +29,11 @@ public class MainMenu : MonoBehaviour
         StartCoroutine(ExplodeBarrel(i));
     }
 
-
+    public IEnumerator StartGame()
+    {
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("Generic standoff level_MULTIPLAYER");
+    }
 
     public IEnumerator Plankfalling(int i)
     {
