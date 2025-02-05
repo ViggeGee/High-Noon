@@ -52,7 +52,7 @@ public class typeRacer : MonoBehaviour
         PickRandomWord();
         StartCoroutine(PlayCinematic());
 
-
+        playerTyped = "";
     }
 
 
