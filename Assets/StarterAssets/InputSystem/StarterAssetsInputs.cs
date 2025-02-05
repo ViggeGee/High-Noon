@@ -87,7 +87,10 @@ namespace StarterAssets
         }
         public void ShootInput(bool newShootState)
         {
-            shoot = newShootState;
+			if(GameManager.Instance.readyToShoot)
+			{
+                shoot = newShootState;
+            }   
         }
 
         private void OnApplicationFocus(bool hasFocus)
