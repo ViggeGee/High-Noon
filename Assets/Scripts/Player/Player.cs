@@ -12,6 +12,7 @@ public class Player : NetworkBehaviour
     {
         if (IsOwner)
         {
+            transform.rotation = Quaternion.identity;
             playerAnimator = GetComponent<Animator>();
             shooterController = GetComponent<ShooterController>();
         }

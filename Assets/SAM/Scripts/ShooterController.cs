@@ -88,7 +88,7 @@ public class ShooterController : NetworkBehaviour
 
     private void Update()
     {
-        if (!IsOwner) return; // Only allow the local player to shoot
+        if (!IsOwner || !GameManager.Instance.readyToShoot) return; 
 
         if(GameManager.Instance.readyToShoot)
         {
