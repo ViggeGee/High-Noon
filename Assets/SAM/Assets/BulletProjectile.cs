@@ -58,6 +58,7 @@ public class BulletProjectile : NetworkBehaviour
             // Sync hit effect if not a player
             ShowHitEffectClientRpc(false, transform.position);
         }
+        DestroyBulletServerRpc();
     }
 
 
