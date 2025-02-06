@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using TMPro;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Challenge;
 
@@ -20,6 +21,9 @@ public class GameManager : NetworkBehaviour
     public GameState currentGameState { get; private set; } = GameState.WaitingForPlayers;
 
     [SerializeField] private GameObject playerObject;
+    [SerializeField] private Canvas NetworkCanvas;
+
+    private Canvas challengeWheelCanvas;
 
     private GameObject player1SpawnPoint, player2SpawnPoint;
 
@@ -68,6 +72,7 @@ public class GameManager : NetworkBehaviour
 
     private void Start()
     {
+        
         //StartCoroutine(CountDown());
         countdownStarted.OnValueChanged += (oldValue, newValue) =>
         {
@@ -95,7 +100,8 @@ public class GameManager : NetworkBehaviour
 
     private void Update()
     {
-        if(player1SpawnPoint == null)
+        
+        if (player1SpawnPoint == null)
         {
             player1SpawnPoint = GameObject.FindGameObjectWithTag("Player1Spawn");
         }
@@ -103,7 +109,7 @@ public class GameManager : NetworkBehaviour
         {
             player2SpawnPoint = GameObject.FindGameObjectWithTag("Player2Spawn");
         }
-
+       
         switch(currentGameState)
         {
             case GameState.MainMenu:
@@ -115,7 +121,7 @@ public class GameManager : NetworkBehaviour
 
                 if(playersJoined == 2)
                 {
-                    challengeWheel = FindFirstObjectByType<ChallengeWheel>();
+                    challengeWheel = challengeCanvas.gameObject.GetComponentInChildren<ChallengeWheel>();
 
                     if(challengeWheel != null)
                     {
@@ -235,6 +241,7 @@ public class GameManager : NetworkBehaviour
         {
             if (playersJoined < MAX_NUMBER_OF_PLAYERS)
             {
+                
                 Debug.Log($"Player {clientId} joined");
 
                 // Determine spawn point based on the player count
@@ -257,9 +264,19 @@ public class GameManager : NetworkBehaviour
                     // NetworkObject will automatically have ownership when the player connects
 
                     playersJoined++;
+
+                    
                 }
             }
         }
+        if (IsHost)
+        {
+            if (playersJoined == 2)
+            {
+                NetworkCanvas.gameObject.SetActive(false);
+            }
+        }
+        
 
         // Disable spawn points after players join
         player1SpawnPoint.SetActive(false);

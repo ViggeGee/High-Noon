@@ -56,40 +56,14 @@ public class typeRacer : MonoBehaviour
     }
 
 
-
-    //IEnumerator FadeText(string newText)
-    //{
-    //    // Scale down
-    //    for (float t = 0; t < 0.2f; t += Time.deltaTime)
-    //    {
-    //        float scale = Mathf.Lerp(1, 0, t / 0.2f);
-    //        canvasText.transform.localScale = new Vector3(scale, scale, scale);
-    //        yield return null;
-    //    }
-    //    canvasText.transform.localScale = Vector3.zero;
-
-    //    // Change the text
-    //    canvasText.text = newText;
-
-    //    // Scale back up
-    //    for (float t = 0; t < 0.3f; t += Time.deltaTime)
-    //    {
-    //        float scale = Mathf.Lerp(0, 1, t / 0.3f);
-    //        canvasText.transform.localScale = new Vector3(scale, scale, scale);
-    //        yield return null;
-    //    }
-    //    canvasText.transform.localScale = Vector3.one;
-
-    //    yield return new WaitForSeconds(1.5f); // Stay visible before next fade
-    //}
-
     public void PickRandomWord()
     {
         ClearWords();
 
         randomWord = wordsList[Random.Range(0, wordsList.Count)];
-        float letterSpacing = 30f;  // Spacing between letters
-        float spaceSpacing = letterSpacing * 1.1f; // Double spacing for spaces between words
+
+        float baseLetterSpacing = Screen.width * 0.03f; // Dynamic spacing based on screen width
+        float spaceSpacing = baseLetterSpacing * 1.5f; // Extra spacing for spaces between words
 
         List<float> letterPositions = new List<float>();
         float totalWidth = 0f;
@@ -103,7 +77,7 @@ public class typeRacer : MonoBehaviour
             }
             else
             {
-                totalWidth += letterSpacing;
+                totalWidth += baseLetterSpacing;
             }
             letterPositions.Add(totalWidth);
         }

@@ -120,6 +120,12 @@ public class ChallengeWheel : NetworkBehaviour
             StartCoroutine(ScaleChallengeText());
         }
     }
+    [ClientRpc]
+    private void HideChallengeWheelClientRpc()
+    {
+        parentCanvas.gameObject.SetActive(false);  // Deactivate canvas on client side
+    }
+
 
     private IEnumerator ScaleChallengeText()
     {
@@ -140,8 +146,8 @@ public class ChallengeWheel : NetworkBehaviour
 
         OnChallengeSelected?.Invoke(gameObject);
 
-        parentCanvas.gameObject.SetActive(false);
-        
+        HideChallengeWheelClientRpc();
+
 
     }
 }

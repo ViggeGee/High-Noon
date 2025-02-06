@@ -9,6 +9,11 @@ TagManager:
   - TypeRacer
   - Plank
   - Barrel
+  - VirtualCamera
+  - Crosshair
+  - Player1Spawn
+  - Player2Spawn
+  - ChallengeWheel
   layers:
   - Default
   - TransparentFX
