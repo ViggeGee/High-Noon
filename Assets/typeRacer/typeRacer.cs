@@ -20,8 +20,7 @@ public class typeRacer : NetworkBehaviour
     private Dictionary<char, Sprite> letterDictionary = new Dictionary<char, Sprite>();
     private List<string> wordsList = new List<string>();
 
-    public GameObject[] cinematicCameras;
-    public GameObject cinematicCanvas;
+ 
 
     public Transform spawnPoint; // Set a spawn point in the scene
 
@@ -52,7 +51,6 @@ public class typeRacer : NetworkBehaviour
             letterDictionary[letter] = texture;
         }
         PickRandomWord();
-        StartCoroutine(PlayCinematic());
 
         playerTyped = "";
     }
@@ -126,23 +124,11 @@ public class typeRacer : NetworkBehaviour
             Debug.LogError("Words file not found!");
         }
     }
-    private bool hasDeactivatedCinematic = false;
+    
     // Update is called once per frame
     void Update()
     {
         if (!GameManager.bHasGameStarted || !GameManager.Instance.bIsPlayer1Ready || GameManager.Instance.bIsPlayer2Ready) return;
-
-        if(GameManager.Instance.readyToShoot && !hasDeactivatedCinematic)
-        {
-            StopCoroutine(PlayCinematic());
-            Cursor.lockState = CursorLockMode.Locked;
-            foreach (GameObject cam in cinematicCameras)
-            {
-                cam.SetActive(false);
-            }
-            cinematicCanvas.SetActive(false);
-            hasDeactivatedCinematic = true;
-        }
 
         playerInput.Select();
 
@@ -206,29 +192,6 @@ public class typeRacer : NetworkBehaviour
             }
         }
     }
-    public IEnumerator PlayCinematic()
-    {
-        while (!GameManager.Instance.readyToShoot) // Keep looping until readyToShoot is true
-        {
-            for (int i = 0; i < cinematicCameras.Length; i++)
-            {
-                if (GameManager.Instance.readyToShoot) break; // Stop early if readyToShoot is true
-
-                // Activate the current camera and deactivate all others
-                for (int j = 0; j < cinematicCameras.Length; j++)
-                {
-                    if (cinematicCameras[j] != null)
-                    cinematicCameras[j].SetActive(j == i);
-                }
-
-                yield return new WaitForSeconds(4f); // Wait 1 second before switching
-            }
-        }
-
-        // Deactivate all cameras once readyToShoot is true
-        
-        yield return null;
-
-    }
+   
 }
 

@@ -51,6 +51,10 @@ public class GameManager : NetworkBehaviour
 
     #region Challenge
 
+    public GameObject[] cinematicCameras;
+    public GameObject cinematicCanvas;
+    private bool hasDeactivatedCinematic = false;
+
     [SerializeField] private GameObject[] availableChallenges;
     private GameObject currentChallenge;
     private typeRacer typeRacer;
@@ -105,6 +109,7 @@ public class GameManager : NetworkBehaviour
 
     private void Update()
     {
+        StopCinematic();
         SetMistakesDuringChallenge();
 
         if (player1SpawnPoint == null)
@@ -171,7 +176,47 @@ public class GameManager : NetworkBehaviour
         //// Add other mistake references for other challenges here
     }
 
-    #region Countdown and challenge selection
+    #region Countdown, challenge selection and Cinematic
+
+    private void StopCinematic()
+    {
+        if (GameManager.Instance.readyToShoot && !hasDeactivatedCinematic)
+        {
+            StopCoroutine(PlayCinematic());
+            Cursor.lockState = CursorLockMode.Locked;
+            foreach (GameObject cam in cinematicCameras)
+            {
+                cam.SetActive(false);
+            }
+            cinematicCanvas.SetActive(false);
+            hasDeactivatedCinematic = true;
+        }
+    }
+
+    public IEnumerator PlayCinematic()
+    {
+        while (!GameManager.Instance.readyToShoot) // Keep looping until readyToShoot is true
+        {
+            for (int i = 0; i < cinematicCameras.Length; i++)
+            {
+                if (GameManager.Instance.readyToShoot) break; // Stop early if readyToShoot is true
+
+                // Activate the current camera and deactivate all others
+                for (int j = 0; j < cinematicCameras.Length; j++)
+                {
+                    if (cinematicCameras[j] != null)
+                        cinematicCameras[j].SetActive(j == i);
+                }
+
+                yield return new WaitForSeconds(4f); // Wait 1 second before switching
+            }
+        }
+
+        // Deactivate all cameras once readyToShoot is true
+
+        yield return null;
+
+    }
 
     private void StartCountDown()
     {
@@ -249,6 +294,7 @@ public class GameManager : NetworkBehaviour
                 if (challenge.CompareTag("TypeRacer"))
                 {
                     challenge.SetActive(true);
+                    StartCoroutine(PlayCinematic());
                     StartCoroutine(WaitForChallengeInitialization(challenge,currentChallengeType.Value));
                 }
             }

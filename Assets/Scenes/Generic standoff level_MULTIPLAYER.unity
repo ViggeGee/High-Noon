@@ -1174,6 +1174,38 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 1781642356
       objectReference: {fileID: 0}
+    - target: {fileID: 5446486521533578656, guid: de7a44ad318005d40add1611d4edc769, type: 3}
+      propertyPath: cinematicCanvas
+      value: 
+      objectReference: {fileID: 276952511150948730}
+    - target: {fileID: 5446486521533578656, guid: de7a44ad318005d40add1611d4edc769, type: 3}
+      propertyPath: cinematicCameras.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5446486521533578656, guid: de7a44ad318005d40add1611d4edc769, type: 3}
+      propertyPath: 'cinematicCameras.Array.data[0]'
+      value: 
+      objectReference: {fileID: 7776111117834061168}
+    - target: {fileID: 5446486521533578656, guid: de7a44ad318005d40add1611d4edc769, type: 3}
+      propertyPath: 'cinematicCameras.Array.data[1]'
+      value: 
+      objectReference: {fileID: 7940655970690858636}
+    - target: {fileID: 5446486521533578656, guid: de7a44ad318005d40add1611d4edc769, type: 3}
+      propertyPath: 'cinematicCameras.Array.data[2]'
+      value: 
+      objectReference: {fileID: 176275175389496267}
+    - target: {fileID: 5446486521533578656, guid: de7a44ad318005d40add1611d4edc769, type: 3}
+      propertyPath: 'cinematicCameras.Array.data[3]'
+      value: 
+      objectReference: {fileID: 5401699204326440804}
+    - target: {fileID: 5446486521533578656, guid: de7a44ad318005d40add1611d4edc769, type: 3}
+      propertyPath: 'cinematicCameras.Array.data[4]'
+      value: 
+      objectReference: {fileID: 5185732034162008910}
+    - target: {fileID: 5446486521533578656, guid: de7a44ad318005d40add1611d4edc769, type: 3}
+      propertyPath: 'cinematicCameras.Array.data[5]'
+      value: 
+      objectReference: {fileID: 5212116635857913591}
     - target: {fileID: 6361280226579049707, guid: de7a44ad318005d40add1611d4edc769, type: 3}
       propertyPath: m_Name
       value: GameManager
