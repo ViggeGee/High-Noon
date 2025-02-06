@@ -2070,6 +2070,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5da284036809ba48a5478179455b2d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   LockCameraPosition: 0
   sensitivity: 1
   CinemachineCameraTarget: {fileID: 1774990059}
@@ -2139,9 +2140,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b0b2a6d1dfab524fb6b73387700da29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  typeRacerObject: {fileID: 1999804424}
+  ShowTopMostFoldoutHeaderGroup: 1
   bulletPrefab: {fileID: 6863857337172796869, guid: 9fc5deab5fef94d41b92a7112049f302, type: 3}
   bulletSpawnPosition: {fileID: 781795829}
+  characterToActivatePlayer1: {fileID: 0}
+  characterToActivatePlayer2: {fileID: 0}
   crossHair: {fileID: 1521722410}
   aimVirtualCamera: {fileID: 1635744043}
   normalSensitivity: 1

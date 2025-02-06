@@ -10722,6 +10722,7 @@ MonoBehaviour:
   rotateX: 0
   rotateY: 1
   rotateZ: 0
+  speed: 0
 --- !u!1 &949089640504883943
 GameObject:
   m_ObjectHideFlags: 0
@@ -30833,6 +30834,7 @@ MonoBehaviour:
   rotateX: 0
   rotateY: 0
   rotateZ: 1
+  speed: 0
 --- !u!1 &3224485719601631972
 GameObject:
   m_ObjectHideFlags: 0

@@ -6838,6 +6838,7 @@ MonoBehaviour:
   rotateX: 0
   rotateY: 1
   rotateZ: 0
+  speed: 0
 --- !u!4 &621079085
 Transform:
   m_ObjectHideFlags: 0
@@ -13385,6 +13386,7 @@ MonoBehaviour:
   rotateX: 0
   rotateY: 0
   rotateZ: 1
+  speed: 0
 --- !u!4 &1250522500 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4959979268377148, guid: 2c837521d4253d74f844a10fd29446ef, type: 3}

@@ -199,17 +199,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bde49c3ba7c70f44faf28a6f28636120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  letterTextures: []
+  letterextures: []
   textAsset: {fileID: 4900000, guid: 2bbede08415b31d428ea2ccd6d19ad89, type: 3}
   canvas: {fileID: 7897439417244046894}
   letterPrefab: {fileID: 6927989232799045905, guid: 424b2a6bd6310054daf4fe7f0ebd2fd9, type: 3}
   playerInput: {fileID: 4254226985124877199}
+  randomWord: Not Working
   cinematicCameras: []
   cinematicCanvas: {fileID: 0}
   spawnPoint: {fileID: 8274034860936209509}
-  letterContainer: {fileID: 0}
   startGameSound: {fileID: 2855539552881132810}
-  finishRaceSound: {fileID: 0}
+  finnishRaceSound: {fileID: 0}
   nrFailLetters: 0
 --- !u!82 &2855539552881132810
 AudioSource:
@@ -811,7 +811,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3877803144
+  GlobalObjectIdHash: 1443129813
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1

@@ -356,6 +356,7 @@ MonoBehaviour:
   rotateX: 0
   rotateY: 1
   rotateZ: 0
+  speed: 0
 --- !u!1 &767964126613069534
 GameObject:
   m_ObjectHideFlags: 0
@@ -10802,6 +10803,7 @@ MonoBehaviour:
   rotateX: 0
   rotateY: 0
   rotateZ: 1
+  speed: 0
 --- !u!1001 &3694115079490990397
 PrefabInstance:
   m_ObjectHideFlags: 0
