@@ -36,10 +36,6 @@ public class typeRacer : NetworkBehaviour
 
     [HideInInspector] public int nrFailLetters;
 
-    public override void OnNetworkSpawn()
-    {
-        base.OnNetworkSpawn();
-    }
     void Start()
     {
         //StartCoroutine(CountDown());
@@ -54,7 +50,6 @@ public class typeRacer : NetworkBehaviour
 
         playerTyped = "";
     }
-
 
     public void PickRandomWord()
     {

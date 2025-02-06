@@ -180,7 +180,9 @@ public class GameManager : NetworkBehaviour
 
     private void StopCinematic()
     {
-        if (GameManager.Instance.readyToShoot && !hasDeactivatedCinematic)
+        if (cinematicCameras.Length == 0) return;
+
+        if (readyToShoot && !hasDeactivatedCinematic)
         {
             StopCoroutine(PlayCinematic());
             Cursor.lockState = CursorLockMode.Locked;
@@ -195,11 +197,13 @@ public class GameManager : NetworkBehaviour
 
     public IEnumerator PlayCinematic()
     {
-        while (!GameManager.Instance.readyToShoot) // Keep looping until readyToShoot is true
+        if (cinematicCameras.Length == 0) yield return null;
+
+        while (!readyToShoot) // Keep looping until readyToShoot is true
         {
             for (int i = 0; i < cinematicCameras.Length; i++)
             {
-                if (GameManager.Instance.readyToShoot) break; // Stop early if readyToShoot is true
+                if (readyToShoot) break; // Stop early if readyToShoot is true
 
                 // Activate the current camera and deactivate all others
                 for (int j = 0; j < cinematicCameras.Length; j++)
