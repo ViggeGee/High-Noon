@@ -1,12 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class typeRacer : MonoBehaviour
+public class typeRacer : NetworkBehaviour
 {
     public Sprite[] letterextures;  // Assign in Inspector (A-Z)
     public TextAsset textAsset;
@@ -39,6 +37,10 @@ public class typeRacer : MonoBehaviour
 
     [HideInInspector] public int nrFailLetters;
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+    }
     void Start()
     {
         //StartCoroutine(CountDown());
@@ -58,6 +60,7 @@ public class typeRacer : MonoBehaviour
 
     public void PickRandomWord()
     {
+        
         ClearWords();
 
         randomWord = wordsList[Random.Range(0, wordsList.Count)];

@@ -41,23 +41,25 @@ public class BulletProjectile : NetworkBehaviour
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            Debug.Log("Player hit!");
+            NetworkObject networkObject = other.GetComponent<NetworkObject>();
 
-            // Get the NetworkObject ID of the player that was hit
-            ulong playerId = other.GetComponent<NetworkObject>().NetworkObjectId;  // Use OwnerClientId instead of NetworkObjectId
-
-            // Sync hit effect and trigger the player hit event
-            HitPlayerClientRpc(playerId);
+            if (networkObject != null)  // Ensure networkObject is valid
+            {
+                ulong playerId = networkObject.NetworkObjectId;
+                HitPlayerClientRpc(playerId);
+            }
+            else
+            {
+                Debug.LogWarning("Player hit, but NetworkObject is missing. Maybe it was disabled or destroyed?");
+            }
         }
         else
         {
             // Sync hit effect if not a player
             ShowHitEffectClientRpc(false, transform.position);
         }
-
-        // Destroy bullet across the network
-        DestroyBulletServerRpc();
     }
+
 
 
     [ClientRpc]
