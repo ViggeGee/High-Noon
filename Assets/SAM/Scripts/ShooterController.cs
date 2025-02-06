@@ -20,12 +20,19 @@ public class ShooterController : NetworkBehaviour
     [SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
     [SerializeField] private float normalSensitivity;
     [SerializeField] private float aimSensitivity;
-    [SerializeField] private LayerMask aimColliderLayerMask = new LayerMask();
+    [SerializeField] private LayerMask aimColliderLayerMask;
     //[SerializeField] private Transform debugTransform;
 
     private float lastBulletShot;
     private float fireRate = 0.5f;
 
+    private float crossHairExpandValue = 0;
+    [Header("Crosshair settings")]
+    [SerializeField] private float shrinkSpeed = 6f;
+    [SerializeField] private float normalSize = 100f;
+    [SerializeField] private float expandedSize = 500f;
+
+    private int numberOfBulletsFired = 0;
 
     private StarterAssetsInputs input;
     private PlayerCamera playerCamera;
@@ -55,12 +62,6 @@ public class ShooterController : NetworkBehaviour
             playerCamera = GetComponent<PlayerCamera>();
             aimVirtualCamera.Priority = 1;
 
-            // Ensure the player controls only their own character
-            NetworkObject networkObject = GetComponent<NetworkObject>();
-            if (networkObject != null)
-            {
-                networkObject.SpawnAsPlayerObject(OwnerClientId); // Ensure correct ownership
-            }
         }
         else
         {
@@ -87,29 +88,48 @@ public class ShooterController : NetworkBehaviour
 
     private void Update()
     {
-        if (!IsOwner) return; // Only allow the local player to shoot
+        if (!IsOwner || !GameManager.Instance.readyToShoot) return; 
+
+        if(GameManager.Instance.readyToShoot)
+        {
+            crossHair.gameObject.SetActive(true);
+        }
+
+        float crossHairSize = 100 + GameManager.Instance.mistakesDuringChallenge;
+        crossHairExpandValue = Mathf.Lerp(crossHairExpandValue, 0f, Time.deltaTime * shrinkSpeed);
+
+        float sizeLerp = Mathf.Lerp(normalSize, expandedSize, crossHairExpandValue);
+        crossHair.rectTransform.sizeDelta = new Vector2(crossHairSize * (sizeLerp / normalSize), crossHairSize * (sizeLerp / normalSize));
 
         Vector3 mouseWorldPosition = Vector3.zero;
         Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
         Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
 
-        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f))
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask))
         {
             mouseWorldPosition = raycastHit.point;
         }
+
+        Vector3 worldAimTarget = mouseWorldPosition;
+        worldAimTarget.y = transform.position.y;
+        Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
+
+        transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
 
         if (input.shoot && GameManager.Instance.readyToShoot)
         {
             input.shoot = false;
             Vector3 aimDir = (mouseWorldPosition - bulletSpawnPosition.position).normalized;
 
-            if (Time.time > lastBulletShot + fireRate)
+            if (Time.time > lastBulletShot + fireRate && numberOfBulletsFired < 20)
             {
+                numberOfBulletsFired++;
                 lastBulletShot = Time.time;
 
                 ShootBulletServerRpc(bulletSpawnPosition.position, aimDir);
 
                 playerCamera.AddRecoil();
+                crossHairExpandValue = 1f;
             }
         }
     }

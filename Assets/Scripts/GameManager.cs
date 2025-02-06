@@ -3,6 +3,7 @@ using TMPro;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using static Challenge;
 
 public enum GameState
@@ -36,6 +37,8 @@ public class GameManager : NetworkBehaviour
 
     public bool readyToShoot { get; set; } = false;
 
+    public int mistakesDuringChallenge { get; private set; }
+
     #region UI variables
 
     [SerializeField] private TextMeshProUGUI countDownText;
@@ -48,7 +51,13 @@ public class GameManager : NetworkBehaviour
 
     #region Challenge
 
+    public GameObject[] cinematicCameras;
+    public GameObject cinematicCanvas;
+    private bool hasDeactivatedCinematic = false;
+
     [SerializeField] private GameObject[] availableChallenges;
+    private GameObject currentChallenge;
+    private typeRacer typeRacer;
 
     private ChallengeWheel challengeWheel;
 
@@ -100,7 +109,9 @@ public class GameManager : NetworkBehaviour
 
     private void Update()
     {
-        
+        StopCinematic();
+        SetMistakesDuringChallenge();
+
         if (player1SpawnPoint == null)
         {
             player1SpawnPoint = GameObject.FindGameObjectWithTag("Player1Spawn");
@@ -144,9 +155,72 @@ public class GameManager : NetworkBehaviour
                 break;
         }
     }
+    private IEnumerator WaitForChallengeInitialization(GameObject challenge, Challenge.ChallengeType currentChallenge)
+    {
+        if (currentChallengeType.Value == Challenge.ChallengeType.typeRacer)
+        {
+            yield return new WaitUntil(() => challenge.GetComponent<typeRacer>() != null);
+            typeRacer = challenge.GetComponent<typeRacer>();
+        }    
+    }
+    private void SetMistakesDuringChallenge()
+    {
+        if (currentChallengeType.Value == Challenge.ChallengeType.typeRacer)
+        {
+            if (typeRacer != null)
+            {
+                mistakesDuringChallenge = typeRacer.nrFailLetters;
+            }
+        }
 
+        //// Add other mistake references for other challenges here
+    }
 
-    #region Countdown and challenge selection
+    #region Countdown, challenge selection and Cinematic
+
+    private void StopCinematic()
+    {
+        if (cinematicCameras.Length == 0) return;
+
+        if (readyToShoot && !hasDeactivatedCinematic)
+        {
+            StopCoroutine(PlayCinematic());
+            Cursor.lockState = CursorLockMode.Locked;
+            foreach (GameObject cam in cinematicCameras)
+            {
+                cam.SetActive(false);
+            }
+            cinematicCanvas.SetActive(false);
+            hasDeactivatedCinematic = true;
+        }
+    }
+
+    public IEnumerator PlayCinematic()
+    {
+        if (cinematicCameras.Length == 0) yield return null;
+
+        while (!readyToShoot) // Keep looping until readyToShoot is true
+        {
+            for (int i = 0; i < cinematicCameras.Length; i++)
+            {
+                if (readyToShoot) break; // Stop early if readyToShoot is true
+
+                // Activate the current camera and deactivate all others
+                for (int j = 0; j < cinematicCameras.Length; j++)
+                {
+                    if (cinematicCameras[j] != null)
+                        cinematicCameras[j].SetActive(j == i);
+                }
+
+                yield return new WaitForSeconds(4f); // Wait 1 second before switching
+            }
+        }
+
+        // Deactivate all cameras once readyToShoot is true
+
+        yield return null;
+
+    }
 
     private void StartCountDown()
     {
@@ -224,6 +298,8 @@ public class GameManager : NetworkBehaviour
                 if (challenge.CompareTag("TypeRacer"))
                 {
                     challenge.SetActive(true);
+                    StartCoroutine(PlayCinematic());
+                    StartCoroutine(WaitForChallengeInitialization(challenge,currentChallengeType.Value));
                 }
             }
         }
@@ -234,18 +310,37 @@ public class GameManager : NetworkBehaviour
     #endregion
 
     #region Events
+    [ClientRpc]
+    private void SetClientPositionClientRpc(ulong clientId, Vector3 position, Quaternion rotation, NetworkObjectReference playerObjectRef)
+    {
+        if (NetworkManager.Singleton.LocalClientId == clientId)
+        {
+            Debug.Log($"Setting position for client {clientId} at {position}");
+
+            // Retrieve the actual GameObject from the NetworkObjectReference
+            if (playerObjectRef.TryGet(out NetworkObject networkObject))
+            {
+                networkObject.transform.position = position;
+                networkObject.transform.rotation = rotation;
+            }
+            else
+            {
+                Debug.LogError("Failed to get NetworkObject from reference.");
+            }
+        }
+    }
+
 
     private void Singleton_OnClientConnect(ulong clientId)
     {
+        
         if (IsServer)
         {
             if (playersJoined < MAX_NUMBER_OF_PLAYERS)
             {
-                
-                Debug.Log($"Player {clientId} joined");
-
                 // Determine spawn point based on the player count
                 Transform spawnPoint = playersJoined == 0 ? player1SpawnPoint.transform : player2SpawnPoint.transform;
+                Debug.Log($"Player {clientId} joined");
 
                 // Spawn the player object via NetworkManager
                 GameObject playerInstance = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(clientId)?.gameObject;
@@ -256,19 +351,17 @@ public class GameManager : NetworkBehaviour
                 }
                 else
                 {
-                    // Before spawning, position the player at the correct spawn point
-                    playerInstance.transform.position = spawnPoint.position;
-                    playerInstance.transform.rotation = spawnPoint.rotation;
-
-                    // No need to call SpawnAsPlayerObject again, it’s already handled by the NetworkManager
-                    // NetworkObject will automatically have ownership when the player connects
+                    SetClientPositionClientRpc(clientId, spawnPoint.position, spawnPoint.rotation, playerInstance);
 
                     playersJoined++;
-
-                    
                 }
             }
         }
+
+        
+
+
+
         if (IsHost)
         {
             if (playersJoined == 2)

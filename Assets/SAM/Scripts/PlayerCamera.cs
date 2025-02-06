@@ -19,6 +19,10 @@ public class PlayerCamera : NetworkBehaviour // ✅ Make it networked
     private float _cinemachineTargetPitch;
     private float recoilOffset = 0f; // New variable to track recoil separately
 
+    [Header("Recoil settings")]
+    [SerializeField] private float recoilRecovery = 5f;
+    [SerializeField] private float recoilAmount = 10f;
+
     public GameObject CinemachineCameraTarget;
 
     [Tooltip("How far in degrees can you move the camera up")]
@@ -44,63 +48,46 @@ public class PlayerCamera : NetworkBehaviour // ✅ Make it networked
         }
     }
 
-    private bool isRecoiling = false;
-    private float recoilAmount = 10f;
-    private float recoilSpeed = 100f;
-    private float recoverySpeed = 50f;
-
-    //void Start()
-    //{
-    //    // ✅ Only initialize camera for the owner (local player)
-       
-
-        
-    //}
     public override void OnNetworkSpawn()
-{
-    if (IsOwner)
     {
-        _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-        
-        // 🛠 Assign inputs only for the local player (to avoid sharing input across players)
-        _input = GetComponent<StarterAssetsInputs>();
-            _input.enabled = true;
-        if (_input == null)
+        if (IsOwner)
         {
-            Debug.LogError($"[PlayerCamera] OwnerClientId: {OwnerClientId} - StarterAssetsInputs NOT found!");
-        }
+            _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
 
-        _playerInput = GetComponent<PlayerInput>();
+            // 🛠 Assign inputs only for the local player (to avoid sharing input across players)
+            _input = GetComponent<StarterAssetsInputs>();
+            _input.enabled = true;
+            if (_input == null)
+            {
+                Debug.LogError($"[PlayerCamera] OwnerClientId: {OwnerClientId} - StarterAssetsInputs NOT found!");
+            }
+
+            _playerInput = GetComponent<PlayerInput>();
             _playerInput.enabled = true;
-        if (_playerInput == null)
+            if (_playerInput == null)
+            {
+                Debug.LogError($"[PlayerCamera] OwnerClientId: {OwnerClientId} - PlayerInput NOT found!");
+            }
+        }
+        else
         {
-            Debug.LogError($"[PlayerCamera] OwnerClientId: {OwnerClientId} - PlayerInput NOT found!");
+            // ❗ Disable input handling for non-owner players
+            enabled = false;
         }
     }
-    else
-    {
-        // ❗ Disable input handling for non-owner players
-        enabled = false;
-    }
-}
 
 
     void Update()
     {
-        if (!IsOwner || !GameManager.Instance.readyToShoot) return; // ✅ Ensure only local player can rotate camera
+        if (!IsOwner || !GameManager.Instance.readyToShoot) return; 
+
         CameraRotation();
+        RecoverRecoil();
     }
 
     private void CameraRotation()
     {
-        if (_input == null)
-        {
-            Debug.LogError($"[PlayerCamera] OwnerClientId: {OwnerClientId} - _input is null!");
-            return;
-        }
-
-        Debug.Log($"[PlayerCamera] OwnerClientId: {OwnerClientId} - Look Input: {_input.look}, Magnitude: {_input.look.sqrMagnitude}");
-
+        
         if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
         {
             float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
@@ -108,7 +95,6 @@ public class PlayerCamera : NetworkBehaviour // ✅ Make it networked
             _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier * sensitivity;
             _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier * sensitivity;
 
-            Debug.Log($"[PlayerCamera] OwnerClientId: {OwnerClientId} - Updated Yaw: {_cinemachineTargetYaw}, Pitch: {_cinemachineTargetPitch}");
         }
 
         // Clamp the player's input-based pitch
@@ -116,8 +102,6 @@ public class PlayerCamera : NetworkBehaviour // ✅ Make it networked
 
         // Apply recoil offset **without overriding player input**
         float finalPitch = _cinemachineTargetPitch + recoilOffset;
-
-        // Ensure final pitch stays within bounds
         finalPitch = ClampAngle(finalPitch, BottomClamp, TopClamp);
 
         // Apply rotation to the camera
@@ -140,40 +124,11 @@ public class PlayerCamera : NetworkBehaviour // ✅ Make it networked
 
     public void AddRecoil()
     {
-        if (!isRecoiling)
-        {
-            StartCoroutine(ApplyRecoil());
-        }
+        recoilOffset -= recoilAmount;
     }
 
-    private IEnumerator ApplyRecoil()
+    private void RecoverRecoil()
     {
-        isRecoiling = true;
-        float targetOffset = -recoilAmount; // Negative makes the camera go UP
-        float elapsedTime = 0f;
-
-        // Move camera up with recoil effect
-        while (elapsedTime < (recoilAmount / recoilSpeed))
-        {
-            recoilOffset = Mathf.Lerp(0, targetOffset, elapsedTime / (recoilAmount / recoilSpeed));
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        recoilOffset = targetOffset;
-
-        // Wait briefly at the top
-        yield return new WaitForSeconds(0.1f);
-
-        // Move camera back down (smooth recovery)
-        elapsedTime = 0f;
-        while (elapsedTime < (recoilAmount / recoverySpeed))
-        {
-            recoilOffset = Mathf.Lerp(targetOffset, 0, elapsedTime / (recoilAmount / recoverySpeed));
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        recoilOffset = 0;
-
-        isRecoiling = false;
+        recoilOffset = Mathf.Lerp(recoilOffset, 0f, Time.deltaTime * recoilRecovery);
     }
 }

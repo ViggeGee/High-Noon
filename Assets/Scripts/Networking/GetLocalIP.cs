@@ -2,7 +2,7 @@ using System.Net.Sockets;
 using System.Net;
 using UnityEngine;
 
-public class GetLocalIP : MonoBehaviour
+public class GetLocalIP : MonoBehaviour //////// REMOVE
 {
     void Start()
     {
