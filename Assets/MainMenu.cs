@@ -32,7 +32,9 @@ public class MainMenu : MonoBehaviour
     public IEnumerator StartGame()
     {
         yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene("Generic standoff level_MULTIPLAYER");
+        Cursor.visible = true;
+        SceneLoader.Instance.LoadScene(Scenes.WesternTown);
+        //SceneManager.LoadScene("Generic standoff level_MULTIPLAYER");
     }
 
     public IEnumerator Plankfalling(int i)

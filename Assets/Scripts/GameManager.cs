@@ -31,7 +31,9 @@ public class GameManager : NetworkBehaviour
     private const int MAX_NUMBER_OF_PLAYERS = 2;
 
     public static bool bHasGameStarted = false;
-    public static int playersJoined { get; private set; } = 0;
+
+    private NetworkVariable<int> playersJoined = new NetworkVariable<int>(0);
+    //public static int playersJoined { get; private set; } = 0;
 
     private bool challengeSelected = false;
 
@@ -109,9 +111,7 @@ public class GameManager : NetworkBehaviour
 
     private void Update()
     {
-        StopCinematic();
-        SetMistakesDuringChallenge();
-
+        
         if (player1SpawnPoint == null)
         {
             player1SpawnPoint = GameObject.FindGameObjectWithTag("Player1Spawn");
@@ -130,14 +130,19 @@ public class GameManager : NetworkBehaviour
 
             case GameState.WaitingForPlayers:
 
-                if(playersJoined == 2)
+                if(playersJoined.Value == 2)
                 {
                     challengeWheel = challengeCanvas.gameObject.GetComponentInChildren<ChallengeWheel>();
 
                     if(challengeWheel != null)
                     {
                         challengeWheel.OnChallengeSelected += ChallengeWheel_OnChallengeSelected;
-                        challengeWheel.RotateServerRpc();
+
+                        if(IsHost)
+                        {
+                            challengeWheel.RotateServerRpc();
+                        }
+                        
                         
                         currentGameState = GameState.Playing;
                     }
@@ -151,6 +156,8 @@ public class GameManager : NetworkBehaviour
 
             case GameState.Playing:
 
+                StopCinematic();
+                SetMistakesDuringChallenge();
 
                 break;
         }
@@ -339,10 +346,10 @@ public class GameManager : NetworkBehaviour
         
         if (IsServer)
         {
-            if (playersJoined < MAX_NUMBER_OF_PLAYERS)
+            if (playersJoined.Value < MAX_NUMBER_OF_PLAYERS)
             {
                 // Determine spawn point based on the player count
-                Transform spawnPoint = playersJoined == 0 ? player1SpawnPoint.transform : player2SpawnPoint.transform;
+                Transform spawnPoint = playersJoined.Value == 0 ? player1SpawnPoint.transform : player2SpawnPoint.transform;
                 Debug.Log($"Player {clientId} joined");
 
                 // Spawn the player object via NetworkManager
@@ -356,7 +363,7 @@ public class GameManager : NetworkBehaviour
                 {
                     SetClientPositionClientRpc(clientId, spawnPoint.position, spawnPoint.rotation, playerInstance);
 
-                    playersJoined++;
+                    playersJoined.Value++;
                 }
             }
         }
@@ -367,7 +374,7 @@ public class GameManager : NetworkBehaviour
 
         if (IsHost)
         {
-            if (playersJoined == 2)
+            if (playersJoined.Value == 2)
             {
                 NetworkCanvas.gameObject.SetActive(false);
             }
@@ -383,8 +390,10 @@ public class GameManager : NetworkBehaviour
 
     private void Singleton_OnClientDisconnect(ulong clientId)
     {
+        if (!IsServer) return;
+
         Debug.Log($"Player{clientId} disconnected");
-        playersJoined--;
+        playersJoined.Value--;
     }
     
     private void ChallengeWheel_OnChallengeSelected(GameObject @object)
