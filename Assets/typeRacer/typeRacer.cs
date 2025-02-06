@@ -1,11 +1,19 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class typeRacer : NetworkBehaviour
 {
+    public NetworkVariable<FixedString64Bytes> networkSentence = new NetworkVariable<FixedString64Bytes>(
+    "",
+    NetworkVariableReadPermission.Everyone,
+    NetworkVariableWritePermission.Server
+);
+
+
     public Sprite[] letterextures;  // Assign in Inspector (A-Z)
     public TextAsset textAsset;
 
@@ -36,8 +44,14 @@ public class typeRacer : NetworkBehaviour
 
     [HideInInspector] public int nrFailLetters;
 
-    void Start()
+    public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
+
+        if (IsClient)
+        {
+            networkSentence.OnValueChanged += OnNetworkSentenceChanged;
+        }
         //StartCoroutine(CountDown());
         LoadWordsFromFile();
         // Populate dictionary (Assumes prefab names are "A", "B", "C", etc.)
@@ -46,11 +60,79 @@ public class typeRacer : NetworkBehaviour
             char letter = texture.name[0]; // Get first character from prefab name
             letterDictionary[letter] = texture;
         }
-        PickRandomWord();
 
         playerTyped = "";
+
+        gameObject.SetActive(false);
     }
 
+    private void OnNetworkSentenceChanged(FixedString64Bytes previousValue, FixedString64Bytes newValue)
+    {
+        if (IsHost) return;
+
+        randomWord = newValue.ToString();
+        Debug.Log($"Updated randomWord on client: {randomWord}");
+
+        SpawnWord();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SetNetworkSentenceServerRpc()
+    {
+        PickRandomWord();
+
+        Debug.Log($"Setting networkSentence on server: {randomWord}");
+        networkSentence.Value = randomWord; // ✅ This will trigger OnValueChanged on all clients!
+    }
+
+    public void SpawnWord()
+    {
+       
+        float baseLetterSpacing = Screen.width * 0.03f; // Dynamic spacing based on screen width
+        float spaceSpacing = baseLetterSpacing * 1.5f; // Extra spacing for spaces between words
+
+        List<float> letterPositions = new List<float>();
+        float totalWidth = 0f;
+
+        // Calculate total width of the sentence
+        for (int i = 0; i < randomWord.Length; i++)
+        {
+            if (randomWord[i] == ' ')
+            {
+                totalWidth += spaceSpacing;
+            }
+            else
+            {
+                totalWidth += baseLetterSpacing;
+            }
+            letterPositions.Add(totalWidth);
+        }
+
+        // Center the sentence on the X-axis
+        float startX = spawnPoint.position.x - (totalWidth / 2f);
+
+        for (int i = 0; i < randomWord.Length; i++)
+        {
+            if (randomWord[i] == ' ')
+            {
+                continue; // Skip rendering actual space characters
+            }
+
+            Vector3 letterPosition = new Vector3(startX + letterPositions[i], spawnPoint.position.y, spawnPoint.position.z);
+            GameObject newLetter = Instantiate(letterPrefab, letterPosition, Quaternion.identity, canvas.transform);
+
+            char letter = char.ToLower(randomWord[i]); // Ensure lowercase lookup
+            if (letterDictionary.ContainsKey(letter))
+            {
+                newLetter.GetComponent<Image>().sprite = letterDictionary[letter];
+            }
+
+            PrefabLettersInWord.Add(newLetter);
+            charLettersInWord.Add(letter);
+        }
+
+        playerInput.onValueChanged.AddListener(delegate { CheckInput(); });
+    }
     public void PickRandomWord()
     {
         

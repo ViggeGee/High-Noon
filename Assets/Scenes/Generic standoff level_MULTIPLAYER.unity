@@ -994,6 +994,14 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 1781642356
       objectReference: {fileID: 0}
+    - target: {fileID: 3660472422424445759, guid: de7a44ad318005d40add1611d4edc769, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 2105873736
+      objectReference: {fileID: 0}
+    - target: {fileID: 3660472422424445759, guid: de7a44ad318005d40add1611d4edc769, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1781642356
+      objectReference: {fileID: 0}
     - target: {fileID: 4645374148243591549, guid: de7a44ad318005d40add1611d4edc769, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 3327995783
@@ -1001,6 +1009,10 @@ PrefabInstance:
     - target: {fileID: 4645374148243591549, guid: de7a44ad318005d40add1611d4edc769, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 1781642356
+      objectReference: {fileID: 0}
+    - target: {fileID: 5399071422460463905, guid: de7a44ad318005d40add1611d4edc769, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5446486521533578656, guid: de7a44ad318005d40add1611d4edc769, type: 3}
       propertyPath: cinematicCanvas

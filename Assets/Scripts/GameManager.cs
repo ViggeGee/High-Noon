@@ -161,8 +161,11 @@ public class GameManager : NetworkBehaviour
         {
             yield return new WaitUntil(() => challenge.GetComponent<typeRacer>() != null);
             typeRacer = challenge.GetComponent<typeRacer>();
+            typeRacer.SetNetworkSentenceServerRpc();
+           
         }    
     }
+
     private void SetMistakesDuringChallenge()
     {
         if (currentChallengeType.Value == Challenge.ChallengeType.typeRacer)
