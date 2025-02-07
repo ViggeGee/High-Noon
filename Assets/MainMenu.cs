@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField] private PlayerJoined playerJoined;
+
     public AudioSource gunShotAudio;
     public AudioSource explosionAudio;
     public GameObject[] planks;
@@ -20,7 +22,13 @@ public class MainMenu : MonoBehaviour
         gunShotAudio.Play();
         StartCoroutine(Plankfalling(i));
         if (i == 0)
+        {
             StartCoroutine(StartGame());
+        }
+        else if(i == 1)
+        {
+            StartCoroutine(JoinGame());
+        }
     }
 
     public void BreakBarrel(int i)
@@ -33,6 +41,16 @@ public class MainMenu : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         Cursor.visible = true;
+        playerJoined.SetIsPlayerHost(true);
+        SceneLoader.Instance.LoadScene(Scenes.WesternTown);
+        //SceneManager.LoadScene("Generic standoff level_MULTIPLAYER");
+    }
+
+    public IEnumerator JoinGame()
+    {
+        yield return new WaitForSeconds(2f);
+        Cursor.visible = true;
+        playerJoined.SetIsPlayerHost(false);
         SceneLoader.Instance.LoadScene(Scenes.WesternTown);
         //SceneManager.LoadScene("Generic standoff level_MULTIPLAYER");
     }

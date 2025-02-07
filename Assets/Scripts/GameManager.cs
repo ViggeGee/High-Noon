@@ -1,9 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using TMPro;
 using Unity.Netcode;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using static Challenge;
 
 public enum GameState
@@ -24,8 +28,6 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private GameObject playerObject;
     [SerializeField] private Canvas NetworkCanvas;
 
-    private Canvas challengeWheelCanvas;
-
     private GameObject player1SpawnPoint, player2SpawnPoint;
 
     private const int MAX_NUMBER_OF_PLAYERS = 2;
@@ -33,6 +35,10 @@ public class GameManager : NetworkBehaviour
     public static bool bHasGameStarted = false;
 
     private NetworkVariable<int> playersJoined = new NetworkVariable<int>(0);
+
+    public NetworkVariable<bool> playerDied = new NetworkVariable<bool>(false);
+    public NetworkVariable<NetworkObjectReference> playerThatDied = new NetworkVariable<NetworkObjectReference>();
+    private bool displayGameOverCanvas = false;
     //public static int playersJoined { get; private set; } = 0;
 
     private bool challengeSelected = false;
@@ -44,7 +50,10 @@ public class GameManager : NetworkBehaviour
     #region UI variables
 
     [SerializeField] private TextMeshProUGUI countDownText;
-    [SerializeField] private Canvas challengeCanvas;
+    [SerializeField] private Canvas challengeWheelCanvas;
+    [SerializeField] private Canvas gameOverCanvas;
+    [SerializeField] private Image winImage;
+    [SerializeField] private Image looseImage;
 
     public bool bIsPlayer1Ready { get; private set; } = false;
     public bool bIsPlayer2Ready { get; private set; } = false;
@@ -83,7 +92,7 @@ public class GameManager : NetworkBehaviour
 
     private void Start()
     {
-        
+        challengeWheel = challengeWheelCanvas.gameObject.GetComponentInChildren<ChallengeWheel>();
         //StartCoroutine(CountDown());
         countdownStarted.OnValueChanged += (oldValue, newValue) =>
         {
@@ -94,6 +103,9 @@ public class GameManager : NetworkBehaviour
                 // Once countdown starts, trigger the countdown function
             }
         };
+
+        
+        //CheckActivePlayers();
 
         if (NetworkManager.Singleton != null)
         {
@@ -132,7 +144,7 @@ public class GameManager : NetworkBehaviour
 
                 if(playersJoined.Value == 2)
                 {
-                    challengeWheel = challengeCanvas.gameObject.GetComponentInChildren<ChallengeWheel>();
+                    challengeWheel = challengeWheelCanvas.gameObject.GetComponentInChildren<ChallengeWheel>();
 
                     if(challengeWheel != null)
                     {
@@ -158,10 +170,114 @@ public class GameManager : NetworkBehaviour
 
                 StopCinematic();
                 SetMistakesDuringChallenge();
+                HandlePlayerDeath();
 
                 break;
         }
     }
+
+    #region Player
+    private void SpawnPlayers(ulong clientId)
+    {
+        // Determine spawn point based on the player count
+        Transform spawnPoint = playersJoined.Value == 0 ? player1SpawnPoint.transform : player2SpawnPoint.transform;
+
+        // Spawn the player object via NetworkManager
+        GameObject playerInstance = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(clientId)?.gameObject;
+
+        if (playerInstance == null)
+        {
+            Debug.LogError("No player object found for this client!");
+        }
+        else
+        {
+            SetClientPositionClientRpc(clientId, spawnPoint.position, spawnPoint.rotation, playerInstance);
+        }
+    }
+    public void CheckActivePlayers()
+    {
+        if (!IsHost) return;
+
+        if (NetworkManager.Singleton != null)
+        {
+            // Iterate through all connected clients and spawn players
+            foreach (var client in NetworkManager.Singleton.ConnectedClients)
+            {
+                ulong clientId = client.Key;
+
+                // Check if the player is already spawned or not
+                GameObject playerInstance = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(clientId)?.gameObject;
+
+                if (playerInstance == null)
+                {
+                    SpawnPlayers(clientId); // Spawn player with the correct clientId
+                    playersJoined.Value++;
+                }
+            }
+        }
+    }
+
+    private void HandlePlayerDeath()
+    {
+      
+        if (playerDied.Value == true && !displayGameOverCanvas)
+        {
+            playerDied.Value = false;
+
+            if (playerThatDied.Value.TryGet(out NetworkObject playerNetworkObject))
+            {
+                displayGameOverCanvas = true;
+                gameOverCanvas.gameObject.SetActive(true);
+                // Access the GameObject from the NetworkObject
+                GameObject playerGameObject = playerNetworkObject.gameObject;
+
+                if(playerNetworkObject.OwnerClientId == NetworkManager.Singleton.LocalClientId)
+                {
+                    looseImage.gameObject.SetActive(true); 
+                }
+                else
+                {
+                    winImage.gameObject.SetActive(true);
+                }
+
+                //if(IsHost)
+                //{
+                //    LoadNextLevelServerRpc();
+                //}        
+            }
+            else
+            {
+                Debug.LogError("Failed to get the player network object.");
+            }
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void LoadNextLevelServerRpc()
+    {
+        StartCoroutine(DestroyPlayersAndLoadScene());
+    }
+
+    private IEnumerator DestroyPlayersAndLoadScene()
+    {
+        //// Ensure all player objects are despawned before loading a new scene
+        //foreach (var networkObject in NetworkManager.Singleton.SpawnManager.SpawnedObjects.Values)
+        //{
+        //    if (networkObject.TryGetComponent(out Player player))
+        //    {
+        //        networkObject.Despawn(true); // Despawn player object for all clients
+        //    }
+        //}
+
+        yield return new WaitForSeconds(10); // Small delay to ensure all players are despawned
+
+        SceneLoader.Instance.LoadRandomSceneForAllPlayers(); // Load the next scene
+    }
+
+    #endregion
+
+    #region Countdown, challenge selection and Cinematic
+
     private IEnumerator WaitForChallengeInitialization(GameObject challenge, Challenge.ChallengeType currentChallenge)
     {
         if (currentChallengeType.Value == Challenge.ChallengeType.typeRacer)
@@ -169,8 +285,8 @@ public class GameManager : NetworkBehaviour
             yield return new WaitUntil(() => challenge.GetComponent<typeRacer>() != null);
             typeRacer = challenge.GetComponent<typeRacer>();
             typeRacer.SetNetworkSentenceServerRpc();
-           
-        }    
+
+        }
     }
 
     private void SetMistakesDuringChallenge()
@@ -185,8 +301,6 @@ public class GameManager : NetworkBehaviour
 
         //// Add other mistake references for other challenges here
     }
-
-    #region Countdown, challenge selection and Cinematic
 
     private void StopCinematic()
     {
@@ -298,7 +412,7 @@ public class GameManager : NetworkBehaviour
     [ClientRpc]
     private void ToggleChallengeCanvasClientRpc()
     {
-        challengeCanvas.gameObject.SetActive(true);
+        challengeWheelCanvas.gameObject.SetActive(true);
 
         foreach (GameObject challenge in availableChallenges)
         {
@@ -340,10 +454,9 @@ public class GameManager : NetworkBehaviour
         }
     }
 
-
     private void Singleton_OnClientConnect(ulong clientId)
     {
-        
+
         if (IsServer)
         {
             if (playersJoined.Value < MAX_NUMBER_OF_PLAYERS)
@@ -368,15 +481,12 @@ public class GameManager : NetworkBehaviour
             }
         }
 
-        
-
-
-
         if (IsHost)
         {
             if (playersJoined.Value == 2)
             {
                 NetworkCanvas.gameObject.SetActive(false);
+                //SceneLoader.Instance.LoadRandomSceneForAllPlayers();
             }
         }
         
@@ -385,8 +495,7 @@ public class GameManager : NetworkBehaviour
         player1SpawnPoint.SetActive(false);
         player2SpawnPoint.SetActive(false);
     }
-
-
+    
 
     private void Singleton_OnClientDisconnect(ulong clientId)
     {
