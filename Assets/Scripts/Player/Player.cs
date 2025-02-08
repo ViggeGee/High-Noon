@@ -35,8 +35,8 @@ public class Player : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SetDiedVariablesServerRpc()
     {
-        GameManager.Instance.playerDied.Value = true;
-        GameManager.Instance.playerThatDied.Value = gameObject.GetComponent<NetworkObject>();
+        NewGameManager.Instance.playerDied.Value = true;
+        NewGameManager.Instance.playerThatDied.Value = gameObject.GetComponent<NetworkObject>();
     }
 
     

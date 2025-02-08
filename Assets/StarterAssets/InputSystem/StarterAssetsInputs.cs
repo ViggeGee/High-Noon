@@ -87,7 +87,7 @@ namespace StarterAssets
         }
         public void ShootInput(bool newShootState)
         {
-			if(GameManager.Instance.readyToShoot)
+			if(NewGameManager.Instance.readyToShoot)
 			{
                 shoot = newShootState;
             }   

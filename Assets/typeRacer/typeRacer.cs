@@ -48,7 +48,7 @@ public class typeRacer : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
-        if (IsClient)
+        if (!IsHost)
         {
             networkSentence.OnValueChanged += OnNetworkSentenceChanged;
         }
@@ -82,11 +82,12 @@ public class typeRacer : NetworkBehaviour
         PickRandomWord();
 
         Debug.Log($"Setting networkSentence on server: {randomWord}");
-        networkSentence.Value = randomWord; // ✅ This will trigger OnValueChanged on all clients!
+        networkSentence.Value = randomWord; 
     }
 
     public void SpawnWord()
     {
+        ClearWords();
        
         float baseLetterSpacing = Screen.width * 0.03f; // Dynamic spacing based on screen width
         float spaceSpacing = baseLetterSpacing * 1.5f; // Extra spacing for spaces between words
@@ -205,7 +206,7 @@ public class typeRacer : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!GameManager.bHasGameStarted || !GameManager.Instance.bIsPlayer1Ready || GameManager.Instance.bIsPlayer2Ready) return;
+        if (!NewGameManager.Instance.hasGameStarted.Value || !NewGameManager.Instance.isPlayer1Ready.Value || !NewGameManager.Instance.isPlayer2Ready.Value) return;
 
         playerInput.Select();
 
@@ -219,8 +220,9 @@ public class typeRacer : NetworkBehaviour
             if(completedWords >= 1)
             {
                 finnishRaceSound.Play();
-                GameManager.Instance.readyToShoot = true;
+                NewGameManager.Instance.readyToShoot = true;
                 ClearWords();
+                CinematicManager.Instance.StopCinematic();
             }
         }
 

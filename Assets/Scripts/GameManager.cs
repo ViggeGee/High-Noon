@@ -14,6 +14,7 @@ public enum GameState
 {
     MainMenu,
     WaitingForPlayers,
+    ChoosingChallenge,
     Playing
 }
 
@@ -107,7 +108,7 @@ public class GameManager : NetworkBehaviour
         
         //CheckActivePlayers();
 
-        if (NetworkManager.Singleton != null)
+        if (NetworkManager.Singleton != null && IsServer)
         {
             NetworkManager.Singleton.OnClientConnectedCallback += Singleton_OnClientConnect;
             NetworkManager.Singleton.OnClientDisconnectCallback += Singleton_OnClientDisconnect;
@@ -115,6 +116,8 @@ public class GameManager : NetworkBehaviour
     }
     public override void OnDestroy()
     {
+        if (!IsServer) return; 
+
         NetworkManager.Singleton.OnClientConnectedCallback -= Singleton_OnClientConnect;
         NetworkManager.Singleton.OnClientDisconnectCallback -= Singleton_OnClientDisconnect;
 
@@ -222,7 +225,10 @@ public class GameManager : NetworkBehaviour
       
         if (playerDied.Value == true && !displayGameOverCanvas)
         {
-            playerDied.Value = false;
+            if(IsServer)
+            {
+                playerDied.Value = false;
+            }     
 
             if (playerThatDied.Value.TryGet(out NetworkObject playerNetworkObject))
             {

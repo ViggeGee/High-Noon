@@ -88,14 +88,14 @@ public class ShooterController : NetworkBehaviour
 
     private void Update()
     {
-        if (!IsOwner || !GameManager.Instance.readyToShoot) return; 
+        if (!IsOwner || !NewGameManager.Instance.readyToShoot) return; 
 
-        if(GameManager.Instance.readyToShoot)
+        if(NewGameManager.Instance.readyToShoot)
         {
             crossHair.gameObject.SetActive(true);
         }
 
-        float crossHairSize = 100 + GameManager.Instance.mistakesDuringChallenge;
+        float crossHairSize = 100 + ChallengeManager.Instance.mistakesDuringChallenge;
         crossHairExpandValue = Mathf.Lerp(crossHairExpandValue, 0f, Time.deltaTime * shrinkSpeed);
 
         float sizeLerp = Mathf.Lerp(normalSize, expandedSize, crossHairExpandValue);
@@ -116,7 +116,7 @@ public class ShooterController : NetworkBehaviour
 
         transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
 
-        if (input.shoot && GameManager.Instance.readyToShoot)
+        if (input.shoot && NewGameManager.Instance.readyToShoot)
         {
             input.shoot = false;
             Vector3 aimDir = (mouseWorldPosition - bulletSpawnPosition.position).normalized;
