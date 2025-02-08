@@ -42,7 +42,7 @@ public class MainMenu : MonoBehaviour
         yield return new WaitForSeconds(2f);
         Cursor.visible = true;
         playerJoined.SetIsPlayerHost(true);
-        SceneLoader.Instance.LoadScene(Scenes.WesternTown);
+        SceneLoader.Instance.LoadScene(Scenes.StartGameScene);
         //SceneManager.LoadScene("Generic standoff level_MULTIPLAYER");
     }
 
@@ -51,7 +51,7 @@ public class MainMenu : MonoBehaviour
         yield return new WaitForSeconds(2f);
         Cursor.visible = true;
         playerJoined.SetIsPlayerHost(false);
-        SceneLoader.Instance.LoadScene(Scenes.WesternTown);
+        SceneLoader.Instance.LoadScene(Scenes.StartGameScene);
         //SceneManager.LoadScene("Generic standoff level_MULTIPLAYER");
     }
 

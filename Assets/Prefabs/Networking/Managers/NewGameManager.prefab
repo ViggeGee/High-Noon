@@ -453,6 +453,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  isPlayer1Ready:
+    m_InternalValue: 0
+  isPlayer2Ready:
+    m_InternalValue: 0
+  playerDied:
+    m_InternalValue: 0
+  hasGameStarted:
+    m_InternalValue: 0
 --- !u!114 &7677191093440901976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,10 +473,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24dc39a6e9726d2479234933857bce3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   countDownText: {fileID: 2884949029761715799}
   gameOverCanvas: {fileID: 4094759272801639365}
   winImage: {fileID: 2158332833963225821}
   looseImage: {fileID: 2621467232058566082}
+  countdownStarted:
+    m_InternalValue: 0
 --- !u!114 &6984845709245576562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -484,9 +495,11 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   availableChallenges:
   - {fileID: 5399071422460463905}
+  challengeWheelCanvas: {fileID: 807678640972736859}
   challengeWheel: {fileID: 9187142474011012843}
   currentChallengeType:
     m_InternalValue: 0
+  mistakesDuringChallenge: 0
 --- !u!1 &8534638329179902794
 GameObject:
   m_ObjectHideFlags: 0
@@ -864,6 +877,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3f176b86ca0ad814fb76eb6e59d611ff, type: 3}
+--- !u!223 &807678640972736859 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 4201222893404016346, guid: 3f176b86ca0ad814fb76eb6e59d611ff, type: 3}
+  m_PrefabInstance: {fileID: 3564826187237451649}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &5635205492116376010 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9172859435064831563, guid: 3f176b86ca0ad814fb76eb6e59d611ff, type: 3}

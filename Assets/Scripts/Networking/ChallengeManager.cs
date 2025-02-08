@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Unity.Netcode;
+using Unity.VisualScripting;
+using UnityEditor.SearchService;
 using UnityEngine;
 using static Challenge;
 
@@ -17,6 +19,8 @@ public class ChallengeManager : NetworkBehaviour
     private GameObject currentChallengeObject;
 
     public int mistakesDuringChallenge = 0;
+
+    private bool hasStartedWheelRotation = false;
 
     #region Challenges
 
@@ -38,6 +42,11 @@ public class ChallengeManager : NetworkBehaviour
         PlayerManager.Instance.OnPlayersJoined += PlayerManager_OnPlayersJoined;
     }
 
+    private void Update()
+    {
+        StartWheelRotation();
+    }
+
     public void SetMistakesDuringChallenge()
     {
         if (currentChallengeType.Value == Challenge.ChallengeType.typeRacer)
@@ -51,15 +60,30 @@ public class ChallengeManager : NetworkBehaviour
         //// Add other mistake references for other challenges here
     }
 
-    private void PlayerManager_OnPlayersJoined(int numberOfPlayers)
+    private void StartWheelRotation()
+    {
+        if (!IsServer) return;
+
+        if(PlayerManager.Instance.PlayersJoined == 2 && !hasStartedWheelRotation)
+        {
+            hasStartedWheelRotation = true;
+            challengeWheel.RotateServerRpc();
+            NewGameManager.Instance.UpdateCurrentGameStateServerRpc(GameState.ChoosingChallenge);
+        }
+    }
+    private void PlayerManager_OnPlayersJoined(int numberOfPlayers) ///// PLACE THIS METHOD SOMEWHERE MORE APPROPRIATE IN THE FUTURE
     {
         if (numberOfPlayers == PlayerManager.MAX_NUMBER_OF_PLAYERS)
         {
             if(IsServer)
             {
-                challengeWheel.RotateServerRpc();
-                NewGameManager.Instance.UpdateCurrentGameStateServerRpc(GameState.ChoosingChallenge);
+                if (NewGameManager.Instance.currentGameState == GameState.StartGameScene)
+                {
+                    SceneLoader.Instance.LoadRandomSceneForAllPlayers();
+                }
             }
+            
+            
         }
     }
 

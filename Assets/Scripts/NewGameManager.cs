@@ -1,10 +1,19 @@
 using Unity.Netcode;
 using UnityEngine;
 
+public enum GameState
+{
+    MainMenu,
+    StartGameScene,
+    WaitingForPlayers,
+    ChoosingChallenge,
+    Playing
+}
+
 public class NewGameManager : NetworkBehaviour
 {
     public static NewGameManager Instance { get; private set; }
-    public GameState currentGameState { get; private set; } = GameState.WaitingForPlayers;
+    public GameState currentGameState { get; private set; } = GameState.StartGameScene;
 
     public NetworkVariable<bool> isPlayer1Ready = new NetworkVariable<bool>(false);
     public NetworkVariable<bool> isPlayer2Ready = new NetworkVariable<bool>(false);
@@ -28,6 +37,12 @@ public class NewGameManager : NetworkBehaviour
     {
         switch (currentGameState)
         {
+            case GameState.StartGameScene:
+
+
+
+                break;
+
             case GameState.WaitingForPlayers:
      
                     

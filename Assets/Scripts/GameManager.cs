@@ -10,13 +10,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static Challenge;
 
-public enum GameState
-{
-    MainMenu,
-    WaitingForPlayers,
-    ChoosingChallenge,
-    Playing
-}
+
 
 /// <summary>
 /// This script handles the game loop 

@@ -17,6 +17,9 @@ public class Player : NetworkBehaviour
             transform.rotation = Quaternion.identity;
             playerAnimator = GetComponent<Animator>();
             shooterController = GetComponent<ShooterController>();
+
+            NetworkObject networkObject = GetComponent<NetworkObject>();
+            networkObject.DestroyWithScene = true;
         }
     }
     private void Update()

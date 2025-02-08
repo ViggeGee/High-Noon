@@ -14,7 +14,9 @@ public class PlayerManager : NetworkBehaviour
     private NetworkVariable<int> playersJoined = new NetworkVariable<int>(0);
 
     [SerializeField] private GameObject playerPrefab;
-    private GameObject player1SpawnPoint, player2SpawnPoint;
+    [SerializeField] private GameObject player1SpawnPoint, player2SpawnPoint;
+
+    private bool hasDeactivatedSpawnPoints = false;
 
     private void Awake()
     {
@@ -22,10 +24,15 @@ public class PlayerManager : NetworkBehaviour
         else Destroy(gameObject);
     }
 
-    private void Start()
+    private void Update()
     {
-        player1SpawnPoint = GameObject.FindGameObjectWithTag("Player1Spawn");
-        player2SpawnPoint = GameObject.FindGameObjectWithTag("Player2Spawn");
+        if(!hasDeactivatedSpawnPoints)
+        {
+            hasDeactivatedSpawnPoints = true;
+
+            player1SpawnPoint.SetActive(false);
+            player2SpawnPoint.SetActive(false);
+        }
     }
 
     public void HandlePlayerJoin(ulong clientId)
@@ -43,8 +50,31 @@ public class PlayerManager : NetworkBehaviour
             OnPlayersJoined?.Invoke(playersJoined.Value);
         }
 
-        player1SpawnPoint.SetActive(false);
-        player2SpawnPoint.SetActive(false);
+        
+    }
+
+    public void HandlePlayerSpawnOnSceneChange()
+    {
+       
+        if(IsServer)
+        {
+            foreach (var client in NetworkManager.Singleton.ConnectedClients)
+            {
+                ulong clientId = client.Key; // ClientId is the dictionary key
+
+                if (playersJoined.Value >= 2) return;
+
+                Transform spawnPoint = (playersJoined.Value == 0) ? player1SpawnPoint.transform : player2SpawnPoint.transform;
+                GameObject player = Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
+                player.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
+
+                playersJoined.Value++;
+
+                OnPlayersJoined?.Invoke(playersJoined.Value);
+            }
+        }
+
+       
     }
 
     public void HandlePlayerDisconnect(ulong clientId)

@@ -76,9 +76,9 @@ public class NetworkManagerUI : MonoBehaviour
             
         });
 
-        //hostButton.gameObject.SetActive(false);
-        //clientButton.gameObject.SetActive(false);
-        //IPInputField.transform.parent.parent.gameObject.SetActive(false);
+        hostButton.gameObject.SetActive(false);
+        clientButton.gameObject.SetActive(false);
+        IPInputField.transform.parent.parent.gameObject.SetActive(false);
     }
 
     private void Update()
