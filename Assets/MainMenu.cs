@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    
     public AudioSource gunShotAudio;
     public AudioSource explosionAudio;
     public GameObject[] planks;
@@ -14,13 +15,25 @@ public class MainMenu : MonoBehaviour
     public GameObject gunshotParticleEffect; // Assign your particle prefab in the inspector
     public GameObject explosionParticleEffect; // Assign your particle prefab in the inspector
 
+    private PlayerJoined playerJoined;
+
+    private void Start()
+    {
+        playerJoined = FindAnyObjectByType<PlayerJoined>();
+    }
 
     public void BreakPlank(int i)
     {
         gunShotAudio.Play();
         StartCoroutine(Plankfalling(i));
         if (i == 0)
+        {
             StartCoroutine(StartGame());
+        }
+        else if(i == 1)
+        {
+            StartCoroutine(JoinGame());
+        }
     }
 
     public void BreakBarrel(int i)
@@ -32,7 +45,19 @@ public class MainMenu : MonoBehaviour
     public IEnumerator StartGame()
     {
         yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene("Generic standoff level_MULTIPLAYER");
+        Cursor.visible = true;
+        playerJoined.SetIsPlayerHost(true);
+        SceneLoader.Instance.LoadScene(Scenes.JoinGameScene);
+        //SceneManager.LoadScene("Generic standoff level_MULTIPLAYER");
+    }
+
+    public IEnumerator JoinGame()
+    {
+        yield return new WaitForSeconds(2f);
+        Cursor.visible = true;
+        playerJoined.SetIsPlayerHost(false);
+        SceneLoader.Instance.LoadScene(Scenes.JoinGameScene);
+        //SceneManager.LoadScene("Generic standoff level_MULTIPLAYER");
     }
 
     public IEnumerator Plankfalling(int i)

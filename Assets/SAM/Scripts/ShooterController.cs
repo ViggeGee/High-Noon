@@ -95,7 +95,7 @@ public class ShooterController : NetworkBehaviour
             crossHair.gameObject.SetActive(true);
         }
 
-        float crossHairSize = 100 + GameManager.Instance.mistakesDuringChallenge;
+        float crossHairSize = 100 + ChallengeManager.Instance.mistakesDuringChallenge;
         crossHairExpandValue = Mathf.Lerp(crossHairExpandValue, 0f, Time.deltaTime * shrinkSpeed);
 
         float sizeLerp = Mathf.Lerp(normalSize, expandedSize, crossHairExpandValue);

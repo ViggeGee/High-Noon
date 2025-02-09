@@ -100,13 +100,13 @@ public class ChallengeWheel : NetworkBehaviour
     [ServerRpc]
     public void SetCurrentChallengeServerRpc(int challengeIndex)
     {
-        if (GameManager.Instance != null)
+        if (ChallengeManager.Instance != null)
         {
-            GameManager.Instance.currentChallengeType.Value = availableChallenges[challengeIndex].GetComponent<Challenge>().challengeType;
+            ChallengeManager.Instance.currentChallengeType.Value = availableChallenges[challengeIndex].GetComponent<Challenge>().challengeType;
         }
         else
         {
-            Debug.LogError("GameManager is null");
+            Debug.LogError("ChallengeManager is null");
         }
     }
 

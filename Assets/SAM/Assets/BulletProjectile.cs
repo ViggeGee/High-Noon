@@ -14,6 +14,7 @@ public class BulletProjectile : NetworkBehaviour
     private Rigidbody bulletRigidbody;
     private float speed = 60f;
 
+    //public static event Action<GameObject>
     private void Awake()
     {
         bulletRigidbody = GetComponent<Rigidbody>();

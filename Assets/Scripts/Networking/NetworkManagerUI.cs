@@ -15,6 +15,8 @@ public class NetworkManagerUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI PlaceholderTextInputField;
     [SerializeField] private bool useLANConnection = false;
 
+    private PlayerJoined playerJoined;
+
     private void Awake()
     {
         hostButton.onClick.AddListener(() =>
@@ -73,8 +75,35 @@ public class NetworkManagerUI : MonoBehaviour
             
             
         });
+
+        hostButton.gameObject.SetActive(false);
+        clientButton.gameObject.SetActive(false);
+        IPInputField.transform.parent.parent.gameObject.SetActive(false);
     }
 
+    private void Update()
+    {
+        if(PlayerManager.Instance.PlayersJoined == 2)
+        {
+            gameObject.SetActive(false);
+        }
+        if(playerJoined == null)
+        {
+            playerJoined = FindAnyObjectByType<PlayerJoined>();
+        }
+        else
+        {
+            if(playerJoined.GetIsPlayerHost())
+            {
+                hostButton.gameObject.SetActive(true);
+            }
+            else
+            {
+                clientButton.gameObject.SetActive(true);
+                IPInputField.transform.parent.parent.gameObject.SetActive(true);
+            }
+        }
+    }
     string GetLocalIPAddress()
     {
         string localIP = string.Empty;
