@@ -476,7 +476,7 @@ MonoBehaviour:
   clientButton: {fileID: 2654877419240180645}
   IPInputField: {fileID: 6723632413266291498}
   PlaceholderTextInputField: {fileID: 4362377824334491823}
-  useLANConnection: 0
+  useLANConnection: 1
 --- !u!1 &3263751326033394266
 GameObject:
   m_ObjectHideFlags: 0

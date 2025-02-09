@@ -17,9 +17,6 @@ public class Player : NetworkBehaviour
             transform.rotation = Quaternion.identity;
             playerAnimator = GetComponent<Animator>();
             shooterController = GetComponent<ShooterController>();
-
-            NetworkObject networkObject = GetComponent<NetworkObject>();
-            networkObject.DestroyWithScene = true;
         }
     }
     private void Update()
@@ -38,8 +35,8 @@ public class Player : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SetDiedVariablesServerRpc()
     {
-        NewGameManager.Instance.playerDied.Value = true;
-        NewGameManager.Instance.playerThatDied.Value = gameObject.GetComponent<NetworkObject>();
+        GameManager.Instance.playerDied.Value = true;
+        GameManager.Instance.playerThatDied.Value = gameObject.GetComponent<NetworkObject>();
     }
 
     

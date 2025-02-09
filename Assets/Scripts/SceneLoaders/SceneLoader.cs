@@ -5,8 +5,10 @@ using UnityEngine.SceneManagement;
 
 public enum Scenes
 {
-    MainMenu,
     StartGameScene,
+    MainMenu,
+    JoinGameScene,
+
     WesternTown
 }
 public class SceneLoader : NetworkBehaviour
@@ -60,7 +62,7 @@ public class SceneLoader : NetworkBehaviour
     private Scenes GetRandomScene()
     {
         Array sceneValues = Enum.GetValues(typeof(Scenes));
-        return (Scenes)sceneValues.GetValue(UnityEngine.Random.Range(2, sceneValues.Length));
+        return (Scenes)sceneValues.GetValue(UnityEngine.Random.Range(3, sceneValues.Length));
     }
     #endregion
 }

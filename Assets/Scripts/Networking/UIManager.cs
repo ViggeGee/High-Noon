@@ -54,7 +54,7 @@ public class UIManager : NetworkBehaviour
         
         if(IsServer)
         {
-            NewGameManager.Instance.hasGameStarted.Value = true;
+            GameManager.Instance.hasGameStarted.Value = true;
         }    
 
         ulong thisClient = NetworkManager.Singleton.LocalClientId;
@@ -67,11 +67,11 @@ public class UIManager : NetworkBehaviour
     {
         if (localClientId == 0)
         {
-            NewGameManager.Instance.isPlayer1Ready.Value = true;
+            GameManager.Instance.isPlayer1Ready.Value = true;
         }
         else
         {
-            NewGameManager.Instance.isPlayer2Ready.Value = true;
+            GameManager.Instance.isPlayer2Ready.Value = true;
         }
     }
 

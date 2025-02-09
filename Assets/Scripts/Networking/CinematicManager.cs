@@ -20,11 +20,11 @@ public class CinematicManager : MonoBehaviour
     {
         if (cinematicCameras.Length == 0) yield return null;
 
-        while (!NewGameManager.Instance.readyToShoot) 
+        while (!GameManager.Instance.readyToShoot) 
         {
             for (int i = 0; i < cinematicCameras.Length; i++)
             {
-                if (NewGameManager.Instance.readyToShoot) break;
+                if (GameManager.Instance.readyToShoot) break;
 
                 // Activate the current camera and deactivate all others
                 for (int j = 0; j < cinematicCameras.Length; j++)
@@ -47,7 +47,7 @@ public class CinematicManager : MonoBehaviour
     {
         if (cinematicCameras.Length == 0) return;
 
-        if (NewGameManager.Instance.readyToShoot && !hasDeactivatedCinematic)
+        if (GameManager.Instance.readyToShoot && !hasDeactivatedCinematic)
         {
             StopCoroutine(PlayCinematic());
             Cursor.lockState = CursorLockMode.Locked;
@@ -67,7 +67,7 @@ public class CinematicManager : MonoBehaviour
             yield return new WaitUntil(() => challenge.GetComponent<typeRacer>() != null);
             typeRacer typeRacer = challenge.GetComponent<typeRacer>();
             typeRacer.SetNetworkSentenceServerRpc();
-            NewGameManager.Instance.UpdateCurrentGameStateServerRpc(GameState.Playing);
+            GameManager.Instance.UpdateCurrentGameStateServerRpc(GameState.Playing);
         }
     }
 }

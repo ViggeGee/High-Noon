@@ -5,6 +5,7 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static Challenge;
 
 public class ChallengeManager : NetworkBehaviour
@@ -36,6 +37,11 @@ public class ChallengeManager : NetworkBehaviour
 
     private void Start()
     {
+        if(SceneManager.GetActiveScene() == SceneManager.GetSceneByName(Scenes.JoinGameScene.ToString()))
+        {
+            challengeWheelCanvas.gameObject.SetActive(false);
+        }
+
         //challengeWheel = FindFirstObjectByType<ChallengeWheel>();
         if (challengeWheel != null) challengeWheel.OnChallengeSelected += ChallengeWheel_OnChallengeSelected;
 
@@ -68,7 +74,7 @@ public class ChallengeManager : NetworkBehaviour
         {
             hasStartedWheelRotation = true;
             challengeWheel.RotateServerRpc();
-            NewGameManager.Instance.UpdateCurrentGameStateServerRpc(GameState.ChoosingChallenge);
+            GameManager.Instance.UpdateCurrentGameStateServerRpc(GameState.ChoosingChallenge);
         }
     }
     private void PlayerManager_OnPlayersJoined(int numberOfPlayers) ///// PLACE THIS METHOD SOMEWHERE MORE APPROPRIATE IN THE FUTURE
@@ -77,7 +83,7 @@ public class ChallengeManager : NetworkBehaviour
         {
             if(IsServer)
             {
-                if (NewGameManager.Instance.currentGameState == GameState.StartGameScene)
+                if (GameManager.Instance.currentGameState == GameState.StartGameScene)
                 {
                     SceneLoader.Instance.LoadRandomSceneForAllPlayers();
                 }

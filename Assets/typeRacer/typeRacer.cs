@@ -206,7 +206,7 @@ public class typeRacer : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!NewGameManager.Instance.hasGameStarted.Value || !NewGameManager.Instance.isPlayer1Ready.Value || !NewGameManager.Instance.isPlayer2Ready.Value) return;
+        if (!GameManager.Instance.hasGameStarted.Value || !GameManager.Instance.isPlayer1Ready.Value || !GameManager.Instance.isPlayer2Ready.Value) return;
 
         playerInput.Select();
 
@@ -220,7 +220,7 @@ public class typeRacer : NetworkBehaviour
             if(completedWords >= 1)
             {
                 finnishRaceSound.Play();
-                NewGameManager.Instance.readyToShoot = true;
+                GameManager.Instance.readyToShoot = true;
                 ClearWords();
                 CinematicManager.Instance.StopCinematic();
             }

@@ -44,6 +44,7 @@ public class PlayerManager : NetworkBehaviour
             Transform spawnPoint = (playersJoined.Value == 0) ? player1SpawnPoint.transform : player2SpawnPoint.transform;
             GameObject player = Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
             player.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
+            player.GetComponent<NetworkObject>().DestroyWithScene = true;
 
             playersJoined.Value++;
 
@@ -67,6 +68,7 @@ public class PlayerManager : NetworkBehaviour
                 Transform spawnPoint = (playersJoined.Value == 0) ? player1SpawnPoint.transform : player2SpawnPoint.transform;
                 GameObject player = Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
                 player.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
+                player.GetComponent<NetworkObject>().DestroyWithScene = true;
 
                 playersJoined.Value++;
 

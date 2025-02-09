@@ -88,9 +88,9 @@ public class ShooterController : NetworkBehaviour
 
     private void Update()
     {
-        if (!IsOwner || !NewGameManager.Instance.readyToShoot) return; 
+        if (!IsOwner || !GameManager.Instance.readyToShoot) return; 
 
-        if(NewGameManager.Instance.readyToShoot)
+        if(GameManager.Instance.readyToShoot)
         {
             crossHair.gameObject.SetActive(true);
         }
@@ -116,7 +116,7 @@ public class ShooterController : NetworkBehaviour
 
         transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
 
-        if (input.shoot && NewGameManager.Instance.readyToShoot)
+        if (input.shoot && GameManager.Instance.readyToShoot)
         {
             input.shoot = false;
             Vector3 aimDir = (mouseWorldPosition - bulletSpawnPosition.position).normalized;

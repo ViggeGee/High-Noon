@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ExtendedNetworkManager : NetworkBehaviour
 {
@@ -16,22 +17,8 @@ public class ExtendedNetworkManager : NetworkBehaviour
 
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
         NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
-    }
 
-    
-
-    public override void OnDestroy()
-    {
-        if (IsServer && NetworkManager.Singleton != null)
-        {
-            NetworkManager.Singleton.OnServerStarted -= HandleServerStarted;
-            NetworkManager.Singleton.OnServerStopped -= HandleServerStopped;
-
-            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
-            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
-
-            NetworkManager.Singleton.SceneManager.OnSceneEvent -= HandleSceneEvent;
-        }
+        SceneLoader.Instance.LoadScene(Scenes.MainMenu);
     }
 
     private void HandleServerStopped(bool obj)
@@ -58,7 +45,9 @@ public class ExtendedNetworkManager : NetworkBehaviour
 
     private void SpawnGameManager()
     {
-        if (!IsHost) return; 
+        if (!IsHost) return;
+
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName(Scenes.MainMenu.ToString())) return;
 
         gameManagerInstance = Instantiate(gameManagerPrefab);
         NetworkObject networkObject = gameManagerInstance.GetComponent<NetworkObject>();
@@ -68,19 +57,28 @@ public class ExtendedNetworkManager : NetworkBehaviour
 
     private void HandleSceneEvent(SceneEvent sceneEvent)
     {
-        if (sceneEvent.SceneEventType == SceneEventType.LoadComplete)
+
+        switch (sceneEvent.SceneEventType)
         {
-            SpawnGameManager();
-            PlayerManager.Instance.HandlePlayerSpawnOnSceneChange();
-            NewGameManager.Instance.UpdateCurrentGameStateServerRpc(GameState.ChoosingChallenge);
-        }
-        else if (sceneEvent.SceneEventType == SceneEventType.UnloadComplete)
-        {
+            case SceneEventType.Load:
+
+                break;
+
+            case SceneEventType.LoadComplete:
+                // Scene fully loaded
+                SpawnGameManager();
+                PlayerManager.Instance.HandlePlayerSpawnOnSceneChange();
+                GameManager.Instance.UpdateCurrentGameStateServerRpc(GameState.ChoosingChallenge);
+               
+                break;
+
+            case SceneEventType.Unload:
             
-        }
-        else if (sceneEvent.SceneEventType == SceneEventType.Load)
-        {
-            
+                break;
+
+            case SceneEventType.UnloadComplete:
+                
+                break;
         }
     }
 
