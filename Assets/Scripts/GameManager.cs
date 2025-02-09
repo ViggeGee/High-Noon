@@ -42,7 +42,6 @@ public class GameManager : NetworkBehaviour
             case GameState.StartGameScene:
 
 
-
                 break;
 
             case GameState.WaitingForPlayers:

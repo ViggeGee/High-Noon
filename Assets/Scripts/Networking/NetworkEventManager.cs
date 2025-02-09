@@ -3,7 +3,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ExtendedNetworkManager : NetworkBehaviour
+public class NetworkEventManager : NetworkBehaviour
 {
     public GameObject gameManagerPrefab;
     private GameObject gameManagerInstance;
