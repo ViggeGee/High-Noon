@@ -6,8 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private PlayerJoined playerJoined;
-
+    
     public AudioSource gunShotAudio;
     public AudioSource explosionAudio;
     public GameObject[] planks;
@@ -16,6 +15,12 @@ public class MainMenu : MonoBehaviour
     public GameObject gunshotParticleEffect; // Assign your particle prefab in the inspector
     public GameObject explosionParticleEffect; // Assign your particle prefab in the inspector
 
+    private PlayerJoined playerJoined;
+
+    private void Start()
+    {
+        playerJoined = FindAnyObjectByType<PlayerJoined>();
+    }
 
     public void BreakPlank(int i)
     {

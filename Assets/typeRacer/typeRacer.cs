@@ -206,7 +206,7 @@ public class typeRacer : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!GameManager.Instance.hasGameStarted.Value || !GameManager.Instance.isPlayer1Ready.Value || !GameManager.Instance.isPlayer2Ready.Value) return;
+        if (!GameManager.Instance.hasGameStarted.Value || !GameManager.Instance.isPlayer1Ready.Value || !GameManager.Instance.isPlayer2Ready.Value || GameManager.Instance.playerDied.Value) return;
 
         playerInput.Select();
 
