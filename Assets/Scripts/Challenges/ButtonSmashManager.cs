@@ -1,34 +1,60 @@
 using System.Runtime.CompilerServices;
 using StarterAssets;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ButtonSmashManager : MonoBehaviour
 {
-    //[SerializeField] private Image button1;
-    //[SerializeField] private Image button2;
+    [SerializeField] private Image button1;
+    [SerializeField] private Image button2;
     [SerializeField] private float maximumButtonPresses;
     [SerializeField] private float currentButtonPresses = 0;
-    [SerializeField] private float button1Value;
-    [SerializeField] private float button2Value;
-    [SerializeField] private bool button1Active = false;
-    [SerializeField] private bool button2Active = false;
+    [SerializeField] private TextMeshProUGUI tmp_instructions;
+
+
     private StarterAssetsInputs input;
     public bool nextIsButton1 = true;
-
+    public bool challengeCompleted = false;
 
 
     void Start()
     {
-        button1Active = false;
-        button2Active = false;
         input = GetComponent<StarterAssetsInputs>();
     }
 
     // Update is called once per frame
     void Update()
     {
+
         ButtonSmashActivated();
+        CanvasSettings();
+        SetColor();
+
+    }
+
+    private void SetColor()
+    {
+        if (nextIsButton1)
+        {
+            button1.color = Color.white;
+            button2.color = Color.gray;
+        }
+        else
+        {
+            button1.color = Color.gray;
+            button2.color = Color.white;
+        }
+    }
+
+    private void CanvasSettings()
+    {
+        if (challengeCompleted)
+        {
+            button1.gameObject.SetActive(false);
+            button2.gameObject.SetActive(false);
+            tmp_instructions.gameObject.SetActive(false);
+        }
     }
 
     private void ButtonSmashActivated()
@@ -44,6 +70,11 @@ public class ButtonSmashManager : MonoBehaviour
             input.buttonSmash2 = false;
             nextIsButton1 = true;
             currentButtonPresses++;
+        }
+
+        if (currentButtonPresses > maximumButtonPresses)
+        {
+            challengeCompleted = true;
         }
     }
 }

@@ -1,14 +1,8 @@
-﻿using StarterAssets;
+using StarterAssets;
 using UnityEngine;
-using UnityEngine.Windows;
 using UnityEngine.InputSystem;
-using System.Collections;
 
-
-
-using Unity.Netcode;
-
-public class PlayerCamera : NetworkBehaviour // ✅ Make it networked
+public class PlayerCameraTest : MonoBehaviour
 {
     private StarterAssetsInputs _input;
     private const float _threshold = 0.01f;
@@ -47,47 +41,17 @@ public class PlayerCamera : NetworkBehaviour // ✅ Make it networked
 #endif
         }
     }
-
-    public override void OnNetworkSpawn()
-    {
-        if (IsOwner)
-        {
-            _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-
-            // 🛠 Assign inputs only for the local player (to avoid sharing input across players)
-            _input = GetComponent<StarterAssetsInputs>();
-            _input.enabled = true;
-            if (_input == null)
-            {
-                Debug.LogError($"[PlayerCamera] OwnerClientId: {OwnerClientId} - StarterAssetsInputs NOT found!");
-            }
-
-            _playerInput = GetComponent<PlayerInput>();
-            _playerInput.enabled = true;
-            if (_playerInput == null)
-            {
-                Debug.LogError($"[PlayerCamera] OwnerClientId: {OwnerClientId} - PlayerInput NOT found!");
-            }
-        }
-        else
-        {
-            // ❗ Disable input handling for non-owner players
-            enabled = false;
-        }
-    }
-
-
     void Update()
     {
         //if (!IsOwner || !GameManager.Instance.readyToShoot) return; 
-
+        
         CameraRotation();
         RecoverRecoil();
     }
 
     private void CameraRotation()
     {
-        
+
         if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
         {
             float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
@@ -108,7 +72,6 @@ public class PlayerCamera : NetworkBehaviour // ✅ Make it networked
         CinemachineCameraTarget.transform.rotation = Quaternion.Euler(finalPitch + CameraAngleOverride,
             _cinemachineTargetYaw, 0.0f);
     }
-
 
     private static float ClampAngle(float angle, float min, float max)
     {

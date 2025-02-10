@@ -100,10 +100,6 @@ namespace StarterAssets
         public void ShootInput(bool newShootState)
         {
             shoot = newShootState;
-            //if(GameManager.Instance.readyToShoot)
-            //{
-            //             shoot = newShootState;
-            //         }   
         }
         public void ButtonSmashInput1(bool newButtonSmash1State)
         {
