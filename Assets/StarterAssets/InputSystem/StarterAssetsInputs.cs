@@ -16,6 +16,10 @@ namespace StarterAssets
 		public bool aim;
 		public bool shoot;
 
+		//ButtonSmash
+		public bool buttonSmash1;
+		public bool buttonSmash2;
+
 		[Header("Movement Settings")]
 		public bool analogMovement;
 
@@ -56,6 +60,14 @@ namespace StarterAssets
         {
             ShootInput(value.isPressed);
         }
+        public void OnButtonSmash1(InputValue value)
+        {
+            ButtonSmashInput1(value.isPressed);
+        }
+        public void OnButtonSmash2(InputValue value)
+        {
+            ButtonSmashInput2(value.isPressed);
+        }
 #endif
 
 
@@ -67,7 +79,7 @@ namespace StarterAssets
         public void LookInput(Vector2 newLookDirection)
         {
             look = newLookDirection;
-            Debug.Log($"[StarterAssetsInputs] Look Input Updated: {look} - Player: {GetComponent<NetworkBehaviour>()?.OwnerClientId}");
+            //Debug.Log($"[StarterAssetsInputs] Look Input Updated: {look} - Player: {GetComponent<NetworkBehaviour>()?.OwnerClientId}");
         }
 
 
@@ -87,10 +99,20 @@ namespace StarterAssets
         }
         public void ShootInput(bool newShootState)
         {
-			if(GameManager.Instance.readyToShoot)
-			{
-                shoot = newShootState;
-            }   
+            shoot = newShootState;
+            //if(GameManager.Instance.readyToShoot)
+            //{
+            //             shoot = newShootState;
+            //         }   
+        }
+        public void ButtonSmashInput1(bool newButtonSmash1State)
+        {
+            buttonSmash1 = newButtonSmash1State;
+        }
+
+        public void ButtonSmashInput2(bool newButtonSmash2State)
+        {
+            buttonSmash2 = newButtonSmash2State;
         }
 
         private void OnApplicationFocus(bool hasFocus)

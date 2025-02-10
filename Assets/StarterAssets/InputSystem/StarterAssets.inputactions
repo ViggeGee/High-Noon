@@ -52,8 +52,26 @@
                 },
                 {
                     "name": "Shoot",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "08dbac25-65bc-4650-a4c5-ad9519a16d47",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ButtonSmash1",
+                    "type": "PassThrough",
+                    "id": "de9785dd-01a1-4244-8ed5-3ddc4189806a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ButtonSmash2",
+                    "type": "PassThrough",
+                    "id": "7a4b62f9-4a0c-4a22-81ef-578c65769774",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -256,6 +274,28 @@
                     "processors": "",
                     "groups": ";KeyboardMouse",
                     "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2f8cc2e7-dd73-4ddd-accb-d3548632a778",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardMouse",
+                    "action": "ButtonSmash1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "58b82c82-5678-425e-9452-00021e2e5a45",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardMouse",
+                    "action": "ButtonSmash2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

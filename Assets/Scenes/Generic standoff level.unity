@@ -2035,6 +2035,31 @@ Transform:
   - {fileID: 1066754000}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1453070299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1586181784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 888901955
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!136 &1482117221
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2073,6 +2098,8 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   LockCameraPosition: 0
   sensitivity: 1
+  recoilRecovery: 5
+  recoilAmount: 10
   CinemachineCameraTarget: {fileID: 1774990059}
   TopClamp: 70
   BottomClamp: -30
@@ -2095,6 +2122,8 @@ MonoBehaviour:
   sprint: 0
   aim: 0
   shoot: 0
+  buttonSmash1: 0
+  buttonSmash2: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
@@ -2152,6 +2181,9 @@ MonoBehaviour:
   aimColliderLayerMask:
     serializedVersion: 2
     m_Bits: 375
+  shrinkSpeed: 6
+  normalSize: 100
+  expandedSize: 500
 --- !u!1001 &1497894855
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2928,6 +2960,9 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1930506485524798, guid: 00ab987898452b64582d6bf1a5caafd4, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 1453070299}
+    - targetCorrespondingSourceObject: {fileID: 1930506485524798, guid: 00ab987898452b64582d6bf1a5caafd4, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1482117225}
     - targetCorrespondingSourceObject: {fileID: 1930506485524798, guid: 00ab987898452b64582d6bf1a5caafd4, type: 3}
       insertIndex: -1
@@ -3600,6 +3635,31 @@ Canvas:
   m_CorrespondingSourceObject: {fileID: 3825244117364547449, guid: ec0f349b07704ba459286b620ef27457, type: 3}
   m_PrefabInstance: {fileID: 4977687207710304954}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1999804431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999804424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1382321792
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!144 &2013399873
 CharacterJoint:
   m_ObjectHideFlags: 0
@@ -4488,7 +4548,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9188962435204146716, guid: ec0f349b07704ba459286b620ef27457, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1999804431}
   m_SourcePrefab: {fileID: 100100000, guid: ec0f349b07704ba459286b620ef27457, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
