@@ -80,6 +80,12 @@ public class BulletProjectile : NetworkBehaviour
             {
                 animator.enabled = false;
             }
+
+            
+            foreach(Rigidbody rb in playerObject.GetComponentsInChildren<Rigidbody>())
+            {
+                rb.AddForce(transform.forward * 20, ForceMode.Impulse);
+            }
         }
 
         ShowHitEffectClientRpc(true, transform.position);
