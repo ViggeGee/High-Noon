@@ -1210,9 +1210,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'U
-
-'
+  m_text: E
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 28f4e41dd9c92f74da965a57562a2701, type: 2}
   m_sharedMaterial: {fileID: 4626367629381079744, guid: 28f4e41dd9c92f74da965a57562a2701, type: 2}
