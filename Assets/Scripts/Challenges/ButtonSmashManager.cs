@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Runtime.CompilerServices;
 using StarterAssets;
 using TMPro;
@@ -8,28 +9,36 @@ public class ButtonSmashManager : MonoBehaviour
 {
     [SerializeField] private Image button1;
     [SerializeField] private Image button2;
+    [SerializeField] private TextMeshProUGUI countdown;
     [SerializeField] private float maximumButtonPresses;
     [SerializeField] private float currentButtonPresses = 0;
     [SerializeField] private TextMeshProUGUI tmp_instructions;
-
+    [SerializeField] private Transform player;
+    [SerializeField] private int timer = 5;
 
     private StarterAssetsInputs input;
     public bool nextIsButton1 = true;
     public bool challengeCompleted = false;
+    private bool challengeStarted = false;
 
 
     void Start()
     {
-        input = GetComponent<StarterAssetsInputs>();
+        input = player.GetComponent<StarterAssetsInputs>();
+        StartCoroutine(CountdownRoutine());
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        ButtonSmashActivated();
         CanvasSettings();
         SetColor();
+
+        if (challengeStarted && !challengeCompleted)
+        {
+            ButtonSmashActivated();
+        }
 
     }
 
@@ -49,11 +58,17 @@ public class ButtonSmashManager : MonoBehaviour
 
     private void CanvasSettings()
     {
-        if (challengeCompleted)
+        if (challengeCompleted || !challengeStarted)
         {
             button1.gameObject.SetActive(false);
             button2.gameObject.SetActive(false);
             tmp_instructions.gameObject.SetActive(false);
+        }
+        else
+        {
+            button1.gameObject.SetActive(true);
+            button2.gameObject.SetActive(true);
+            tmp_instructions.gameObject.SetActive(true);
         }
     }
 
@@ -72,9 +87,25 @@ public class ButtonSmashManager : MonoBehaviour
             currentButtonPresses++;
         }
 
-        if (currentButtonPresses > maximumButtonPresses)
+        if (currentButtonPresses >= maximumButtonPresses)
         {
             challengeCompleted = true;
         }
+    }
+
+    IEnumerator CountdownRoutine()
+    {
+        int timeLeft = timer;
+
+        while (timeLeft > 0)
+        {
+            countdown.text = timeLeft.ToString(); // Update UI
+            yield return new WaitForSeconds(1f); // Wait 1 second
+            timeLeft--; // Decrease time
+        }
+        challengeStarted = true;
+        countdown.text = "GO!"; // Display final message
+        yield return new WaitForSeconds(1f);
+        countdown.text = ""; // Clear text after 1 sec (optional)
     }
 }
