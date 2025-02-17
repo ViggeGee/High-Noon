@@ -9,9 +9,11 @@ public class Motion_Controller : MonoBehaviour
     public GameObject player1GameObject;
     public GameObject player1PivotAroundGameObject;
 
-    //private Rewired.Player player2;
-    //public GameObject player2GameObject;
-    //public GameObject player2PivotAroundGameObject;
+    public bool twoPlayers;
+
+    private Rewired.Player player2;
+    public GameObject player2GameObject;
+    public GameObject player2PivotAroundGameObject;
 
     private List<Rewired.Player> players = new List<Rewired.Player>();
 
@@ -22,26 +24,30 @@ public class Motion_Controller : MonoBehaviour
     private void Start()
     {
         player1 = ReInput.players.GetPlayer(0);
-        //player2 = ReInput.players.GetPlayer(1);
+        if (twoPlayers)
+            player2 = ReInput.players.GetPlayer(1);
 
         if (player1 == null)
         {
-            Debug.LogError("<color=red>Player 1 not found! Ensure Rewired is set up correctly.</color>");
+            Debug.LogError("<color=red>Player 1 not found!</color>");
             return;
         }
-        //else if (player2 == null)
-        //{
-        //    Debug.LogError("<color=red>Player 2 not found! Ensure Rewired is set up correctly.</color>");
-        //    return;
-        //}
+        else if (twoPlayers == true && player2 == null)
+        {
+            Debug.LogError("<color=red>Player 2 not found!</color>");
+            return;
+        }
         else
         {
             players.Add(player1);
-            //players.Add(player2);
+
+            if (twoPlayers)
+                players.Add(player2);
         }
 
         Debug.Log("<color=green>Player 1: " + player1.name + "</color>");
-        //Debug.Log("<color=green>Player 2: " + player2.name + "</color>");
+        if (twoPlayers)
+            Debug.Log("<color=green>Player 2: " + player2.name + "</color>");
     }
 
     void Update()
@@ -117,7 +123,7 @@ public class Motion_Controller : MonoBehaviour
     {
         foreach (Joystick joystick in player.controllers.Joysticks)
         {
-            Debug.Log($"<color=yellow>Detected Controller: {joystick.name}</color>");
+            Debug.Log($"<color=yellow>Player: {player.name} Detected Controller: {joystick.name}</color>");
 
             #region Not Working - Switch Controllers
             //if (joystick.name.Contains("Joy-Con (L)"))
@@ -149,7 +155,7 @@ public class Motion_Controller : MonoBehaviour
 
     private void PivotObjectWithController(string controllerType, Rewired.Player player, Vector3 gyroData)
     {
-        if(gyroData.sqrMagnitude < 0.05f)
+        if (gyroData.sqrMagnitude < 0.01f)
         {
             return;
         }
@@ -163,11 +169,12 @@ public class Motion_Controller : MonoBehaviour
         //player1GameObject.transform.RotateAround(player1PivotAroundGameObject.transform.position, gyroDataX * Time.deltaTime * rotationAmount, angle);
         //player1GameObject.transform.RotateAround(player1PivotAroundGameObject.transform.position, gyroDataY * Time.deltaTime * rotationAmount, angle);
 
-        
 
-        player1GameObject.transform.RotateAround(player1PivotAroundGameObject.transform.position, rotationAmount * Time.deltaTime * gyroDataZ, angle);
+        GameObject playerGameObject = GetPlayerGameObject(player);
+        GameObject pivotAroundGameObject = GetPlayerPivotGameObject(player);
+        playerGameObject.transform.RotateAround(pivotAroundGameObject.transform.position, rotationAmount * Time.deltaTime * gyroDataZ, angle);
 
-        Debug.Log($"<color=cyan>{controllerType} Gyro: {gyroData}</color>");
+        Debug.Log($"<color=cyan>Player: {player.name} has {controllerType} Gyro: {gyroData}</color>");
     }
     private void RotateObjectWithController(string controllerType, Rewired.Player player, Vector3 gyroData)
     {
@@ -182,5 +189,36 @@ public class Motion_Controller : MonoBehaviour
         player1GameObject.transform.Rotate(gyroDataZ * Time.deltaTime * rotationAmount);
 
         Debug.Log($"<color=cyan>{controllerType} Gyro: {gyroData}</color>");
+    }
+
+    public GameObject GetPlayerGameObject(Rewired.Player player)
+    {
+        if (player == player1)
+        {
+            return player1GameObject;
+        }
+        else if (twoPlayers == true && player == player2)
+        {
+            return player2GameObject;
+        }
+        else
+        {
+            return null;
+        }
+    }
+    public GameObject GetPlayerPivotGameObject(Rewired.Player player)
+    {
+        if (player == player1)
+        {
+            return player1PivotAroundGameObject;
+        }
+        else if (twoPlayers == true && player == player2)
+        {
+            return player2PivotAroundGameObject;
+        }
+        else
+        {
+            return null;
+        }
     }
 }
