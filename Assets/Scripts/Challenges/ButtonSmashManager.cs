@@ -10,8 +10,7 @@ public class ButtonSmashManager : MonoBehaviour
     [SerializeField] private Image button1;
     [SerializeField] private Image button2;
     [SerializeField] private Image emptyBar;
-    [SerializeField] private Image emptyBar;
-    [SerializeField] private Image button2;
+    [SerializeField] private Image loadingBar;
     [SerializeField] private TextMeshProUGUI countdown;
     [SerializeField] private float maximumButtonPresses;
     [SerializeField] private float currentButtonPresses = 0;
