@@ -14,6 +14,8 @@ TagManager:
   - Player1Spawn
   - Player2Spawn
   - ChallengeWheel
+  - BlackAndWhitePP
+  - PP
   layers:
   - Default
   - TransparentFX

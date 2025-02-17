@@ -7,9 +7,11 @@ using UnityEngine;
 
 public class BulletProjectile : NetworkBehaviour
 {
-   
+
     [SerializeField] private Transform vfxHitGreen;
     [SerializeField] private Transform vfxHitRed;
+
+    SlowMotion slowMotion = new SlowMotion();
 
     private Rigidbody bulletRigidbody;
     private float speed = 60f;
@@ -46,8 +48,10 @@ public class BulletProjectile : NetworkBehaviour
 
             if (networkObject != null)  // Ensure networkObject is valid
             {
+                other.enabled = false;
                 ulong playerId = networkObject.NetworkObjectId;
                 HitPlayerClientRpc(playerId);
+                
             }
             else
             {
@@ -75,16 +79,23 @@ public class BulletProjectile : NetworkBehaviour
     {
         if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(playerId, out NetworkObject playerObject))
         {
+            StartCoroutine(slowMotion.StartSlowMotion(5, 0.2f));
+
             Animator animator = playerObject.GetComponent<Animator>();
             if (animator != null)
             {
                 animator.enabled = false;
             }
 
-            
-            foreach(Rigidbody rb in playerObject.GetComponentsInChildren<Rigidbody>())
+
+            foreach (Rigidbody rb in playerObject.GetComponentsInChildren<Rigidbody>())
             {
-                rb.AddForce(transform.forward * 20, ForceMode.Impulse);
+                if (rb.gameObject.name == "Head")
+                {
+                    
+                    rb.AddForce(bulletRigidbody.angularVelocity * 50);
+                    break;
+                }
             }
         }
 
