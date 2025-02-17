@@ -20,6 +20,7 @@ public class ButtonSmashManager : MonoBehaviour
     public bool nextIsButton1 = true;
     public bool challengeCompleted = false;
     private bool challengeStarted = false;
+    private bool canPress = true;
 
 
     void Start()
@@ -62,7 +63,11 @@ public class ButtonSmashManager : MonoBehaviour
         {
             button1.gameObject.SetActive(false);
             button2.gameObject.SetActive(false);
-            tmp_instructions.gameObject.SetActive(false);
+
+            if (challengeCompleted)
+            {
+                tmp_instructions.gameObject.SetActive(false);
+            }
         }
         else
         {
@@ -70,26 +75,39 @@ public class ButtonSmashManager : MonoBehaviour
             button2.gameObject.SetActive(true);
             tmp_instructions.gameObject.SetActive(true);
         }
+
+
     }
 
     private void ButtonSmashActivated()
     {
-        if (input.buttonSmash1 && nextIsButton1)
-        {
-            input.buttonSmash1 = false;
-            nextIsButton1 = false;
-            currentButtonPresses++;
-        }
-        else if (input.buttonSmash2 && !nextIsButton1)
-        {
-            input.buttonSmash2 = false;
-            nextIsButton1 = true;
-            currentButtonPresses++;
-        }
+        // If we're in the middle of the short delay, do nothing
+        if (!canPress) return;
 
-        if (currentButtonPresses >= maximumButtonPresses)
+        bool pressedButton1 = input.buttonSmash1 && nextIsButton1;
+        bool pressedButton2 = input.buttonSmash2 && !nextIsButton1;
+
+        if (pressedButton1 || pressedButton2)
         {
-            challengeCompleted = true;
+            StartCoroutine(ButtonPressDelay());
+
+            if (pressedButton1)
+            {
+                input.buttonSmash1 = false;
+                nextIsButton1 = false;
+            }
+            else
+            {
+                input.buttonSmash2 = false;
+                nextIsButton1 = true;
+            }
+
+            currentButtonPresses++;
+
+            if (currentButtonPresses >= maximumButtonPresses)
+            {
+                challengeCompleted = true;
+            }
         }
     }
 
@@ -99,13 +117,21 @@ public class ButtonSmashManager : MonoBehaviour
 
         while (timeLeft > 0)
         {
-            countdown.text = timeLeft.ToString(); // Update UI
-            yield return new WaitForSeconds(1f); // Wait 1 second
-            timeLeft--; // Decrease time
+            countdown.text = timeLeft.ToString();
+            yield return new WaitForSeconds(1f);
+            timeLeft--;
         }
         challengeStarted = true;
-        countdown.text = "GO!"; // Display final message
+        countdown.text = "GO!";
         yield return new WaitForSeconds(1f);
-        countdown.text = ""; // Clear text after 1 sec (optional)
+        countdown.text = "";
+    }
+
+    
+    private IEnumerator ButtonPressDelay()
+    {
+        canPress = false;
+        yield return new WaitForSeconds(0.05f);
+        canPress = true;
     }
 }
