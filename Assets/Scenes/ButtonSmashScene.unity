@@ -20970,6 +20970,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   button1: {fileID: 886784203}
   button2: {fileID: 1114980666}
+  emptyBar: {fileID: 1376946950}
+  loadingBar: {fileID: 1949738388}
   countdown: {fileID: 249568672}
   maximumButtonPresses: 200
   currentButtonPresses: 0

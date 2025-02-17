@@ -17,6 +17,7 @@ public class ButtonSmashManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI tmp_instructions;
     [SerializeField] private Transform player;
     [SerializeField] private int timer = 5;
+    private float barWidth = 0;
 
     private StarterAssetsInputs input;
     public bool nextIsButton1 = true;
@@ -29,6 +30,7 @@ public class ButtonSmashManager : MonoBehaviour
     {
         input = player.GetComponent<StarterAssetsInputs>();
         StartCoroutine(CountdownRoutine());
+        loadingBar.rectTransform.sizeDelta = new Vector2(barWidth, loadingBar.rectTransform.sizeDelta.y);
     }
 
     // Update is called once per frame
@@ -61,8 +63,11 @@ public class ButtonSmashManager : MonoBehaviour
 
     private void CanvasSettings()
     {
+        loadingBar.rectTransform.sizeDelta = new Vector2(barWidth, loadingBar.rectTransform.sizeDelta.y);
         if (challengeCompleted || !challengeStarted)
         {
+            loadingBar.gameObject.SetActive(false);
+            emptyBar.gameObject.SetActive(false);
             button1.gameObject.SetActive(false);
             button2.gameObject.SetActive(false);
 
@@ -73,6 +78,8 @@ public class ButtonSmashManager : MonoBehaviour
         }
         else
         {
+            loadingBar.gameObject.SetActive(true);
+            emptyBar.gameObject.SetActive(true);
             button1.gameObject.SetActive(true);
             button2.gameObject.SetActive(true);
             tmp_instructions.gameObject.SetActive(true);
@@ -95,11 +102,13 @@ public class ButtonSmashManager : MonoBehaviour
             {
                 input.buttonSmash1 = false;
                 nextIsButton1 = false;
+                barWidth += 1.95f;
             }
             else
             {
                 input.buttonSmash2 = false;
                 nextIsButton1 = true;
+                barWidth += 1.95f;
             }
 
             currentButtonPresses++;
