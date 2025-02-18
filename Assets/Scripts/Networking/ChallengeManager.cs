@@ -26,6 +26,7 @@ public class ChallengeManager : NetworkBehaviour
     #region Challenges
 
     private typeRacer typeRacer;
+    private ButtonSmashManager buttonSmash;
 
     #endregion
 
@@ -60,6 +61,13 @@ public class ChallengeManager : NetworkBehaviour
             if (typeRacer != null)
             {
                 mistakesDuringChallenge = typeRacer.nrFailLetters;
+            }
+        }
+        else if (currentChallengeType.Value == Challenge.ChallengeType.ButtonSmash)
+        {
+            if (buttonSmash != null)
+            {
+                // NR OF MISTAKES FOR BUTTON SMASH
             }
         }
 
@@ -122,6 +130,17 @@ public class ChallengeManager : NetworkBehaviour
                 {
                     challenge.SetActive(true);
                     typeRacer = challenge.GetComponent<typeRacer>();
+                    StartCoroutine(CinematicManager.Instance.PlayCinematic());
+                    StartCoroutine(CinematicManager.Instance.WaitForChallengeInitialization(challenge, currentChallengeType.Value));
+                }
+            }
+            else if (currentChallengeType.Value == Challenge.ChallengeType.ButtonSmash)
+            {
+
+                if (challenge.CompareTag("ButtonSmash"))
+                {
+                    challenge.SetActive(true);
+                    buttonSmash = challenge.GetComponent<ButtonSmashManager>();
                     StartCoroutine(CinematicManager.Instance.PlayCinematic());
                     StartCoroutine(CinematicManager.Instance.WaitForChallengeInitialization(challenge, currentChallengeType.Value));
                 }

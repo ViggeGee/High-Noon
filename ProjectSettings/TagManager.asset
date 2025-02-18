@@ -16,6 +16,7 @@ TagManager:
   - ChallengeWheel
   - BlackAndWhitePP
   - PP
+  - ButtonSmash
   layers:
   - Default
   - TransparentFX

@@ -68,6 +68,7 @@ public class GameManager : NetworkBehaviour
 
         if (playerDied.Value == true && !displayGameOverCanvas)
         {
+            Time.timeScale = 0.2f;
             if (IsServer)
             {
                 playerDied.Value = false;
@@ -109,8 +110,15 @@ public class GameManager : NetworkBehaviour
 
     private IEnumerator LoadNextSceneTimer()
     {
-        yield return new WaitForSeconds(6);
+        yield return new WaitForSecondsRealtime(6);
+        ResetTimeScaleClientRpc();
         SceneLoader.Instance.LoadRandomSceneForAllPlayers();
+    }
+
+    [ClientRpc]
+    private void ResetTimeScaleClientRpc()
+    {
+        Time.timeScale = 1f;
     }
 
     [ServerRpc(RequireOwnership = false)]

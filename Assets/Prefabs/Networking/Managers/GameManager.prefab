@@ -645,6 +645,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   availableChallenges:
   - {fileID: 5399071422460463905}
+  - {fileID: 3282994390481750343}
   challengeWheelCanvas: {fileID: 807678640972736859}
   challengeWheel: {fileID: 9187142474011012843}
   currentChallengeType:
@@ -661,6 +662,10 @@ PrefabInstance:
     - target: {fileID: -5887685350710154521, guid: dd43f7cc039567e45a89e36effaf9d37, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 1820526987
+      objectReference: {fileID: 0}
+    - target: {fileID: 1068487120785069330, guid: dd43f7cc039567e45a89e36effaf9d37, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4840417743942987675, guid: dd43f7cc039567e45a89e36effaf9d37, type: 3}
       propertyPath: m_Pivot.x
@@ -742,6 +747,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7617513019807012724, guid: dd43f7cc039567e45a89e36effaf9d37, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7884703550999319679, guid: dd43f7cc039567e45a89e36effaf9d37, type: 3}
       propertyPath: m_Name
       value: Challenge Canvas
@@ -763,6 +772,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &3282994390481750343 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1068487120785069330, guid: dd43f7cc039567e45a89e36effaf9d37, type: 3}
+  m_PrefabInstance: {fileID: 2547785462449871957}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5399071422460463905 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7617513019807012724, guid: dd43f7cc039567e45a89e36effaf9d37, type: 3}

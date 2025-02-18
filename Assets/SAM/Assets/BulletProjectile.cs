@@ -79,7 +79,7 @@ public class BulletProjectile : NetworkBehaviour
     {
         if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(playerId, out NetworkObject playerObject))
         {
-            StartCoroutine(slowMotion.StartSlowMotion(5, 0.2f));
+            //StartCoroutine(slowMotion.StartSlowMotion(5, 0.2f));
 
             Animator animator = playerObject.GetComponent<Animator>();
             if (animator != null)

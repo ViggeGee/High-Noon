@@ -13,10 +13,16 @@ EditorBuildSettings:
     guid: 56d6970f177532f498a6f2e1a86f1c27
   - enabled: 1
     path: Assets/Scenes/JoinGameScene.unity
-    guid: 1090226c9a68f2b409339be37c36c2a1
+    guid: 50d8df8b012e302438a9bb471bbcaf81
   - enabled: 1
     path: Assets/Scenes/Production_Ready/WesternTown.unity
     guid: 10606990e5d5d7d499e347c926bb170b
+  - enabled: 1
+    path: Assets/Scenes/TrainMap.unity
+    guid: 7019c58718757e24ab9b21b3baa07d40
+  - enabled: 1
+    path: Assets/Scenes/TrainHorseMap.unity
+    guid: 2d58d2cc68702ec49b2a961267de76aa
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05

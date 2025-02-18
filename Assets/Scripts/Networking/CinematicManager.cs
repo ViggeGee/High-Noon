@@ -69,6 +69,12 @@ public class CinematicManager : MonoBehaviour
             typeRacer.SetNetworkSentenceServerRpc();
             GameManager.Instance.UpdateCurrentGameStateServerRpc(GameState.Playing);
         }
+        else if (ChallengeManager.Instance.currentChallengeType.Value == Challenge.ChallengeType.ButtonSmash)
+        {
+            yield return new WaitUntil(() => challenge.GetComponent<ButtonSmashManager>() != null);
+            ButtonSmashManager typeRacer = challenge.GetComponent<ButtonSmashManager>();
+            GameManager.Instance.UpdateCurrentGameStateServerRpc(GameState.Playing);
+        }
     }
 }
 

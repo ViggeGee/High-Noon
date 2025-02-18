@@ -7,11 +7,7 @@ public class Challenge : MonoBehaviour
         None,
 
         typeRacer,
-        PointAndClick,
-        Sequence,
-        Brah,
-        Boh,
-        Nah
+        ButtonSmash,
     };
 
     public ChallengeType challengeType;
