@@ -46,6 +46,9 @@ public class PlayerManager : NetworkBehaviour
             player.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
             player.GetComponent<NetworkObject>().DestroyWithScene = true;
 
+            Player playerScript = player.GetComponent<Player>();
+            playerScript.scoreData.scorePlayer1 = 0;
+            playerScript.scoreData.scorePlayer2 = 0;
             playersJoined.Value++;
 
             OnPlayersJoined?.Invoke(playersJoined.Value);

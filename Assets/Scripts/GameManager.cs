@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -28,6 +29,8 @@ public class GameManager : NetworkBehaviour
 
     public bool readyToShoot { get; set; } = false;
 
+    private NetworkVariable<bool> hasSomeoneWon = new NetworkVariable<bool>(false);
+    
     private bool hasStoppedCinematic;
     private void Awake()
     {
@@ -65,21 +68,14 @@ public class GameManager : NetworkBehaviour
 
     private void HandlePlayerDeath()
     {
-
         if (playerDied.Value == true && !displayGameOverCanvas)
         {
             Time.timeScale = 0.2f;
-            if (IsServer)
-            {
-                playerDied.Value = false;
-            }
 
             if (playerThatDied.Value.TryGet(out NetworkObject playerNetworkObject))
             {
                 displayGameOverCanvas = true;
                 UIManager.Instance.GetGameOverCanvas.gameObject.SetActive(true);
-                // Access the GameObject from the NetworkObject
-                GameObject playerGameObject = playerNetworkObject.gameObject;
 
                 if (playerNetworkObject.OwnerClientId == NetworkManager.Singleton.LocalClientId)
                 {
@@ -87,12 +83,13 @@ public class GameManager : NetworkBehaviour
                 }
                 else
                 {
+                    UpdatePlayerScoreServerRpc(NetworkManager.Singleton.LocalClientId);
                     UIManager.Instance.GetWinImage.gameObject.SetActive(true);
                 }
 
                 if (IsHost)
                 {
-                    LoadNextLevelServerRpc();
+                    StartCoroutine(DelayedCheckWin());
                 }
             }
             else
@@ -102,10 +99,67 @@ public class GameManager : NetworkBehaviour
         }
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    private void UpdatePlayerScoreServerRpc(ulong clientId)
+    {
+        if (NetworkManager.Singleton.ConnectedClients.TryGetValue(clientId, out var networkClient))
+        {
+            Player player = networkClient.PlayerObject.GetComponent<Player>();
+            if (player != null)
+            {
+                if(clientId == 1)
+                {
+                    player.scoreData.scorePlayer1 += 1;
+                }
+                else
+                {
+                    player.scoreData.scorePlayer2 += 1;
+                }
+            }
+        }
+    }
+
+    private IEnumerator DelayedCheckWin()
+    {
+        yield return new WaitForSeconds(0.5f);
+        hasSomeoneWon.Value = CheckIfSomeoneWon();
+        LoadNextLevelServerRpc();
+        playerDied.Value = false; // Moved here
+    }
+
+    private bool CheckIfSomeoneWon()
+    {
+        List<ulong> clientIds = new List<ulong>(NetworkManager.Singleton.ConnectedClientsIds);
+
+        foreach (var clientId in clientIds)
+        {
+            if (NetworkManager.Singleton.ConnectedClients.TryGetValue(clientId, out var networkClient))
+            {
+                GameObject playerObject = networkClient.PlayerObject.gameObject;
+                Player player = playerObject.GetComponent<Player>();
+
+                if(player.scoreData.scorePlayer1 >= 3 || player.scoreData.scorePlayer2 >= 3)
+                {
+                    return true;
+                }
+            }
+            
+        }
+        return false;
+    }
+
     [ServerRpc]
     private void LoadNextLevelServerRpc()
     {
-       StartCoroutine(LoadNextSceneTimer());
+        if (!hasSomeoneWon.Value)
+        {
+            StartCoroutine(LoadNextSceneTimer());
+        }
+        else
+        {
+            StartCoroutine(LoadMainMenuTimer());
+        }
+
     }
 
     private IEnumerator LoadNextSceneTimer()
@@ -114,6 +168,15 @@ public class GameManager : NetworkBehaviour
         ResetTimeScaleClientRpc();
         SceneLoader.Instance.LoadRandomSceneForAllPlayers();
     }
+
+    public IEnumerator LoadMainMenuTimer()
+    {
+        yield return new WaitForSecondsRealtime(6);
+        ResetTimeScaleClientRpc();
+       
+        SceneLoader.Instance.LoadMainMenuAfterGameIsOver();
+    }
+
 
     [ClientRpc]
     private void ResetTimeScaleClientRpc()

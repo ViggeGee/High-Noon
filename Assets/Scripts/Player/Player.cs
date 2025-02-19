@@ -25,13 +25,30 @@ public class Player : NetworkBehaviour
 
     private float health = 100f;
 
-  
+    public ScoreData scoreData;
+    ScoreCount scoreCount;
+    public int currentScore { get; set; } = 0;
+
+    private void Start()
+    {
+        if(NetworkManager.Singleton.LocalClientId == 0)
+        {
+            currentScore = scoreData.scorePlayer1;
+        }
+        else
+        {
+            currentScore = scoreData.scorePlayer2;
+        }
+    }
     private void Update()
     {
-
         if(health <= 0)
         {
             SetDiedVariablesServerRpc();
+        }
+        else
+        {
+            //scoreCount.score = currentScore;
         }
     }
 

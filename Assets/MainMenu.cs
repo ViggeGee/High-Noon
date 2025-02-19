@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,6 +20,8 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
+        Cursor.lockState = CursorLockMode.None; 
+
         playerJoined = FindAnyObjectByType<PlayerJoined>();
     }
 

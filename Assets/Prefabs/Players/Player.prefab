@@ -4854,7 +4854,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7163904005779057135
 Transform:
   m_ObjectHideFlags: 0
@@ -5853,6 +5853,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   playerAnimator: {fileID: 6183986622529525490}
   shooterController: {fileID: 69411315451178830}
+  scoreData: {fileID: 11400000, guid: 1326610c124d96c4e9423ef35741b213, type: 2}
 --- !u!114 &69411315451178830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5877,7 +5878,6 @@ MonoBehaviour:
   aimColliderLayerMask:
     serializedVersion: 2
     m_Bits: 503
-  debugTransform: {fileID: 7163904005779057135}
   shrinkSpeed: 6
   normalSize: 100
   expandedSize: 500

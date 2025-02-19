@@ -51,7 +51,7 @@ public class ShooterController : NetworkBehaviour
                 characterToActivatePlayer1.SetActive(true);
                 Debug.Log("Activated Player 1 character");
             }
-            else if (OwnerClientId == 1)
+            else
             {
                 characterToActivatePlayer2.SetActive(true);
                 Debug.Log("Activated Player 2 character");
@@ -73,7 +73,7 @@ public class ShooterController : NetworkBehaviour
                 characterToActivatePlayer1.SetActive(true); // Make sure Player 1 is visible for Player 2
                 Debug.Log("Player 2 sees Player 1 character");
             }
-            else if (OwnerClientId == 1)
+            else
             {
                 characterToActivatePlayer2.SetActive(true); // Make sure Player 1 is visible for Player 2
                 Debug.Log("Player 1 sees Player 2 character");
@@ -82,8 +82,6 @@ public class ShooterController : NetworkBehaviour
             aimVirtualCamera.Priority = 0;
         }
     }
-
-
 
 
     private void Update()

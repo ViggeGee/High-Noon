@@ -39,6 +39,14 @@ public class SceneLoader : NetworkBehaviour
     #endregion
 
     #region Online
+
+    public void LoadMainMenuAfterGameIsOver()
+    {
+        if (IsServer)
+        {
+            NetworkManager.Singleton.SceneManager.LoadScene(Scenes.MainMenu.ToString(), LoadSceneMode.Single);
+        }
+    }
     public void LoadRandomSceneForAllPlayers()
     {
         if (IsServer)
