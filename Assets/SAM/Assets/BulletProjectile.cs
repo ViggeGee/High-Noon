@@ -14,7 +14,7 @@ public class BulletProjectile : NetworkBehaviour
     SlowMotion slowMotion = new SlowMotion();
 
     private Rigidbody bulletRigidbody;
-    private float speed = 60f;
+    private float speed = 40f;
 
     //public static event Action<GameObject>
     private void Awake()
@@ -132,13 +132,7 @@ public class BulletProjectile : NetworkBehaviour
                 player.TakeDamage(damageType);
             }
 
-            //Animator animator = playerObject.GetComponent<Animator>();
-            //if (animator != null)
-            //{
-            //    animator.enabled = false;
-            //}
-
-
+           
             foreach (Rigidbody rb in playerObject.GetComponentsInChildren<Rigidbody>())
             {
                 if (rb.gameObject.name == "Head")

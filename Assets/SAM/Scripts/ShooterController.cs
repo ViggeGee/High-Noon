@@ -108,6 +108,7 @@ public class ShooterController : NetworkBehaviour
         if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask, QueryTriggerInteraction.Collide))
         {
             mouseWorldPosition = raycastHit.point;
+            //debugTransform.position = raycastHit.point;
         }
 
         Vector3 worldAimTarget = mouseWorldPosition;
