@@ -79,7 +79,7 @@ public class ButtonSmashManager : MonoBehaviour
         bool pressedButton1 = Input.GetKeyDown(KeyCode.Q) && nextIsButton1;
         bool pressedButton2 = Input.GetKeyDown(KeyCode.E) && !nextIsButton1;
 
-        loadingBar.fillAmount -= 0.005f;
+        loadingBar.fillAmount -= 0.05f * Time.deltaTime;
 
         if (pressedButton1 || pressedButton2)
         {
@@ -87,12 +87,12 @@ public class ButtonSmashManager : MonoBehaviour
             if (pressedButton1)
             {
                 nextIsButton1 = false;
-                loadingBar.fillAmount += 0.1f;
+                loadingBar.fillAmount += 1f * Time.deltaTime;
             }
             else
             {
                 nextIsButton1 = true;
-                loadingBar.fillAmount += 0.1f;
+                loadingBar.fillAmount += 1f * Time.deltaTime;
             }
 
             if (loadingBar.fillAmount >= 1)

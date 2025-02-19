@@ -11,7 +11,7 @@ public class UIManager : NetworkBehaviour
 
     [SerializeField] private TextMeshProUGUI countDownText;
     [SerializeField] private Canvas gameOverCanvas;
-    [SerializeField] private Image winImage, looseImage;
+    [SerializeField] private Image winImage, looseImage, tieImage;
     public TextMeshProUGUI scoreLooseScreen, scoreWinScreen;
 
     public NetworkVariable<bool> countdownStarted = new NetworkVariable<bool>(false);
@@ -19,6 +19,7 @@ public class UIManager : NetworkBehaviour
     public Canvas GetGameOverCanvas { get { return gameOverCanvas; } }
     public Image GetWinImage { get { return winImage; } }
     public Image GetLooseImage { get { return looseImage; } }
+    public Image GetTieImage { get { return tieImage; } }
 
     private void Awake()
     {

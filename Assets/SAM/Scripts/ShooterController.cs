@@ -37,6 +37,7 @@ public class ShooterController : NetworkBehaviour
     private StarterAssetsInputs input;
     private PlayerCamera playerCamera;
 
+    private const int MAX_NUMBER_OF_BULLETS = 6;
     public override void OnNetworkSpawn()
     {
         if (IsOwner) // Only apply changes for the owning client
@@ -120,7 +121,12 @@ public class ShooterController : NetworkBehaviour
             input.shoot = false;
             Vector3 aimDir = (mouseWorldPosition - bulletSpawnPosition.position).normalized;
 
-            if (Time.time > lastBulletShot + fireRate && numberOfBulletsFired < 20)
+            if(numberOfBulletsFired >= MAX_NUMBER_OF_BULLETS)
+            {
+                PlayerOutOfBulletsServerRpc(NetworkManager.Singleton.LocalClientId);
+            }
+
+            if (Time.time > lastBulletShot + fireRate && numberOfBulletsFired < MAX_NUMBER_OF_BULLETS)
             {
                 numberOfBulletsFired++;
                 lastBulletShot = Time.time;
@@ -130,6 +136,19 @@ public class ShooterController : NetworkBehaviour
                 playerCamera.AddRecoil();
                 crossHairExpandValue = 1f;
             }
+        }
+    }
+
+    [ServerRpc]
+    private void PlayerOutOfBulletsServerRpc(ulong clientId)
+    {
+        if (clientId == 0)
+        {
+            GameManager.Instance.player1OutOfBullets.Value = true;
+        }
+        else
+        {
+            GameManager.Instance.player2OutOfBullets.Value = true;
         }
     }
 

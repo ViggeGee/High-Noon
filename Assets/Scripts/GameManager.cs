@@ -18,6 +18,10 @@ public class GameManager : NetworkBehaviour
     public static GameManager Instance { get; private set; }
     public GameState currentGameState { get; private set; } = GameState.StartGameScene;
 
+    public NetworkVariable<bool> player1OutOfBullets = new NetworkVariable<bool>();
+    public NetworkVariable<bool> player2OutOfBullets = new NetworkVariable<bool>();
+    private bool isTie = false;
+
     public NetworkVariable<bool> isPlayer1Ready = new NetworkVariable<bool>(false);
     public NetworkVariable<bool> isPlayer2Ready = new NetworkVariable<bool>(false);
 
@@ -71,8 +75,28 @@ public class GameManager : NetworkBehaviour
 
                 ChallengeManager.Instance.SetMistakesDuringChallenge();
                 HandlePlayerDeath();
-
+                HandlePlayerTie();
                 break;
+        }
+    }
+
+    private void HandlePlayerTie()
+    {
+        if(player1OutOfBullets.Value && player2OutOfBullets.Value && !displayGameOverCanvas)
+        {
+            isTie = true;
+            Time.timeScale = 0.2f;
+
+            displayGameOverCanvas = true;
+
+            UIManager.Instance.GetGameOverCanvas.gameObject.SetActive(true);
+
+            UIManager.Instance.GetTieImage.gameObject.SetActive(true);
+
+            if (IsHost)
+            {
+                StartCoroutine(DelayedCheckWin());
+            }
         }
     }
 
@@ -117,13 +141,13 @@ public class GameManager : NetworkBehaviour
     {
         if (NetworkManager.Singleton.LocalClientId == 0)
         {
-            UIManager.Instance.scoreWinScreen.text = player1Score.Value.ToString() + " / 3";
-            UIManager.Instance.scoreLooseScreen.text = player1Score.Value.ToString() + " / 3";
+            UIManager.Instance.scoreWinScreen.text = player1Score.Value.ToString() + " of 3";
+            UIManager.Instance.scoreLooseScreen.text = player1Score.Value.ToString() + " of 3";
         }
         else
         {
-            UIManager.Instance.scoreWinScreen.text = player2Score.Value.ToString() + " / 3";
-            UIManager.Instance.scoreLooseScreen.text = player2Score.Value.ToString() + " / 3";
+            UIManager.Instance.scoreWinScreen.text = player2Score.Value.ToString() + " of 3";
+            UIManager.Instance.scoreLooseScreen.text = player2Score.Value.ToString() + " of 3";
         }
     }
 
@@ -135,16 +159,20 @@ public class GameManager : NetworkBehaviour
             Player player = networkClient.PlayerObject.GetComponent<Player>();
             if (player != null)
             {
-                if(clientId == 0)
+                if(!isTie)
                 {
-                    player.scoreData.scorePlayer1 += 1;
-                    
+                    if (clientId == 0)
+                    {
+                        player.scoreData.scorePlayer1 += 1;
+
+                    }
+                    else
+                    {
+                        player.scoreData.scorePlayer2 += 1;
+
+                    }
                 }
-                else
-                {
-                    player.scoreData.scorePlayer2 += 1;
-                   
-                }
+                
                 player1Score.Value = player.scoreData.scorePlayer1;
                 player2Score.Value = player.scoreData.scorePlayer2;
             }
