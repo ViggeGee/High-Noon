@@ -132,10 +132,7 @@ MonoBehaviour:
   button2: {fileID: 7440014711620482859}
   emptyBar: {fileID: 0}
   loadingBar: {fileID: 4756655891774488568}
-  maximumButtonPresses: 200
-  currentButtonPresses: 0
   tmp_instructions: {fileID: 4611566781477237463}
-  player: {fileID: 0}
   timer: 5
   nextIsButton1: 1
   challengeCompleted: 0
