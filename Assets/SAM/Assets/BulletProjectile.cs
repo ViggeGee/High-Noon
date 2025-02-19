@@ -38,20 +38,26 @@ public class BulletProjectile : NetworkBehaviour
         }
     }
 
+    Player.DamageType damageType;
+
     private void OnTriggerEnter(Collider other)
     {
         if (!IsServer) return; // Ensure only the server handles collisions
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            NetworkObject networkObject = other.GetComponent<NetworkObject>();
+            Transform rootParent = GetRootParent(other.transform); // Get the highest parent
+            NetworkObject networkObject = rootParent.GetComponent<NetworkObject>();
+
+            damageType = HitPoint(other.tag);
 
             if (networkObject != null)  // Ensure networkObject is valid
             {
-                other.enabled = false;
+                     
+                //other.enabled = false;
                 ulong playerId = networkObject.NetworkObjectId;
-                HitPlayerClientRpc(playerId);
-                
+
+                HitPlayerClientRpc(playerId);               
             }
             else
             {
@@ -65,8 +71,47 @@ public class BulletProjectile : NetworkBehaviour
         }
         DestroyBulletServerRpc();
     }
+    private Transform GetRootParent(Transform child)
+    {
+        while (child.parent != null)
+        {
+            child = child.parent;
+        }
+        return child; // Returns the top-most parent
+    }
+    private Player.DamageType HitPoint(string tag)
+    {
+        if(tag == "Head")
+        {
+            return Player.DamageType.Head;
+        }
+        else if(tag == "RightArm")
+        {
+            return Player.DamageType.RightArm;
+        }
+        else if(tag == "LeftArm")
+        {
+            return Player.DamageType.LeftArm;
+        }
+        else if(tag == "RightLeg")
+        {
+            return Player.DamageType.RightLeg;
+        }
+        else if(tag == "LeftLeg")
+        {
+            return Player.DamageType.LeftLeg;
+        }
+        else if(tag == "Stomach")
+        {
+            return Player.DamageType.Stomach;
+        }
+        else if(tag == "Chest")
+        {
+            return Player.DamageType.Chest;
+        }
 
-
+        return Player.DamageType.None;
+    }
 
     [ClientRpc]
     private void ShowHitEffectClientRpc(bool hitPlayer, Vector3 position)
@@ -79,20 +124,25 @@ public class BulletProjectile : NetworkBehaviour
     {
         if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(playerId, out NetworkObject playerObject))
         {
-            //StartCoroutine(slowMotion.StartSlowMotion(5, 0.2f));
-
-            Animator animator = playerObject.GetComponent<Animator>();
-            if (animator != null)
+        
+            Player player = playerObject.GetComponent<Player>();
+            
+            if(player != null)
             {
-                animator.enabled = false;
+                player.TakeDamage(damageType);
             }
+
+            //Animator animator = playerObject.GetComponent<Animator>();
+            //if (animator != null)
+            //{
+            //    animator.enabled = false;
+            //}
 
 
             foreach (Rigidbody rb in playerObject.GetComponentsInChildren<Rigidbody>())
             {
                 if (rb.gameObject.name == "Head")
-                {
-                    
+                {                 
                     rb.AddForce(bulletRigidbody.angularVelocity * 50);
                     break;
                 }

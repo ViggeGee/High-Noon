@@ -17,6 +17,13 @@ TagManager:
   - BlackAndWhitePP
   - PP
   - ButtonSmash
+  - RightArm
+  - LeftArm
+  - RightLeg
+  - LeftLeg
+  - Stomach
+  - Chest
+  - Head
   layers:
   - Default
   - TransparentFX
@@ -30,7 +37,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Bullet
   - 
   - 
   - 

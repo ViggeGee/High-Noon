@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 810733913983134852}
   - component: {fileID: 671791433978098328}
   - component: {fileID: -8163274686991154940}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: pfBulletProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 6863857337905034732}
   - component: {fileID: 6863857337905034707}
   - component: {fileID: 6050120816508447850}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
