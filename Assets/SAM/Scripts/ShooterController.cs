@@ -51,7 +51,7 @@ public class ShooterController : NetworkBehaviour
                 characterToActivatePlayer1.SetActive(true);
                 Debug.Log("Activated Player 1 character");
             }
-            else if (OwnerClientId == 1)
+            else
             {
                 characterToActivatePlayer2.SetActive(true);
                 Debug.Log("Activated Player 2 character");
@@ -73,7 +73,7 @@ public class ShooterController : NetworkBehaviour
                 characterToActivatePlayer1.SetActive(true); // Make sure Player 1 is visible for Player 2
                 Debug.Log("Player 2 sees Player 1 character");
             }
-            else if (OwnerClientId == 1)
+            else
             {
                 characterToActivatePlayer2.SetActive(true); // Make sure Player 1 is visible for Player 2
                 Debug.Log("Player 1 sees Player 2 character");
@@ -82,8 +82,6 @@ public class ShooterController : NetworkBehaviour
             aimVirtualCamera.Priority = 0;
         }
     }
-
-
 
 
     private void Update()
@@ -105,9 +103,10 @@ public class ShooterController : NetworkBehaviour
         Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
         Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
 
-        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask))
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask, QueryTriggerInteraction.Collide))
         {
             mouseWorldPosition = raycastHit.point;
+            //debugTransform.position = raycastHit.point;
         }
 
         Vector3 worldAimTarget = mouseWorldPosition;

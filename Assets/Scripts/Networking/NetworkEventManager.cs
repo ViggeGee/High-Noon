@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -66,10 +67,24 @@ public class NetworkEventManager : NetworkBehaviour
 
             case SceneEventType.LoadComplete:
                 // Scene fully loaded
-                SpawnGameManager();
-                PlayerManager.Instance.HandlePlayerSpawnOnSceneChange();
-                GameManager.Instance.UpdateCurrentGameStateServerRpc(GameState.ChoosingChallenge);
-               
+                if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName(Scenes.MainMenu.ToString()))
+                {
+                    SpawnGameManager();
+                    PlayerManager.Instance.HandlePlayerSpawnOnSceneChange();
+                    GameManager.Instance.UpdateCurrentGameStateServerRpc(GameState.ChoosingChallenge);
+                }
+                else
+                {
+                    List<ulong> clientIds = new List<ulong>(NetworkManager.Singleton.ConnectedClientsIds);
+
+                    foreach (var clientId in clientIds)
+                    {
+                        NetworkManager.Singleton.DisconnectClient(clientId);
+                    }
+
+                    NetworkManager.Singleton.Shutdown();
+                }
+                   
                 break;
 
             case SceneEventType.Unload:
