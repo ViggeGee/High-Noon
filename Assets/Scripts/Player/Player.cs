@@ -26,7 +26,6 @@ public class Player : NetworkBehaviour
     private float health = 100f;
 
     public ScoreData scoreData;
-    ScoreCount scoreCount;
     public int currentScore { get; set; } = 0;
 
     private void Start()
@@ -46,10 +45,7 @@ public class Player : NetworkBehaviour
         {
             SetDiedVariablesServerRpc();
         }
-        else
-        {
-            //scoreCount.score = currentScore;
-        }
+   
     }
 
     public void TakeDamage(DamageType damageType)

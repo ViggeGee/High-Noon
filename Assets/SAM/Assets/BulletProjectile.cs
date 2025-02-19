@@ -11,8 +11,6 @@ public class BulletProjectile : NetworkBehaviour
     [SerializeField] private Transform vfxHitGreen;
     [SerializeField] private Transform vfxHitRed;
 
-    SlowMotion slowMotion = new SlowMotion();
-
     private Rigidbody bulletRigidbody;
     private float speed = 40f;
 

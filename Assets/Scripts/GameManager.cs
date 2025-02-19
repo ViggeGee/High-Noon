@@ -32,10 +32,20 @@ public class GameManager : NetworkBehaviour
     private NetworkVariable<bool> hasSomeoneWon = new NetworkVariable<bool>(false);
     
     private bool hasStoppedCinematic;
+
+    private NetworkVariable<int> player1Score = new NetworkVariable<int>(0);
+    private NetworkVariable<int> player2Score = new NetworkVariable<int>(0);
     private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+    }
+
+    private void Start()
+    {
+        // Listen for changes in score and update UI automatically
+        player1Score.OnValueChanged += UpdateScoreUI;
+        player2Score.OnValueChanged += UpdateScoreUI;
     }
 
     private void Update()
@@ -77,25 +87,43 @@ public class GameManager : NetworkBehaviour
                 displayGameOverCanvas = true;
                 UIManager.Instance.GetGameOverCanvas.gameObject.SetActive(true);
 
+                Player player = playerNetworkObject.gameObject.GetComponent<Player>();
+
                 if (playerNetworkObject.OwnerClientId == NetworkManager.Singleton.LocalClientId)
                 {
-                    UIManager.Instance.GetLooseImage.gameObject.SetActive(true);
+                    UIManager.Instance.GetLooseImage.gameObject.SetActive(true);                                           
                 }
                 else
                 {
                     UpdatePlayerScoreServerRpc(NetworkManager.Singleton.LocalClientId);
-                    UIManager.Instance.GetWinImage.gameObject.SetActive(true);
+                    UIManager.Instance.GetWinImage.gameObject.SetActive(true);      
                 }
 
                 if (IsHost)
                 {
                     StartCoroutine(DelayedCheckWin());
                 }
+
+                
             }
             else
             {
                 Debug.LogError("Failed to get the player network object.");
             }
+        }
+    }
+
+    private void UpdateScoreUI(int oldValue, int newValue)
+    {
+        if (NetworkManager.Singleton.LocalClientId == 0)
+        {
+            UIManager.Instance.scoreWinScreen.text = player1Score.Value.ToString() + " / 3";
+            UIManager.Instance.scoreLooseScreen.text = player1Score.Value.ToString() + " / 3";
+        }
+        else
+        {
+            UIManager.Instance.scoreWinScreen.text = player2Score.Value.ToString() + " / 3";
+            UIManager.Instance.scoreLooseScreen.text = player2Score.Value.ToString() + " / 3";
         }
     }
 
@@ -107,14 +135,18 @@ public class GameManager : NetworkBehaviour
             Player player = networkClient.PlayerObject.GetComponent<Player>();
             if (player != null)
             {
-                if(clientId == 1)
+                if(clientId == 0)
                 {
                     player.scoreData.scorePlayer1 += 1;
+                    
                 }
                 else
                 {
                     player.scoreData.scorePlayer2 += 1;
+                   
                 }
+                player1Score.Value = player.scoreData.scorePlayer1;
+                player2Score.Value = player.scoreData.scorePlayer2;
             }
         }
     }
@@ -123,6 +155,7 @@ public class GameManager : NetworkBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         hasSomeoneWon.Value = CheckIfSomeoneWon();
+
         LoadNextLevelServerRpc();
         playerDied.Value = false; // Moved here
     }

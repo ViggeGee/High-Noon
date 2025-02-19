@@ -12,6 +12,7 @@ public class UIManager : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI countDownText;
     [SerializeField] private Canvas gameOverCanvas;
     [SerializeField] private Image winImage, looseImage;
+    public TextMeshProUGUI scoreLooseScreen, scoreWinScreen;
 
     public NetworkVariable<bool> countdownStarted = new NetworkVariable<bool>(false);
 
