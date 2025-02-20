@@ -21,7 +21,7 @@ public class ButtonSmashManager : MonoBehaviour
 
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
 
         CanvasSettings();
