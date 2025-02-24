@@ -172,7 +172,7 @@ public class Motion_Controller : MonoBehaviour
 
         GameObject playerGameObject = GetPlayerGameObject(player);
         GameObject pivotAroundGameObject = GetPlayerPivotGameObject(player);
-        playerGameObject.transform.RotateAround(pivotAroundGameObject.transform.position, rotationAmount * Time.deltaTime * gyroDataZ, angle);
+        playerGameObject.transform.RotateAround(pivotAroundGameObject.transform.position, rotationAmount * Time.deltaTime * gyroDataX - new Vector3(gyroDataX.x/2, 0,0), angle);
 
         Debug.Log($"<color=cyan>Player: {player.name} has {controllerType} Gyro: {gyroData}</color>");
     }
