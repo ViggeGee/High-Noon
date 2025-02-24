@@ -79,7 +79,7 @@ public class PlayerCamera : NetworkBehaviour // ✅ Make it networked
 
     void Update()
     {
-        if (!IsOwner || !GameManager.Instance.readyToShoot) return; 
+        //if (!IsOwner || !GameManager.Instance.readyToShoot) return; 
 
         CameraRotation();
         RecoverRecoil();

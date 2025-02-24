@@ -37,6 +37,7 @@ public class ShooterController : NetworkBehaviour
     private StarterAssetsInputs input;
     private PlayerCamera playerCamera;
 
+    private const int MAX_NUMBER_OF_BULLETS = 6;
     public override void OnNetworkSpawn()
     {
         if (IsOwner) // Only apply changes for the owning client
@@ -51,7 +52,7 @@ public class ShooterController : NetworkBehaviour
                 characterToActivatePlayer1.SetActive(true);
                 Debug.Log("Activated Player 1 character");
             }
-            else if (OwnerClientId == 1)
+            else
             {
                 characterToActivatePlayer2.SetActive(true);
                 Debug.Log("Activated Player 2 character");
@@ -73,7 +74,7 @@ public class ShooterController : NetworkBehaviour
                 characterToActivatePlayer1.SetActive(true); // Make sure Player 1 is visible for Player 2
                 Debug.Log("Player 2 sees Player 1 character");
             }
-            else if (OwnerClientId == 1)
+            else
             {
                 characterToActivatePlayer2.SetActive(true); // Make sure Player 1 is visible for Player 2
                 Debug.Log("Player 1 sees Player 2 character");
@@ -82,8 +83,6 @@ public class ShooterController : NetworkBehaviour
             aimVirtualCamera.Priority = 0;
         }
     }
-
-
 
 
     private void Update()
@@ -95,7 +94,7 @@ public class ShooterController : NetworkBehaviour
             crossHair.gameObject.SetActive(true);
         }
 
-        float crossHairSize = 100 + GameManager.Instance.mistakesDuringChallenge;
+        float crossHairSize = 100 + ChallengeManager.Instance.mistakesDuringChallenge;
         crossHairExpandValue = Mathf.Lerp(crossHairExpandValue, 0f, Time.deltaTime * shrinkSpeed);
 
         float sizeLerp = Mathf.Lerp(normalSize, expandedSize, crossHairExpandValue);
@@ -105,9 +104,10 @@ public class ShooterController : NetworkBehaviour
         Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
         Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
 
-        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask))
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask, QueryTriggerInteraction.Collide))
         {
             mouseWorldPosition = raycastHit.point;
+            //debugTransform.position = raycastHit.point;
         }
 
         Vector3 worldAimTarget = mouseWorldPosition;
@@ -121,7 +121,12 @@ public class ShooterController : NetworkBehaviour
             input.shoot = false;
             Vector3 aimDir = (mouseWorldPosition - bulletSpawnPosition.position).normalized;
 
-            if (Time.time > lastBulletShot + fireRate && numberOfBulletsFired < 20)
+            if(numberOfBulletsFired >= MAX_NUMBER_OF_BULLETS)
+            {
+                PlayerOutOfBulletsServerRpc(NetworkManager.Singleton.LocalClientId);
+            }
+
+            if (Time.time > lastBulletShot + fireRate && numberOfBulletsFired < MAX_NUMBER_OF_BULLETS)
             {
                 numberOfBulletsFired++;
                 lastBulletShot = Time.time;
@@ -131,6 +136,19 @@ public class ShooterController : NetworkBehaviour
                 playerCamera.AddRecoil();
                 crossHairExpandValue = 1f;
             }
+        }
+    }
+
+    [ServerRpc]
+    private void PlayerOutOfBulletsServerRpc(ulong clientId)
+    {
+        if (clientId == 0)
+        {
+            GameManager.Instance.player1OutOfBullets.Value = true;
+        }
+        else
+        {
+            GameManager.Instance.player2OutOfBullets.Value = true;
         }
     }
 

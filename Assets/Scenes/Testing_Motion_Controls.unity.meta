@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/Testing_Motion_Controls.unity.meta
 guid: c7e0d5f9a3b3fe246bfbde1e330d24c4
+========
+guid: 3a3f771be8c0b004298cf17231b2eeee
+>>>>>>>> main:Assets/Scenes/ButtonSmashScene.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

@@ -14,6 +14,16 @@ TagManager:
   - Player1Spawn
   - Player2Spawn
   - ChallengeWheel
+  - BlackAndWhitePP
+  - PP
+  - ButtonSmash
+  - RightArm
+  - LeftArm
+  - RightLeg
+  - LeftLeg
+  - Stomach
+  - Chest
+  - Head
   layers:
   - Default
   - TransparentFX
@@ -27,7 +37,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Bullet
   - 
   - 
   - 

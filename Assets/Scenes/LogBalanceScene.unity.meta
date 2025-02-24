@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/LogBalanceScene.unity.meta
 guid: 2d4ac4d814ad47147a9321cf356a8c66
+========
+guid: 675f0f6d091bc5f4abf89b65ba2d7bfb
+>>>>>>>> main:Assets/Scenes/Bison.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

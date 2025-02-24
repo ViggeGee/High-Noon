@@ -7,6 +7,12 @@ public class Train : MonoBehaviour
     [SerializeField] GameObject trainPrefab;
     [SerializeField] float xValueAtNewSpawn;
     [SerializeField] Vector3 spawnPosition;
+    Quaternion spawnRotation;
+
+    private void Start()
+    {
+        spawnRotation = transform.rotation;
+    }
 
     private void FixedUpdate()
     {
@@ -20,7 +26,7 @@ public class Train : MonoBehaviour
         {
             if (transform.position.x > xValueAtNewSpawn && !spawnedTrain)
             {
-                GameObject newTrain = Instantiate(trainPrefab, spawnPosition, Quaternion.identity);
+                GameObject newTrain = Instantiate(trainPrefab, spawnPosition, spawnRotation);
                 spawnedTrain = true;
 
             }
@@ -29,7 +35,7 @@ public class Train : MonoBehaviour
         {
             if (transform.position.x < xValueAtNewSpawn && !spawnedTrain)
             {
-                GameObject newTrain = Instantiate(trainPrefab, spawnPosition, Quaternion.identity);
+                GameObject newTrain = Instantiate(trainPrefab, spawnPosition, spawnRotation);
                 spawnedTrain = true;
 
             }
