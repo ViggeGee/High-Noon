@@ -72,4 +72,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   gotoThisScene: 5
-  isRandomScene: 1
+  isRandomScene: 0
