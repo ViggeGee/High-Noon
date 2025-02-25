@@ -18,6 +18,9 @@ public class SceneLoader : NetworkBehaviour
 {
     public static SceneLoader Instance { get; private set; }
 
+    [Header("if changeing this. Apply this on the prefab aswell. \n The networkmanager needs the correct prefab on both players")]
+    public Scenes gotoThisScene;
+    [SerializeField] bool isRandomScene;
     private void Awake()
     {
         if(Instance == null)
@@ -50,11 +53,22 @@ public class SceneLoader : NetworkBehaviour
     }
     public void LoadRandomSceneForAllPlayers()
     {
+       
         if (IsServer)
         {
-            Scenes randomScene = GetRandomScene();
-            LoadSceneForAllPlayersServerRpc(randomScene);
+            if (isRandomScene )
+            {
+                Scenes randomScene = GetRandomScene();
+                LoadSceneForAllPlayersServerRpc(randomScene);
+           
+            }
+            else
+            {
+                LoadSceneForAllPlayersServerRpc(gotoThisScene);
+            }
+           
         }
+        
         else
         {
             Debug.LogWarning("Only the server can initiate a scene change!");
