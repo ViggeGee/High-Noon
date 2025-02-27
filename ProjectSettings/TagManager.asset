@@ -24,6 +24,7 @@ TagManager:
   - Stomach
   - Chest
   - Head
+  - NPC
   layers:
   - Default
   - TransparentFX
