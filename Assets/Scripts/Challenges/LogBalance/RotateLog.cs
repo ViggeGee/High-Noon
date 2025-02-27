@@ -1,19 +1,26 @@
+using System.Collections;
 using UnityEngine;
 
 public class RotateLog
 {
 
     private Transform transform;
-    private float rotationSpeed = 30;
-
+    private int direction = 1;
     public RotateLog( Transform transform)
     {
         this.transform = transform;
     }
 
     // Update is called once per frame
-    public void RotateLogMethod()
+    public IEnumerator RotateLogMethod(int rotationDuration , int rotationSpeed)
     {
-        transform.Rotate(Vector3.right * rotationSpeed * Time.deltaTime);
+        float elapsedTime = 0f;
+        while(elapsedTime < rotationDuration)
+        {
+            transform.Rotate(Vector3.right *direction * rotationSpeed * Time.deltaTime);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        direction *= -1;
     }
 }
