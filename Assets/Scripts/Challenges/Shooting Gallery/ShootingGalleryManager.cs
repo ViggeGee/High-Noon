@@ -10,9 +10,9 @@ public class ShootingGalleryManager : MonoBehaviour
     public Transform parentSpawnPointList;
     private List<Button> targetButtonList; // The buttons that will appear/disappear
     private List<Transform> spawnPointList; // 16 spawn points in the Inspector
-    private float minDelay = 3f;
-    private float maxDelay = 7f;
-    private float activeTime = 2f;
+    private float minDelay = 5f;
+    private float maxDelay = 10f;
+    private float activeTime = 1f;
 
     public TextMeshProUGUI scoreText;
     private int score = 0;
@@ -41,6 +41,14 @@ public class ShootingGalleryManager : MonoBehaviour
         }
 
         UpdateScoreText();
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0)) // Left mouse button
+        {
+            ShootingGallerySFX.Instance.PlayLeftClick();
+        }
     }
 
     private void CreateLists()
@@ -82,6 +90,7 @@ public class ShootingGalleryManager : MonoBehaviour
 
     private IEnumerator ButtonRoutine(Button btn)
     {
+
         while (true)
         {
             // Wait a random time before spawning.
@@ -129,7 +138,19 @@ public class ShootingGalleryManager : MonoBehaviour
         // Only award points if active.
         if (clickedButton.gameObject.activeSelf)
         {
-            score++;
+
+            if (clickedButton.CompareTag("GoodButton"))
+            {
+                score++;
+                ShootingGallerySFX.Instance.PlayHitTarget();
+            }
+            else if (clickedButton.CompareTag("BadButton"))
+            {
+                score--;
+                ShootingGallerySFX.Instance.PlayRandomScream();
+            }
+
+            //StartCoroutine(RotateButton(clickedButton));
             UpdateScoreText();
 
             // Deactivate the button immediately after clicking.
@@ -146,6 +167,27 @@ public class ShootingGalleryManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    private IEnumerator RotateButton(Button btn)
+    {
+        float duration = 0.5f;
+        float elapsed = 0f;
+        Quaternion startRotation = btn.transform.rotation;
+        // Define the target rotation (rotate 180 degrees on Y axis, for example).
+        Quaternion targetRotation = startRotation * Quaternion.Euler(0, 180, 0);
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+            btn.transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+            
+            yield return null;
+        }
+        // Ensure final rotation is set.
+        btn.transform.rotation = targetRotation;
+        //btn.gameObject.SetActive(false);
     }
 
     private void UpdateScoreText()
