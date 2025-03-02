@@ -11,8 +11,8 @@ public class ShootingGalleryManager : MonoBehaviour
     private List<Button> targetButtonList; // The buttons that will appear/disappear
     private List<Transform> spawnPointList; // 16 spawn points in the Inspector
     private float minDelay = 3f;
-    private float maxDelay = 7f;
-    private float activeTime = 1.5f;
+    private float maxDelay = 3f;
+    private float activeTime = 10f;
 
     public TextMeshProUGUI scoreText;
     private int score = 0;
