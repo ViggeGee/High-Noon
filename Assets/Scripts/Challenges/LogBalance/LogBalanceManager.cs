@@ -24,9 +24,16 @@ public class LogBalanceManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (challengeOver)
+        if (challengeOver||challengeCompleted)
         {
+            
+            foreach (var component in FindObjectsByType<PlayerLogSlip>(FindObjectsSortMode.None))
+            {
+                component.enabled = false;
+            }
+            FindFirstObjectByType<Motion_Controller>().enabled = false;
             StopAllCoroutines();
+            enabled = false;
         }
     }
 
@@ -36,7 +43,7 @@ public class LogBalanceManager : MonoBehaviour
         while (elapsedTime < challengeDuration)
         {
             int rndRotationSpeed = Random.Range(minRotationSpeed, maxRotationSpeed);
-            int rndRotationDuration = Random.Range(1, (int)challengeDuration / 2);
+            int rndRotationDuration = Random.Range(1, (int)challengeDuration / 3);
 
             StartCoroutine(logBehavior.RotateLogMethod(rndRotationDuration, rndRotationSpeed));
 
@@ -45,9 +52,19 @@ public class LogBalanceManager : MonoBehaviour
             elapsedTime += rndRotationDuration;
         }
 
+        log.transform.rotation = Quaternion.Euler(0, 18.41f, 0);
         challengeCompleted = true;
+        //Add code here for starting shooting
         if(GameManager.Instance != null)GameManager.Instance.readyToShoot = true;
     }
 
-    
+    //Check if a player hits the water
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.transform.tag == "Player")
+        {
+            
+            challengeOver = true;
+        }
+    }
 }
