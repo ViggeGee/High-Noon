@@ -24,26 +24,25 @@ public class LogBalanceManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (challengeOver||challengeCompleted)
+        if (challengeOver||challengeCompleted)//either if a player fell or if both players survived
         {
-            
             foreach (var component in FindObjectsByType<PlayerLogSlip>(FindObjectsSortMode.None))
             {
-                component.enabled = false;
+                component.enabled = false; //Disables PlayerLogSlip component on both players
             }
-            FindFirstObjectByType<Motion_Controller>().enabled = false;
-            StopAllCoroutines();
-            enabled = false;
+            FindFirstObjectByType<Motion_Controller>().enabled = false;//Disables controller rotation
+            StopAllCoroutines();//Stops log from rotation
+            enabled = false;//Disables this component
         }
     }
 
-    IEnumerator RandomLogRotation()
+    IEnumerator RandomLogRotation()//Coroutine that rotates the log a random amount of times for the duration of the challenge
     {
         float elapsedTime = 0f;
         while (elapsedTime < challengeDuration)
         {
             int rndRotationSpeed = Random.Range(minRotationSpeed, maxRotationSpeed);
-            int rndRotationDuration = Random.Range(1, (int)challengeDuration / 3);
+            int rndRotationDuration = Random.Range(1, (int)challengeDuration / 3); // Random duration of each individual rotation
 
             StartCoroutine(logBehavior.RotateLogMethod(rndRotationDuration, rndRotationSpeed));
 
@@ -51,8 +50,8 @@ public class LogBalanceManager : MonoBehaviour
 
             elapsedTime += rndRotationDuration;
         }
-
-        log.transform.rotation = Quaternion.Euler(0, 18.41f, 0);
+        //If both players survive the duration of the challenge the following code applies
+        log.transform.rotation = Quaternion.Euler(0, 18.41f, 0);//Resets the log's rotation
         challengeCompleted = true;
         //Add code here for starting shooting
         if(GameManager.Instance != null)GameManager.Instance.readyToShoot = true;

@@ -12,7 +12,7 @@ public class RotateLog
     }
 
     // Update is called once per frame
-    public IEnumerator RotateLogMethod(int rotationDuration , int rotationSpeed)
+    public IEnumerator RotateLogMethod(int rotationDuration , int rotationSpeed)//Rotates the log at a random speed for a given duration
     {
         float elapsedTime = 0f;
         while(elapsedTime < rotationDuration)
@@ -21,6 +21,6 @@ public class RotateLog
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        direction *= -1;
+        direction *= -1;//CHanges direction everytime this method is called
     }
 }
