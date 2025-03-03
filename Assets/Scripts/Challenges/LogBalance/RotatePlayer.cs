@@ -12,7 +12,7 @@ public class RotatePlayer : MonoBehaviour
         if (Input.GetKey(KeyCode.D)) horizontalInput = -1; // Rotate right (clockwise)
 
         // Rotate around Object A
-        transform.RotateAround(parentLog.position, Vector3.right, horizontalInput * 100 * Time.deltaTime);
+        transform.RotateAround(parentLog.position, parentLog.transform.right, horizontalInput * 100 * Time.deltaTime);
 
     }
 }
