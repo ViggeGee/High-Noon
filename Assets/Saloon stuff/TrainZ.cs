@@ -24,7 +24,7 @@ public class TrainZ : MonoBehaviour
     {
         if (zValueAtNewSpawn > 0)
         {
-            if (transform.position.x > zValueAtNewSpawn && !spawnedTrain)
+            if (transform.position.z > zValueAtNewSpawn && !spawnedTrain)
             {
                 GameObject newTrain = Instantiate(trainPrefab, spawnPosition, spawnRotation);
                 spawnedTrain = true;
