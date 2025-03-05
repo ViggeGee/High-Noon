@@ -12,16 +12,22 @@ public class ShootingGalleryManager : MonoBehaviour
     private List<Transform> spawnPointList; // 16 spawn points in the Inspector
     private float minDelay = 5f;
     private float maxDelay = 10f;
-    private float activeTime = 1f;
+    private float activeTimeNormal = 0.8f;
+    private float activeTimeSuper = 0.5f;
+    private Dictionary<Button, bool> clickedFlags = new Dictionary<Button, bool>();
 
     public TextMeshProUGUI scoreText;
     private int score = 0;
+    private int normalAddScore = 1;
+    private int superAddScore = 3;
 
     // Array to track if each spawn point is occupied.
     private bool[] spawnOccupied;
 
     private void Start()
     {
+
+
         CreateLists();
 
         // Initialize our occupancy array with the same count as spawn points.
@@ -40,6 +46,10 @@ public class ShootingGalleryManager : MonoBehaviour
             StartCoroutine(ButtonRoutine(btn));
         }
 
+        foreach (Button btn in targetButtonList)
+        {
+            clickedFlags[btn] = false;
+        }
         UpdateScoreText();
     }
 
@@ -90,14 +100,12 @@ public class ShootingGalleryManager : MonoBehaviour
 
     private IEnumerator ButtonRoutine(Button btn)
     {
-
         while (true)
         {
             // Wait a random time before spawning.
             float waitTime = Random.Range(minDelay, maxDelay);
             yield return new WaitForSeconds(waitTime);
 
-            // Get a free spawn point index.
             int spawnIndex = GetRandomFreeSpawnPointIndex();
             if (spawnIndex == -1)
             {
@@ -105,89 +113,88 @@ public class ShootingGalleryManager : MonoBehaviour
                 yield return new WaitForSeconds(0.1f);
                 continue;
             }
-            // Mark the spawn point as occupied.
             spawnOccupied[spawnIndex] = true;
 
-            // Get the spawn point transform.
             Transform spawn = spawnPointList[spawnIndex];
-
-            // Move the button to that spawn point.
             btn.transform.position = spawn.position;
 
-            // Activate the button.
+            // Reset the clicked flag and rotation for reuse.
+            clickedFlags[btn] = false;
+            btn.transform.rotation = Quaternion.identity;
+
             btn.gameObject.SetActive(true);
 
-            // Instead of waiting a fixed activeTime, check every frame.
             float elapsed = 0f;
-            while (elapsed < activeTime && btn.gameObject.activeSelf)
+            float chosenActiveTime = 1f;
+            
+            if (btn.CompareTag("GoodButton"))
+            {
+                chosenActiveTime = activeTimeNormal;
+            }
+            else if (btn.CompareTag("BadButton"))
+            {
+                chosenActiveTime = activeTimeSuper;
+            }
+
+            // Wait until activeTime passes or the button gets clicked.
+            while (elapsed < chosenActiveTime && btn.gameObject.activeSelf && !clickedFlags[btn])
             {
                 elapsed += Time.deltaTime;
                 yield return null;
             }
 
-            // Deactivate the button.
-            btn.gameObject.SetActive(false);
+            // If the button was clicked, run the rotation animation.
+            if (clickedFlags[btn])
+            {
+                // Run rotation over 1 second.
+                yield return StartCoroutine(RotateButton(btn, 1f, 720f));
+            }
 
-            // Free up the spawn point.
+            btn.gameObject.SetActive(false);
             spawnOccupied[spawnIndex] = false;
         }
     }
 
     private void OnButtonClicked(Button clickedButton)
     {
-        // Only award points if active.
-        if (clickedButton.gameObject.activeSelf)
+        // Only award points if active and not already processed.
+        if (clickedButton.gameObject.activeSelf && !clickedFlags[clickedButton])
         {
+            clickedFlags[clickedButton] = true;  // Mark that this button was hit.
 
             if (clickedButton.CompareTag("GoodButton"))
             {
-                score++;
+                score += normalAddScore;
                 ShootingGallerySFX.Instance.PlayHitTarget();
             }
             else if (clickedButton.CompareTag("BadButton"))
             {
-                score--;
+                score += superAddScore;
                 ShootingGallerySFX.Instance.PlayRandomScream();
             }
-
-            //StartCoroutine(RotateButton(clickedButton));
             UpdateScoreText();
 
-            // Deactivate the button immediately after clicking.
-            clickedButton.gameObject.SetActive(false);
-
-            // Find which spawn point the button was occupying and free it.
-            // This requires comparing positions (you could also store the index in a component for efficiency).
-            for (int i = 0; i < spawnPointList.Count; i++)
-            {
-                if (Vector3.Distance(clickedButton.transform.position, spawnPointList[i].position) < 0.01f)
-                {
-                    spawnOccupied[i] = false;
-                    break;
-                }
-            }
+            // No longer deactivating or freeing the spawn point here!
         }
     }
 
-    private IEnumerator RotateButton(Button btn)
+    private IEnumerator RotateButton(Button btn, float duration, float fullRotationAngle)
     {
-        float duration = 0.5f;
         float elapsed = 0f;
-        Quaternion startRotation = btn.transform.rotation;
-        // Define the target rotation (rotate 180 degrees on Y axis, for example).
-        Quaternion targetRotation = startRotation * Quaternion.Euler(0, 180, 0);
+        Quaternion originalRotation = btn.transform.rotation;
 
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            float t = elapsed / duration;
-            btn.transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
-            
+            // Lerp the angle from 0 to the desired full rotation (e.g., 360 or 720 degrees).
+            float angle = Mathf.Lerp(0, fullRotationAngle, elapsed / duration);
+            // Apply the incremental rotation relative to the original.
+            btn.transform.rotation = originalRotation * Quaternion.Euler(0, angle, 0);
             yield return null;
         }
-        // Ensure final rotation is set.
-        btn.transform.rotation = targetRotation;
-        //btn.gameObject.SetActive(false);
+
+        // Ensure the final rotation is exactly the original (or adjust if you want it to keep the rotation)
+        btn.transform.rotation = originalRotation;
     }
 
     private void UpdateScoreText()
