@@ -13,7 +13,7 @@ public class ShootingGalleryManager : MonoBehaviour
     private float minDelay = 5f;
     private float maxDelay = 10f;
     private float activeTimeNormal = 0.8f;
-    private float activeTimeSuper = 0.5f;
+    private float activeTimeSuper = 0.6f;
     private Dictionary<Button, bool> clickedFlags = new Dictionary<Button, bool>();
 
     public TextMeshProUGUI scoreText;
