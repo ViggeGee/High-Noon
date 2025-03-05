@@ -13141,10 +13141,6 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 483237764
       objectReference: {fileID: 0}
-    - target: {fileID: 5191251721192283473, guid: bc5ba55182f393b44b40480a94db2824, type: 3}
-      propertyPath: InScenePlacedSourceGlobalObjectIdHash
-      value: 246062979
-      objectReference: {fileID: 0}
     - target: {fileID: 8579863906499583437, guid: bc5ba55182f393b44b40480a94db2824, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -18892,7 +18888,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1c85443962bdb84c983163dda556b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerJoined: {fileID: 0}
   gunShotAudio: {fileID: 1817935823}
   explosionAudio: {fileID: 1817935822}
   planks:

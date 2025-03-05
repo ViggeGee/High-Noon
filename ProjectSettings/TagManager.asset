@@ -24,6 +24,7 @@ TagManager:
   - Stomach
   - Chest
   - Head
+  - NPC
   layers:
   - Default
   - TransparentFX
@@ -36,7 +37,7 @@ TagManager:
   - Player
   - 
   - 
-  - 
+  - House
   - Bullet
   - 
   - 

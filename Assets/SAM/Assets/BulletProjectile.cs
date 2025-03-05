@@ -67,6 +67,10 @@ public class BulletProjectile : NetworkBehaviour
             // Sync hit effect if not a player
             ShowHitEffectClientRpc(false, transform.position);
         }
+        if(other.gameObject.CompareTag("NPC"))
+        {
+            other.gameObject.GetComponent<Animator>().enabled = false;
+        }
         DestroyBulletServerRpc();
     }
     private Transform GetRootParent(Transform child)
