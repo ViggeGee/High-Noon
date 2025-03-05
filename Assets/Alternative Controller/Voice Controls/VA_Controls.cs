@@ -19,6 +19,10 @@ namespace VA_Controls
 #if UNITY_STANDALONE_WIN || UNITY_WSA
             // Define keyword and corresponding action for jump only
             keywords.Add("jump", PerformJump);
+            keywords.Add("Move Forward", PerformMoveForward);
+            keywords.Add("Move Backward", PerformMoveBackward);
+            keywords.Add("Move Left", PerformMoveLeft);
+            keywords.Add("Move Right", PerformMoveRight);
 
             // Initialize the KeywordRecognizer with the keywords
             keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
@@ -45,6 +49,44 @@ namespace VA_Controls
                 playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
                 Debug.Log("Jump action executed.");
                 isGrounded = false;
+            }
+        }
+
+        private void PerformMoveForward()
+        {
+
+            if (playerRigidbody != null)
+            {
+                playerRigidbody.AddForce(Vector3.forward * 2, ForceMode.Impulse);
+                Debug.Log("Move Forward action executed.");
+                
+            }
+        }
+
+        private void PerformMoveBackward()
+        {
+            if (playerRigidbody != null)
+            {
+                playerRigidbody.AddForce(Vector3.back * 2, ForceMode.Impulse);
+                Debug.Log("Move Backward action executed.");
+            }
+        }
+
+        private void PerformMoveLeft()
+        {
+            if (playerRigidbody != null)
+            {
+                playerRigidbody.AddForce(Vector3.left * 2, ForceMode.Impulse);
+                Debug.Log("Move Left action executed.");
+            }
+        }
+
+        private void PerformMoveRight()
+        {
+            if (playerRigidbody != null)
+            {
+                playerRigidbody.AddForce(Vector3.right * 2, ForceMode.Impulse);
+                Debug.Log("Move Right action executed.");
             }
         }
 
