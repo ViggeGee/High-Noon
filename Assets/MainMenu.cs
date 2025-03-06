@@ -10,11 +10,19 @@ public class MainMenu : MonoBehaviour
     
     public AudioSource gunShotAudio;
     public AudioSource explosionAudio;
+    public AudioSource deathAudio;
     public GameObject[] planks;
     public GameObject[] barrels;
+    public GameObject cowboy;
     int index = 0;
     public GameObject gunshotParticleEffect; // Assign your particle prefab in the inspector
+    public GameObject gunshotBloodParticleEffect; // Assign your particle prefab in the inspector
     public GameObject explosionParticleEffect; // Assign your particle prefab in the inspector
+    public GameObject waterParticleEffect; // Assign your particle prefab in the inspector
+
+    public GameObject titleButton;
+    public GameObject waterTowerButton;
+
 
     private PlayerJoined playerJoined;
 
@@ -37,12 +45,28 @@ public class MainMenu : MonoBehaviour
         {
             StartCoroutine(JoinGame());
         }
+        else if (i == 4)
+        {
+            titleButton.SetActive(false);
+            waterTowerButton.SetActive(true);
+        }
     }
 
     public void BreakBarrel(int i)
     {
+       
         gunShotAudio.Play();
         StartCoroutine(ExplodeBarrel(i));
+    }
+    public void ShootWaterTower()
+    {
+        gunShotAudio.Play();
+        StartCoroutine(SpawnWaterParticleAtCursor());
+    }
+    public void KillCowboy()
+    {
+        gunShotAudio.Play();
+        StartCoroutine(CowboyDeath());
     }
 
     public IEnumerator StartGame()
@@ -53,6 +77,14 @@ public class MainMenu : MonoBehaviour
         SceneLoader.Instance.LoadScene(Scenes.JoinGameScene);
         //SceneManager.LoadScene("Generic standoff level_MULTIPLAYER");
     }
+    
+    public IEnumerator QuitGame()
+    {
+        yield return new WaitForSeconds(2f);
+        Application.Quit();
+        //SceneManager.LoadScene("Generic standoff level_MULTIPLAYER");
+    }
+    
 
     public IEnumerator JoinGame()
     {
@@ -84,6 +116,17 @@ public class MainMenu : MonoBehaviour
         Instantiate(explosionParticleEffect, barrels[i].transform.position, Quaternion.identity);
         barrels[i].gameObject.SetActive(false);
     }
+    public IEnumerator CowboyDeath()
+    {
+        yield return new WaitForSeconds(0.6f);
+        SpawnBloodParticleAtCursor();
+        deathAudio.Play();
+        cowboy.GetComponent<Animator>().enabled = false;
+
+        cowboy.GetComponentInChildren<Rigidbody>().AddForce(new Vector3(0, 150, 150), ForceMode.Impulse);
+        cowboy.GetComponentInChildren<Rigidbody>().AddTorque(new Vector3(0, 1, 0), ForceMode.Impulse);
+
+    }
 
     void SpawnParticleAtCursor()
     {
@@ -95,6 +138,34 @@ public class MainMenu : MonoBehaviour
             if (hit.collider.CompareTag("Plank")) // Ensure it hits a plank
             {
                 Instantiate(gunshotParticleEffect, hit.point, Quaternion.identity);
+            }
+        }
+    }
+    IEnumerator SpawnWaterParticleAtCursor()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        yield return new WaitForSeconds(0.6f);
+        if (Physics.Raycast(ray, out hit)) // Check if we hit something
+        {
+            if (hit.collider.CompareTag("WaterTower")) // Ensure it hits a plank
+            {
+                Quaternion lookRotation = Quaternion.LookRotation(Camera.main.transform.position - hit.point, Vector3.up);
+                Instantiate(waterParticleEffect, hit.point, Quaternion.Euler(90, lookRotation.eulerAngles.y, lookRotation.eulerAngles.z));
+            }
+        }
+    }
+    void SpawnBloodParticleAtCursor()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit)) // Check if we hit something
+        {
+            if (hit.collider.CompareTag("NPC")) // Ensure it hits a plank
+            {
+                Instantiate(gunshotBloodParticleEffect, hit.point, Quaternion.identity);
             }
         }
     }
