@@ -23,6 +23,7 @@ public class MainMenu : MonoBehaviour
     public GameObject titleButton;
     public GameObject waterTowerButton;
 
+    public GameObject creditsGO;
 
     private PlayerJoined playerJoined;
 
@@ -44,6 +45,15 @@ public class MainMenu : MonoBehaviour
         else if(i == 1)
         {
             StartCoroutine(JoinGame());
+        }
+        else if(i == 2)
+        {
+            StartCoroutine(SpawnCredits());
+        }
+        else if (i == 3)
+        {
+            StartCoroutine(QuitGame());
+
         }
         else if (i == 4)
         {
@@ -155,6 +165,13 @@ public class MainMenu : MonoBehaviour
                 Instantiate(waterParticleEffect, hit.point, Quaternion.Euler(90, lookRotation.eulerAngles.y, lookRotation.eulerAngles.z));
             }
         }
+    }
+    
+    IEnumerator SpawnCredits()
+    {
+      
+        yield return new WaitForSeconds(0.6f);
+        creditsGO.SetActive(true);
     }
     void SpawnBloodParticleAtCursor()
     {
