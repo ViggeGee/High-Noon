@@ -3,6 +3,8 @@ using UnityEngine;
 public class LookAtPoint : MonoBehaviour
 {
     public Transform target;
+    public Transform activetarget;
+    public Transform dummyTarget;
     public float rotationSpeed = 5f;
     public float maxYaw = 90f;
     public float maxPitch = 20f;
@@ -16,7 +18,22 @@ public class LookAtPoint : MonoBehaviour
 
     void Update()
     {
-        Vector3 direction = target.position - transform.position;
+        if (target == null || activetarget == null || dummyTarget == null)
+        {            
+            return;
+        }
+
+        if (GameManager.Instance.readyToShoot)
+        {
+            activetarget.position = target.position;
+
+        }
+        else
+        {
+            activetarget.position = dummyTarget.position;
+        }
+
+        Vector3 direction = activetarget.position - transform.position;
         Quaternion desiredRotation = Quaternion.LookRotation(direction);
         Quaternion deltaRotation = Quaternion.Inverse(initialRotation) * desiredRotation;
         Vector3 deltaEuler = deltaRotation.eulerAngles;

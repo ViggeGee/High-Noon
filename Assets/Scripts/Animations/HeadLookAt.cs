@@ -9,6 +9,7 @@ public class HeadLookAt : MonoBehaviour
     public float headWeight = 1f;
     public float eyesWeight = 1f;
     public float clampWeight = 0.5f;
+   
 
     void Start()
     {
@@ -17,12 +18,16 @@ public class HeadLookAt : MonoBehaviour
 
     void OnAnimatorIK(int layerIndex)
     {
-        if (lookAtTarget)
+        if(GameManager.Instance.readyToShoot == true)
         {
-            animator.SetLookAtWeight(weight, bodyWeight, headWeight, eyesWeight, clampWeight);
-            Vector3 pos = lookAtTarget.position;
-            pos.y = Mathf.Clamp(pos.y, 0f, 5f);
-            animator.SetLookAtPosition(pos);
+            if (lookAtTarget)
+            {
+                animator.SetLookAtWeight(weight, bodyWeight, headWeight, eyesWeight, clampWeight);
+                Vector3 pos = lookAtTarget.position;
+                pos.y = Mathf.Clamp(pos.y, 0f, 5f);
+                animator.SetLookAtPosition(pos);
+            }
         }
+       
     }
 }
