@@ -13141,10 +13141,6 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 483237764
       objectReference: {fileID: 0}
-    - target: {fileID: 7260838267974934671, guid: bc5ba55182f393b44b40480a94db2824, type: 3}
-      propertyPath: gotoThisScene
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 8579863906499583437, guid: bc5ba55182f393b44b40480a94db2824, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -18894,6 +18890,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunShotAudio: {fileID: 1817935823}
   explosionAudio: {fileID: 1817935822}
+  deathAudio: {fileID: 0}
   planks:
   - {fileID: 597230720}
   - {fileID: 125137153}
@@ -18905,8 +18902,14 @@ MonoBehaviour:
   - {fileID: 1682946960}
   - {fileID: 780111659}
   - {fileID: 1086346111}
+  cowboy: {fileID: 0}
   gunshotParticleEffect: {fileID: 348396211}
+  gunshotBloodParticleEffect: {fileID: 0}
   explosionParticleEffect: {fileID: 2850410978916676767, guid: b5042d340cd7fac4ba699822e00e39d1, type: 3}
+  waterParticleEffect: {fileID: 0}
+  titleButton: {fileID: 0}
+  waterTowerButton: {fileID: 0}
+  creditsGO: {fileID: 0}
 --- !u!114 &1817935825
 MonoBehaviour:
   m_ObjectHideFlags: 0

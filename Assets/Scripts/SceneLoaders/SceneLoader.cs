@@ -11,7 +11,7 @@ public enum Scenes
 
     WesternTown,
     TrainMap,
-    TrainHorseMap,
+    //TrainHorseMap,
     Bison,
     TrainHorseMap2
 }
