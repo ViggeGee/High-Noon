@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Rewired;
 using Rewired.ControllerExtensions;
 using System.Collections.Generic;
@@ -155,27 +155,30 @@ public class Motion_Controller : MonoBehaviour
 
     private void PivotObjectWithController(string controllerType, Rewired.Player player, Vector3 gyroData)
     {
-        if (gyroData.sqrMagnitude < 0.01f)
-        {
-            return;
-        }
-
-        //gameObject.transform.Rotate(gyroData * Time.deltaTime * 10);
-
-        Vector3 gyroDataX = new Vector3(gyroData.x, 0, 0);
-        Vector3 gyroDataY = new Vector3(0, gyroData.y, 0);
-        Vector3 gyroDataZ = new Vector3(0, 0, gyroData.z);
-
-        //player1GameObject.transform.RotateAround(player1PivotAroundGameObject.transform.position, gyroDataX * Time.deltaTime * rotationAmount, angle);
-        //player1GameObject.transform.RotateAround(player1PivotAroundGameObject.transform.position, gyroDataY * Time.deltaTime * rotationAmount, angle);
-
+        if (gyroData.sqrMagnitude < 0.01f) return; // Ignore small gyro movements
 
         GameObject playerGameObject = GetPlayerGameObject(player);
         GameObject pivotAroundGameObject = GetPlayerPivotGameObject(player);
-        playerGameObject.transform.RotateAround(pivotAroundGameObject.transform.position, rotationAmount * Time.deltaTime * gyroDataX - new Vector3(gyroDataX.x/2, 0,0), angle);
 
-        Debug.Log($"<color=cyan>Player: {player.name} has {controllerType} Gyro: {gyroData}</color>");
+        if (playerGameObject == null || pivotAroundGameObject == null)
+        {
+            Debug.LogWarning("Pivot or player GameObject is null.");
+            return;
+        }
+
+        Vector3 pivotPosition = pivotAroundGameObject.transform.position;
+
+        // 1️⃣ **Use X-axis for side-to-side balance effect**
+        Vector3 rotationAxis = pivotAroundGameObject.transform.right; // Ensures a proper balancing pivot
+        float rotationSpeed = gyroData.z * rotationAmount * Time.deltaTime; // Z gyro controls X-axis tilt
+
+        // 2️⃣ **Rotate character around the log’s X-axis to simulate balance**
+        playerGameObject.transform.RotateAround(pivotPosition, rotationAxis, rotationSpeed);
+
+        Debug.Log($"Pivoting properly! Speed: {rotationSpeed}, Axis: {rotationAxis}");
     }
+
+
     private void RotateObjectWithController(string controllerType, Rewired.Player player, Vector3 gyroData)
     {
         //gameObject.transform.Rotate(gyroData * Time.deltaTime * 10);
