@@ -27,6 +27,7 @@ TagManager:
   - NPC
   - BadButton
   - GoodButton
+  - WaterTower
   layers:
   - Default
   - TransparentFX
