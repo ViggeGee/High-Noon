@@ -13142,6 +13142,10 @@ PrefabInstance:
       value: 483237764
       objectReference: {fileID: 0}
     - target: {fileID: 7260838267974934671, guid: bc5ba55182f393b44b40480a94db2824, type: 3}
+      propertyPath: gotoThisScene
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7260838267974934671, guid: bc5ba55182f393b44b40480a94db2824, type: 3}
       propertyPath: isRandomScene
       value: 1
       objectReference: {fileID: 0}

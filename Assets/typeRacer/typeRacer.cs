@@ -195,7 +195,7 @@ public class typeRacer : NetworkBehaviour
         {
             string[] words = textAsset.text.Split(new char[] { '\n', '\r' }, System.StringSplitOptions.RemoveEmptyEntries);
             wordsList.AddRange(words);
-            Debug.Log("Loaded " + wordsList.Count + " words!");
+           // Debug.Log("Loaded " + wordsList.Count + " words!");
         }
         else
         {

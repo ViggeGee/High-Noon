@@ -42,20 +42,20 @@ public class ShooterController : NetworkBehaviour
     {
         if (IsOwner) // Only apply changes for the owning client
         {
-            Debug.Log($"ShooterController spawned for Client ID: {OwnerClientId}");
+            //Debug.Log($"ShooterController spawned for Client ID: {OwnerClientId}");
 
             // Debugging and safety check
-            Debug.Log($"IsOwner: {IsOwner}, OwnerClientId: {OwnerClientId}");
+            //Debug.Log($"IsOwner: {IsOwner}, OwnerClientId: {OwnerClientId}");
 
             if (OwnerClientId == 0)
             {
                 characterToActivatePlayer1.SetActive(true);
-                Debug.Log("Activated Player 1 character");
+                //Debug.Log("Activated Player 1 character");
             }
             else
             {
                 characterToActivatePlayer2.SetActive(true);
-                Debug.Log("Activated Player 2 character");
+                //Debug.Log("Activated Player 2 character");
             }
 
             // Set up the input and player camera
@@ -66,18 +66,18 @@ public class ShooterController : NetworkBehaviour
         }
         else
         {
-            Debug.Log($"Player is not owner of shooter controller: {OwnerClientId}");
+            //Debug.Log($"Player is not owner of shooter controller: {OwnerClientId}");
 
             // For the non-owner, ensure they can see both players' characters
             if (OwnerClientId == 0 )
             {
                 characterToActivatePlayer1.SetActive(true); // Make sure Player 1 is visible for Player 2
-                Debug.Log("Player 2 sees Player 1 character");
+                //Debug.Log("Player 2 sees Player 1 character");
             }
             else
             {
                 characterToActivatePlayer2.SetActive(true); // Make sure Player 1 is visible for Player 2
-                Debug.Log("Player 1 sees Player 2 character");
+                //Debug.Log("Player 1 sees Player 2 character");
             }
 
             aimVirtualCamera.Priority = 0;

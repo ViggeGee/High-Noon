@@ -1173,7 +1173,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 628090700085494591}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 010fb286ab5d67a44b161c378f9fb3cc, type: 3}
   m_Name: 
@@ -2538,12 +2538,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1333531841506687175}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 124.4, z: 68.3}
-  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 0.059, z: 0.165}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3320072041468935953}
+  m_Father: {fileID: 4707781717987259068}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1359678302131527643
 GameObject:
@@ -6403,6 +6403,7 @@ GameObject:
   - component: {fileID: 8903808938598760822}
   - component: {fileID: 3950605588212791533}
   - component: {fileID: -4243033916673864580}
+  - component: {fileID: 1975081400887858357}
   m_Layer: 0
   m_Name: Horse
   m_TagString: Untagged
@@ -6500,6 +6501,22 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &1975081400887858357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3793882768129189829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 010fb286ab5d67a44b161c378f9fb3cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  playerAnimator: {fileID: 7593119171396112576}
+  shooterController: {fileID: 9175530176093678297}
+  scoreData: {fileID: 11400000, guid: 1326610c124d96c4e9423ef35741b213, type: 2}
 --- !u!1 &3805239941994058998
 GameObject:
   m_ObjectHideFlags: 0
@@ -12067,7 +12084,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2470086353067224989}
-  - {fileID: 5867652217970721612}
   m_Father: {fileID: 8280921285078142437}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7018006467907141489
@@ -15214,6 +15230,7 @@ Transform:
   - {fileID: 757837790643955040}
   - {fileID: 3200132744797488253}
   - {fileID: 7470888109560881072}
+  - {fileID: 5867652217970721612}
   m_Father: {fileID: 3973097001237566905}
   m_LocalEulerAnglesHint: {x: 1.523, y: 101.52, z: -110.036}
 --- !u!33 &6362898123767367932

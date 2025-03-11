@@ -17,7 +17,7 @@ public class ButtonSmashManager : MonoBehaviour
     public bool nextIsButton1 = true;
     public bool challengeCompleted = false;
     //private bool challengeStarted = false;
-    private bool canPress = true;
+    //private bool canPress = true;
 
 
     // Update is called once per frame
