@@ -1,6 +1,7 @@
 using UnityEngine;
+using Unity.Netcode;
 
-public class HeadLookAt : MonoBehaviour
+public class HeadLookAt : NetworkBehaviour
 {
     private Animator animator;
     public Transform lookAtTarget;
@@ -9,7 +10,9 @@ public class HeadLookAt : MonoBehaviour
     public float headWeight = 1f;
     public float eyesWeight = 1f;
     public float clampWeight = 0.5f;
-   
+
+    private NetworkVariable<Vector3> networkLookAtPos = new NetworkVariable<Vector3>(
+        default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     void Start()
     {
@@ -18,16 +21,21 @@ public class HeadLookAt : MonoBehaviour
 
     void OnAnimatorIK(int layerIndex)
     {
-        if(GameManager.Instance.readyToShoot == true)
+        if (lookAtTarget == null) return;
+
+        if (IsOwner)
         {
-            if (lookAtTarget)
-            {
-                animator.SetLookAtWeight(weight, bodyWeight, headWeight, eyesWeight, clampWeight);
-                Vector3 pos = lookAtTarget.position;
-                pos.y = Mathf.Clamp(pos.y, 0f, 5f);
-                animator.SetLookAtPosition(pos);
-            }
+            RequestLookAtPositionServerRpc(lookAtTarget.position);
         }
+
        
+        animator.SetLookAtWeight(weight, bodyWeight, headWeight, eyesWeight, clampWeight);
+        animator.SetLookAtPosition(networkLookAtPos.Value);
+    }
+
+    [ServerRpc]
+    private void RequestLookAtPositionServerRpc(Vector3 newPosition)
+    {
+        networkLookAtPos.Value = newPosition;
     }
 }

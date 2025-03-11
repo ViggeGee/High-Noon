@@ -1,6 +1,7 @@
 using UnityEngine;
+using Unity.Netcode;
 
-public class LookAtPoint : MonoBehaviour
+public class LookAtPoint : NetworkBehaviour
 {
     public Transform target;
     public Transform activetarget;
@@ -10,6 +11,7 @@ public class LookAtPoint : MonoBehaviour
     public float maxPitch = 20f;
 
     private Quaternion initialRotation;
+    private NetworkVariable<Vector3> networkTargetPos = new NetworkVariable<Vector3>();
 
     void Start()
     {
@@ -19,19 +21,17 @@ public class LookAtPoint : MonoBehaviour
     void Update()
     {
         if (target == null || activetarget == null || dummyTarget == null)
-        {            
             return;
+
+        if (IsServer)
+        {
+            if (GameManager.Instance.readyToShoot)
+                networkTargetPos.Value = target.position;
+            else
+                networkTargetPos.Value = dummyTarget.position;
         }
 
-        if (GameManager.Instance.readyToShoot)
-        {
-            activetarget.position = target.position;
-
-        }
-        else
-        {
-            activetarget.position = dummyTarget.position;
-        }
+        activetarget.position = networkTargetPos.Value;
 
         Vector3 direction = activetarget.position - transform.position;
         Quaternion desiredRotation = Quaternion.LookRotation(direction);
