@@ -9950,8 +9950,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1122002522536412448}
-  activetarget: {fileID: 0}
-  dummyTarget: {fileID: 0}
+  activetarget: {fileID: 1103783547176433765}
+  dummyTarget: {fileID: 9048338230540118311}
   rotationSpeed: 100
   maxYaw: 90
   maxPitch: 20
@@ -13957,7 +13957,7 @@ Transform:
   m_GameObject: {fileID: 7975210787407667611}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 70}
+  m_LocalPosition: {x: -0, y: 0, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
