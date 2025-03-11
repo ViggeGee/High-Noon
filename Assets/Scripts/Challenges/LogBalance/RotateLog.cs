@@ -4,7 +4,7 @@ public class RotateLog
 {
 
     private Transform transform;
-    private float rotationSpeed = 30;
+    private float rotationSpeed = 15;
 
     public RotateLog( Transform transform)
     {

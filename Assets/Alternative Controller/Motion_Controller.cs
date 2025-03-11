@@ -168,15 +168,21 @@ public class Motion_Controller : MonoBehaviour
 
         Vector3 pivotPosition = pivotAroundGameObject.transform.position;
 
-        // 1️⃣ **Use X-axis for side-to-side balance effect**
-        Vector3 rotationAxis = pivotAroundGameObject.transform.right; // Ensures a proper balancing pivot
-        float rotationSpeed = gyroData.z * rotationAmount * Time.deltaTime; // Z gyro controls X-axis tilt
+        //Get log's rotation velocity
+        Vector3 logRotationVelocity = pivotAroundGameObject.transform.right * 30 * Time.deltaTime; // Adjust 30 if too strong
 
-        // 2️⃣ **Rotate character around the log’s X-axis to simulate balance**
-        playerGameObject.transform.RotateAround(pivotPosition, rotationAxis, rotationSpeed);
+        //Use gyro to counteract log movement
+        Vector3 gyroInfluence = gyroData.z * rotationAmount * Time.deltaTime * pivotAroundGameObject.transform.right;
 
-        Debug.Log($"Pivoting properly! Speed: {rotationSpeed}, Axis: {rotationAxis}");
+        //Combine both forces
+        Vector3 finalRotationAxis = logRotationVelocity + gyroInfluence;
+
+        //Rotate character accordingly
+        playerGameObject.transform.RotateAround(pivotPosition, finalRotationAxis, 1.0f); // 1.0f = fixed angle strength
+
+        Debug.Log($"Log Influence: {logRotationVelocity}, Player Counteraction: {gyroInfluence}");
     }
+
 
 
     private void RotateObjectWithController(string controllerType, Rewired.Player player, Vector3 gyroData)

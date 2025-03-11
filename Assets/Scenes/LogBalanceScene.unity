@@ -25188,7 +25188,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4438043195868558864, guid: c853585142a3e0347b411542b2d61d20, type: 3}
       propertyPath: rotationAmount
-      value: 20
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 4438043195868558864, guid: c853585142a3e0347b411542b2d61d20, type: 3}
       propertyPath: player1GameObject
