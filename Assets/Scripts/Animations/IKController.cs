@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Netcode;
 using System.Collections;
+using Cinemachine;
 
 public class IKController : NetworkBehaviour
 {
@@ -9,7 +10,8 @@ public class IKController : NetworkBehaviour
     public Transform[] rightHandTargets;
     public Transform leftFootTarget;
     public Transform rightFootTarget;
-
+    public GameObject gun;
+    
     public enum HandState { Holster, Aiming, Recoil }
 
     public NetworkVariable<HandState> currentHandState = new NetworkVariable<HandState>(HandState.Holster, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
@@ -23,6 +25,7 @@ public class IKController : NetworkBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
+        
     }
 
     void Update()
@@ -41,6 +44,9 @@ public class IKController : NetworkBehaviour
     void OnAnimatorIK(int layerIndex)
     {
         if (!animator) return;
+
+        Quaternion cameraRotation = GetCameraRotation();
+        Vector3 aimDirection = cameraRotation * Vector3.forward;
 
         if (leftHandTarget != null)
         {
@@ -62,6 +68,13 @@ public class IKController : NetworkBehaviour
 
             if (target != null)
             {
+
+                Vector3 newTargetPosition = target.position + aimDirection * 0.5f;
+
+
+                //rightHandTargets[1].position = Vector3.Lerp(target.position, newTargetPosition, Time.deltaTime * 10f);
+                //rightHandTargets[1].rotation = Quaternion.Slerp(target.rotation, cameraRotation, Time.deltaTime * 10f);
+
                 animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
                 animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
                 animator.SetIKPosition(AvatarIKGoal.RightHand, target.position);
@@ -84,6 +97,37 @@ public class IKController : NetworkBehaviour
             animator.SetIKPosition(AvatarIKGoal.RightFoot, rightFootTarget.position);
             animator.SetIKRotation(AvatarIKGoal.RightFoot, rightFootTarget.rotation);
         }
+    }
+
+    private Vector3 GetCameraForward()
+    {
+        CinemachineBrain brain = Camera.main.GetComponent<CinemachineBrain>();
+
+        if (brain != null && brain.ActiveVirtualCamera != null)
+        {
+            CinemachineVirtualCamera vCam = brain.ActiveVirtualCamera as CinemachineVirtualCamera;
+            if (vCam != null)
+            {
+                return vCam.transform.forward; 
+            }
+        }
+
+        return Camera.main.transform.forward; 
+    }
+    private Quaternion GetCameraRotation()
+    {
+        CinemachineBrain brain = Camera.main.GetComponent<CinemachineBrain>();
+
+        if (brain != null && brain.ActiveVirtualCamera != null)
+        {
+            CinemachineVirtualCamera vCam = brain.ActiveVirtualCamera as CinemachineVirtualCamera;
+            if (vCam != null)
+            {
+                return vCam.transform.rotation;
+            }
+        }
+
+        return Camera.main.transform.rotation; 
     }
 
     [ServerRpc]

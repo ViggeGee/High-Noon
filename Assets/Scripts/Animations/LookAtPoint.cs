@@ -43,6 +43,6 @@ public class LookAtPoint : NetworkBehaviour
         float clampedPitch = Mathf.Clamp(deltaEuler.x, -maxPitch, maxPitch);
         Quaternion clampedDelta = Quaternion.Euler(clampedPitch, clampedYaw, 0);
         Quaternion finalRotation = Quaternion.Slerp(transform.rotation, initialRotation * clampedDelta, rotationSpeed * Time.deltaTime);
-        transform.rotation = finalRotation;
+        //transform.rotation = finalRotation;
     }
 }

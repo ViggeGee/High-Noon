@@ -1369,6 +1369,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb940b87b0e34d54c8251ec9e8291b95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   leftHandTarget: {fileID: 16192108448134407}
   rightHandTargets:
   - {fileID: 8906693682786279619}
@@ -1376,9 +1377,11 @@ MonoBehaviour:
   - {fileID: 7102149208201901237}
   leftFootTarget: {fileID: 4871243792594583069}
   rightFootTarget: {fileID: 551138006570008362}
-  currentHandState: 0
+  currentHandState:
+    m_InternalValue: 0
+  ammocount:
+    m_InternalValue: 0
   recoilDuration: 0.15
-  ammocount: 0
   maxAmmo: 6
 --- !u!114 &551804101233754511
 MonoBehaviour:
@@ -1392,6 +1395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc43a271d00ebb47b71cc9bdd0abc35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   target: {fileID: 1122002522536412448}
   activetarget: {fileID: 1103783547176433765}
   dummyTarget: {fileID: 9048338230540118311}
@@ -1410,6 +1414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4237a65a1a6de64caed30ea06ff157b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   lookAtTarget: {fileID: 1122002522536412448}
   weight: 1
   bodyWeight: 0
@@ -1654,7 +1659,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5018026131491869818
 Transform:
   m_ObjectHideFlags: 0
@@ -9966,6 +9971,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc43a271d00ebb47b71cc9bdd0abc35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   target: {fileID: 1122002522536412448}
   activetarget: {fileID: 1103783547176433765}
   dummyTarget: {fileID: 9048338230540118311}
