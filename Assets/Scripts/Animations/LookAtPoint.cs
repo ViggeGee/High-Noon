@@ -1,39 +1,50 @@
 using UnityEngine;
 using Unity.Netcode;
+using Cinemachine;
 
 public class LookAtPoint : NetworkBehaviour
 {
-    public Transform target;
-    public Transform activetarget;
-    public Transform dummyTarget;
+    public Transform defaultTarget;
     public float rotationSpeed = 5f;
     public float maxYaw = 90f;
     public float maxPitch = 20f;
 
     private Quaternion initialRotation;
-    private NetworkVariable<Vector3> networkTargetPos = new NetworkVariable<Vector3>();
+    private Vector3 smoothTargetPos; 
+
+    private NetworkVariable<Vector3> networkTargetPos = new NetworkVariable<Vector3>(
+        Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server
+    );
+
+    private Transform cameraTarget;
 
     void Start()
     {
         initialRotation = transform.rotation;
+        FindCameraTarget();
     }
 
-    void Update()
+    void LateUpdate()
     {
-        if (target == null || activetarget == null || dummyTarget == null)
-            return;
-
-        if (IsServer)
+        if (cameraTarget == null || defaultTarget == null)
         {
-            if (GameManager.Instance.readyToShoot)
-                networkTargetPos.Value = target.position;
-            else
-                networkTargetPos.Value = dummyTarget.position;
+            FindCameraTarget();
+            return;
         }
 
-        activetarget.position = networkTargetPos.Value;
+        if (IsOwner) 
+        {
+            Vector3 newTargetPos = cameraTarget.position; 
+            UpdateTargetPositionServerRpc(newTargetPos);
+        }
 
-        Vector3 direction = activetarget.position - transform.position;
+
+        smoothTargetPos = Vector3.Lerp(smoothTargetPos, networkTargetPos.Value, Time.deltaTime * 5f);
+
+  
+        Vector3 lookTargetPos = (smoothTargetPos != Vector3.zero) ? smoothTargetPos : defaultTarget.position;
+
+        Vector3 direction = lookTargetPos - transform.position;
         Quaternion desiredRotation = Quaternion.LookRotation(direction);
         Quaternion deltaRotation = Quaternion.Inverse(initialRotation) * desiredRotation;
         Vector3 deltaEuler = deltaRotation.eulerAngles;
@@ -43,6 +54,33 @@ public class LookAtPoint : NetworkBehaviour
         float clampedPitch = Mathf.Clamp(deltaEuler.x, -maxPitch, maxPitch);
         Quaternion clampedDelta = Quaternion.Euler(clampedPitch, clampedYaw, 0);
         Quaternion finalRotation = Quaternion.Slerp(transform.rotation, initialRotation * clampedDelta, rotationSpeed * Time.deltaTime);
-        //transform.rotation = finalRotation;
+        transform.rotation = finalRotation;
+    }
+
+
+    private void FindCameraTarget()
+    {
+        CinemachineBrain brain = Camera.main?.GetComponent<CinemachineBrain>();
+        if (brain != null && brain.ActiveVirtualCamera != null)
+        {
+            CinemachineVirtualCamera vCam = brain.ActiveVirtualCamera as CinemachineVirtualCamera;
+            if (vCam != null)
+            {
+                cameraTarget = vCam.transform; 
+            }
+        }
+    }
+
+    [ServerRpc]
+    private void UpdateTargetPositionServerRpc(Vector3 newPosition)
+    {
+        networkTargetPos.Value = newPosition;
+        UpdateTargetPositionClientRpc(newPosition);
+    }
+
+    [ClientRpc]
+    private void UpdateTargetPositionClientRpc(Vector3 newPosition)
+    {
+        networkTargetPos.Value = newPosition;
     }
 }

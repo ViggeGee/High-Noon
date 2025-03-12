@@ -23,10 +23,18 @@ public class IKController : NetworkBehaviour
     public int maxAmmo = 6;
     private Vector3 velocity = Vector3.zero;
     private Quaternion latestCameraRotation;
+
+    public NetworkVariable<Quaternion> networkCameraRotation = new NetworkVariable<Quaternion>(
+      Quaternion.identity, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
+    public NetworkVariable<bool> isGunActive = new NetworkVariable<bool>(false); 
     void Start()
     {
         animator = GetComponent<Animator>();
-        
+        //isGunActive.OnValueChanged += (oldValue, newValue) =>
+        //{
+        //    gun.SetActive(newValue);
+        //};
     }
 
     void Update()
@@ -35,12 +43,14 @@ public class IKController : NetworkBehaviour
 
         if (GameManager.Instance.readyToShoot)
         {
-            ToggleGun();
+            ToggleGunServerRpc();
             if (Input.GetMouseButtonDown(0) && !isRecoiling.Value && ammocount.Value < maxAmmo)
             {
                 RequestNextHandStateServerRpc();
             }
         }
+
+        UpdateCameraRotationServerRpc(GetCameraRotation());
     }
     void ToggleGun()
     {
@@ -49,7 +59,14 @@ public class IKController : NetworkBehaviour
 
     void LateUpdate()
     {
-        latestCameraRotation = GetCameraRotation();
+        if (IsOwner)
+        {
+            latestCameraRotation = GetCameraRotation();
+        }
+        else
+        {
+            latestCameraRotation = networkCameraRotation.Value; 
+        }
     }
 
     void OnAnimatorIK(int layerIndex)
@@ -84,17 +101,19 @@ public class IKController : NetworkBehaviour
              
 
                     Vector3 newTargetPosition = target.position + aimDirection * 0.5f;
-                    Quaternion newTargetRotation = Quaternion.LookRotation(aimDirection) * Quaternion.Euler(0, 0, -100);
+                    Quaternion newTargetRotation = Quaternion.LookRotation(aimDirection) * Quaternion.Euler(0, 0, -80);
+                    Vector3 aimUp = latestCameraRotation * Vector3.up;
 
-                 
                     target.position = Vector3.Lerp(target.position, newTargetPosition, Time.deltaTime * 10f);
                     target.rotation = Quaternion.Slerp(target.rotation, newTargetRotation, Time.deltaTime * 10f);
 
-                
+                 
                     animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
                     animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
                     animator.SetIKPosition(AvatarIKGoal.RightHand, target.position);
                     animator.SetIKRotation(AvatarIKGoal.RightHand, target.rotation);
+
+              
                     break;
                 case HandState.Recoil: target = rightHandTargets[2];
                     animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
@@ -191,6 +210,25 @@ public class IKController : NetworkBehaviour
         }
 
         ammocount.Value++;
+    }
+
+    [ServerRpc]
+    private void UpdateCameraRotationServerRpc(Quaternion newRotation)
+    {
+        networkCameraRotation.Value = newRotation;
+    }
+
+    [ServerRpc]
+    private void ToggleGunServerRpc()
+    {
+        bool newState = !isGunActive.Value;
+        isGunActive.Value = newState;
+        ToggleGunClientRpc(true);
+    }
+    [ClientRpc]
+    private void ToggleGunClientRpc(bool newState)
+    {
+        gun.SetActive(newState);
     }
 
     private IEnumerator RecoilCoroutine()
