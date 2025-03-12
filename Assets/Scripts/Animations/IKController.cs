@@ -22,7 +22,7 @@ public class IKController : NetworkBehaviour
 
     public int maxAmmo = 6;
     private Vector3 velocity = Vector3.zero;
-
+    private Quaternion latestCameraRotation;
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -49,17 +49,14 @@ public class IKController : NetworkBehaviour
 
     void LateUpdate()
     {
-        if (!animator || !IsOwner) return;
-
-        //animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandTargets[1].position);
-        //animator.SetIKRotation(AvatarIKGoal.RightHand, rightHandTargets[1].rotation);
+        latestCameraRotation = GetCameraRotation();
     }
 
     void OnAnimatorIK(int layerIndex)
     {
         if (!animator ) return; 
 
-        Quaternion cameraRotation = GetCameraRotation();
+        Quaternion cameraRotation = latestCameraRotation;
         Vector3 aimDirection = cameraRotation * Vector3.forward;
 
         if (leftHandTarget != null)
@@ -75,9 +72,36 @@ public class IKController : NetworkBehaviour
             Transform target = null;
             switch (currentHandState.Value)
             {
-                case HandState.Holster: target = rightHandTargets[0]; break;
-                case HandState.Aiming: target = rightHandTargets[1]; break;
-                case HandState.Recoil: target = rightHandTargets[2]; break;
+                case HandState.Holster: target = rightHandTargets[0];
+                    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
+                    animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
+                    animator.SetIKPosition(AvatarIKGoal.RightHand, target.position);
+                    animator.SetIKRotation(AvatarIKGoal.RightHand, target.rotation);
+                    break;
+
+                case HandState.Aiming: 
+                    target = rightHandTargets[1];
+             
+
+                    Vector3 newTargetPosition = target.position + aimDirection * 0.5f;
+                    Quaternion newTargetRotation = Quaternion.LookRotation(aimDirection) * Quaternion.Euler(0, 0, -100);
+
+                 
+                    target.position = Vector3.Lerp(target.position, newTargetPosition, Time.deltaTime * 10f);
+                    target.rotation = Quaternion.Slerp(target.rotation, newTargetRotation, Time.deltaTime * 10f);
+
+                
+                    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
+                    animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
+                    animator.SetIKPosition(AvatarIKGoal.RightHand, target.position);
+                    animator.SetIKRotation(AvatarIKGoal.RightHand, target.rotation);
+                    break;
+                case HandState.Recoil: target = rightHandTargets[2];
+                    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
+                    animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
+                    animator.SetIKPosition(AvatarIKGoal.RightHand, target.position);
+                    animator.SetIKRotation(AvatarIKGoal.RightHand, target.rotation);
+                    break;
             }
          
             if (target != null)
@@ -97,10 +121,10 @@ public class IKController : NetworkBehaviour
 
 
 
-                animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
-                animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
-                animator.SetIKPosition(AvatarIKGoal.RightHand, target.position);
-                animator.SetIKRotation(AvatarIKGoal.RightHand, target.rotation);
+                //animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
+                //animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
+                //animator.SetIKPosition(AvatarIKGoal.RightHand, target.position);
+                //animator.SetIKRotation(AvatarIKGoal.RightHand, target.rotation);
             }
         }
 
