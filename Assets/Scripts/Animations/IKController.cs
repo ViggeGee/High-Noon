@@ -57,7 +57,7 @@ public class IKController : NetworkBehaviour
 
     void OnAnimatorIK(int layerIndex)
     {
-        if (!animator || !IsOwner) return; 
+        if (!animator ) return; 
 
         Quaternion cameraRotation = GetCameraRotation();
         Vector3 aimDirection = cameraRotation * Vector3.forward;

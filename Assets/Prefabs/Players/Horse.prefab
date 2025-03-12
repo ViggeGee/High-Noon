@@ -1377,6 +1377,7 @@ MonoBehaviour:
   - {fileID: 7102149208201901237}
   leftFootTarget: {fileID: 4871243792594583069}
   rightFootTarget: {fileID: 551138006570008362}
+  gun: {fileID: 8801953767809046034}
   currentHandState:
     m_InternalValue: 0
   ammocount:
@@ -15219,7 +15220,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4707781717987259068
 Transform:
   m_ObjectHideFlags: 0
