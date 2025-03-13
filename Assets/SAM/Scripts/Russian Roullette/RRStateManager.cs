@@ -13,10 +13,13 @@ public class RRStateManager : MonoBehaviour
     HitBulletState hitBulletState = new();
     DeathState deathState = new();
 
+    //-----------COMPONENTS---------------
+
+    Animator animator;
 
     void Start()
     {
-
+        animator = GetComponent<Animator>();
         currentState.EnterState(this);
 
     }
