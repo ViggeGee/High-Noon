@@ -56,6 +56,10 @@ public class ShootingGalleryManager : MonoBehaviour
 
     private void Update()
     {
+        Cursor.lockState = CursorLockMode.None;
+
+        if (!GameManager.Instance.hasGameStarted.Value || !GameManager.Instance.isPlayer1Ready.Value || !GameManager.Instance.isPlayer2Ready.Value || GameManager.Instance.playerDied.Value) return;
+
         if (Input.GetMouseButtonDown(0) && !gamemodeFinished) 
         {
             ShootingGallerySFX.Instance.PlayLeftClick();
@@ -63,8 +67,11 @@ public class ShootingGalleryManager : MonoBehaviour
 
         if (score >= 30f)
         {
+            Cursor.lockState = CursorLockMode.Locked;
             gamemodeFinished = true;
             canvas.gameObject.SetActive(false);
+            GameManager.Instance.readyToShoot = true;
+            CinematicManager.Instance.StopCinematic();
         }
     }
 
@@ -164,6 +171,8 @@ public class ShootingGalleryManager : MonoBehaviour
 
     private void OnButtonClicked(Button clickedButton)
     {
+        if (!GameManager.Instance.hasGameStarted.Value || !GameManager.Instance.isPlayer1Ready.Value || !GameManager.Instance.isPlayer2Ready.Value || GameManager.Instance.playerDied.Value) return;
+
         if (clickedButton.gameObject.activeSelf && !clickedFlags[clickedButton])
         {
             clickedFlags[clickedButton] = true; 

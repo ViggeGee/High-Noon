@@ -576,8 +576,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parentButtonList: {fileID: 7138162921840577397}
   parentSpawnPointList: {fileID: 6809552965648211900}
-  canvas: {fileID: 2299475278984020776}
   scoreText: {fileID: 3040865007146583880}
+  canvas: {fileID: 2299475278984020776}
   gamemodeFinished: 0
 --- !u!1 &1057504330593453120
 GameObject:

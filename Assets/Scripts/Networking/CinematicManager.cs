@@ -72,7 +72,13 @@ public class CinematicManager : MonoBehaviour
         else if (ChallengeManager.Instance.currentChallengeType.Value == Challenge.ChallengeType.ButtonSmash)
         {
             yield return new WaitUntil(() => challenge.GetComponent<ButtonSmashManager>() != null);
-            ButtonSmashManager typeRacer = challenge.GetComponent<ButtonSmashManager>();
+            ButtonSmashManager buttonMash = challenge.GetComponent<ButtonSmashManager>();
+            GameManager.Instance.UpdateCurrentGameStateServerRpc(GameState.Playing);
+        }
+        else if (ChallengeManager.Instance.currentChallengeType.Value == Challenge.ChallengeType.ShootingGallery)
+        {
+            yield return new WaitUntil(() => challenge.GetComponentInChildren<ShootingGalleryManager>() != null);
+            ShootingGalleryManager shootingGallery = challenge.GetComponentInChildren<ShootingGalleryManager>();
             GameManager.Instance.UpdateCurrentGameStateServerRpc(GameState.Playing);
         }
     }

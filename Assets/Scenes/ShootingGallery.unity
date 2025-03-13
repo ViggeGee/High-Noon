@@ -14065,6 +14065,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShootingGallery
       objectReference: {fileID: 0}
+    - target: {fileID: 5971314493634128981, guid: 921b9ae17320db64b8b6234e7949bbfb, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5971314493634128981, guid: 921b9ae17320db64b8b6234e7949bbfb, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 5971314493634128981, guid: 921b9ae17320db64b8b6234e7949bbfb, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
     - target: {fileID: 8732342735557392817, guid: 921b9ae17320db64b8b6234e7949bbfb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1160.718

@@ -28,6 +28,7 @@ TagManager:
   - BadButton
   - GoodButton
   - WaterTower
+  - ShootingGallery
   layers:
   - Default
   - TransparentFX

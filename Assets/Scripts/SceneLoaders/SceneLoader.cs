@@ -9,11 +9,11 @@ public enum Scenes
     MainMenu,
     JoinGameScene,
 
-    //WesternTown,
-    //TrainMap,
-    //TrainHorseMap,
-    //Bison,
-    //Saloon,
+    WesternTown,
+    TrainMap,
+    TrainHorseMap,
+    Bison,
+    Saloon,
     Mountain
     //TrainHorseMap2
 }
