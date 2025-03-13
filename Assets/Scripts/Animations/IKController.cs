@@ -96,24 +96,37 @@ public class IKController : NetworkBehaviour
                     animator.SetIKRotation(AvatarIKGoal.RightHand, target.rotation);
                     break;
 
-                case HandState.Aiming: 
-                    target = rightHandTargets[1];
-             
+                case HandState.Aiming:
+                    Vector3 aimingTargetPosition;
+                    Quaternion aimingTargetRotation;
 
-                    Vector3 newTargetPosition = target.position + aimDirection * 0.5f;
-                    Quaternion newTargetRotation = Quaternion.LookRotation(aimDirection) * Quaternion.Euler(0, 0, -80);
-                    Vector3 aimUp = latestCameraRotation * Vector3.up;
+                
+                    if (IsOwner)
+                    {
+                        Transform camTransform = Camera.main.transform;
+                        aimingTargetPosition = camTransform.position + camTransform.forward * 20f;
+                        aimingTargetRotation = Quaternion.LookRotation(camTransform.forward);
+                    }
+                    else
+                    {
+                       
+                        aimingTargetPosition = transform.position + (networkCameraRotation.Value * Vector3.forward) * 20f;
+                        aimingTargetRotation = Quaternion.LookRotation(networkCameraRotation.Value * Vector3.forward);
+                    }
 
-                    target.position = Vector3.Lerp(target.position, newTargetPosition, Time.deltaTime * 10f);
-                    target.rotation = Quaternion.Slerp(target.rotation, newTargetRotation, Time.deltaTime * 10f);
+                    Vector3 currentIKPosition = animator.GetIKPosition(AvatarIKGoal.RightHand);
+                    Quaternion currentIKRotation = animator.GetIKRotation(AvatarIKGoal.RightHand);
 
-                 
-                    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
-                    animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
-                    animator.SetIKPosition(AvatarIKGoal.RightHand, target.position);
-                    animator.SetIKRotation(AvatarIKGoal.RightHand, target.rotation);
+                
+                    Vector3 newPosition = Vector3.Lerp(currentIKPosition, aimingTargetPosition, Time.deltaTime * 10f);
+                    Quaternion newRotation = Quaternion.Slerp(currentIKRotation, aimingTargetRotation, Time.deltaTime * 10f);
 
               
+                    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
+                    animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
+                    animator.SetIKPosition(AvatarIKGoal.RightHand, newPosition);
+                    animator.SetIKRotation(AvatarIKGoal.RightHand, newRotation);
+
                     break;
                 case HandState.Recoil: target = rightHandTargets[2];
                     animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
@@ -167,33 +180,18 @@ public class IKController : NetworkBehaviour
 
     private Vector3 GetCameraForward()
     {
-        CinemachineBrain brain = Camera.main.GetComponent<CinemachineBrain>();
-
-        if (brain != null && brain.ActiveVirtualCamera != null)
-        {
-            CinemachineVirtualCamera vCam = brain.ActiveVirtualCamera as CinemachineVirtualCamera;
-            if (vCam != null)
-            {
-                return vCam.transform.forward; 
-            }
-        }
-
-        return Camera.main.transform.forward; 
+        return Camera.main.transform.forward;
     }
+
     private Quaternion GetCameraRotation()
     {
-        CinemachineBrain brain = Camera.main.GetComponent<CinemachineBrain>();
+        return Camera.main.transform.rotation;
+    }
 
-        if (brain != null && brain.ActiveVirtualCamera != null)
-        {
-            CinemachineVirtualCamera vCam = brain.ActiveVirtualCamera as CinemachineVirtualCamera;
-            if (vCam != null)
-            {
-                return vCam.transform.rotation;
-            }
-        }
-
-        return Camera.main.transform.rotation; 
+    [ServerRpc]
+    private void UpdateCameraRotationServerRpc(Quaternion newRotation)
+    {
+        networkCameraRotation.Value = newRotation;
     }
 
     [ServerRpc]
@@ -212,11 +210,7 @@ public class IKController : NetworkBehaviour
         ammocount.Value++;
     }
 
-    [ServerRpc]
-    private void UpdateCameraRotationServerRpc(Quaternion newRotation)
-    {
-        networkCameraRotation.Value = newRotation;
-    }
+   
 
     [ServerRpc]
     private void ToggleGunServerRpc()
@@ -247,6 +241,39 @@ public class IKController : NetworkBehaviour
                 return;
 
             currentHandState.Value = newState;
+        }
+    }
+
+
+    void OnDrawGizmos()
+    {
+       
+        //if (Camera.main != null)
+        //{
+        //    CinemachineBrain brain = Camera.main.GetComponent<CinemachineBrain>();
+        //    if (brain != null && brain.ActiveVirtualCamera != null)
+        //    {
+        //        CinemachineVirtualCamera vCam = brain.ActiveVirtualCamera as CinemachineVirtualCamera;
+        //        if (vCam != null)
+        //        {
+                 
+        //            Vector3 camPos = vCam.transform.position;
+        //            Vector3 camForward = vCam.transform.forward;
+
+                 
+        //            Gizmos.color = Color.red;
+
+        //            Gizmos.DrawLine(camPos, camPos + camForward * 10f);
+        //        }
+        //    }
+        //}
+
+        if (Camera.main != null)
+        {
+            Transform camTransform = Camera.main.transform;
+            Gizmos.color = Color.red;
+  
+            Gizmos.DrawLine(camTransform.position, camTransform.position + camTransform.forward * 10f);
         }
     }
 }
