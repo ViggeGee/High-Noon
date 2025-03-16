@@ -8,6 +8,7 @@ public class Challenge : MonoBehaviour
 
         typeRacer,
         ButtonSmash,
+        ShootingGallery
     };
 
     public ChallengeType challengeType;

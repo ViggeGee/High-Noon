@@ -12,7 +12,10 @@ public enum Scenes
     WesternTown,
     TrainMap,
     TrainHorseMap,
-    Bison
+    Bison,
+    Saloon,
+    Mountain
+    //TrainHorseMap2
 }
 public class SceneLoader : NetworkBehaviour
 {
