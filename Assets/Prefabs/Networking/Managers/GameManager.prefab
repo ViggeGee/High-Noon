@@ -1005,6 +1005,7 @@ MonoBehaviour:
   availableChallenges:
   - {fileID: 5399071422460463905}
   - {fileID: 3282994390481750343}
+  - {fileID: 6989536732645148843}
   challengeWheelCanvas: {fileID: 807678640972736859}
   challengeWheel: {fileID: 9187142474011012843}
   currentChallengeType:
@@ -1390,6 +1391,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4874125980611990782, guid: dd43f7cc039567e45a89e36effaf9d37, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4874125980611990782, guid: dd43f7cc039567e45a89e36effaf9d37, type: 3}
+      propertyPath: m_TagString
+      value: ShootingGallery
+      objectReference: {fileID: 0}
     - target: {fileID: 5813328809036825939, guid: dd43f7cc039567e45a89e36effaf9d37, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -157
@@ -1432,6 +1441,11 @@ GameObject:
 --- !u!224 &6951045629518984142 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4840417743942987675, guid: dd43f7cc039567e45a89e36effaf9d37, type: 3}
+  m_PrefabInstance: {fileID: 2547785462449871957}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6989536732645148843 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4874125980611990782, guid: dd43f7cc039567e45a89e36effaf9d37, type: 3}
   m_PrefabInstance: {fileID: 2547785462449871957}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3564826187237451649

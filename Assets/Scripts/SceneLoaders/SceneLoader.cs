@@ -13,6 +13,8 @@ public enum Scenes
     TrainMap,
     TrainHorseMap,
     Bison,
+    Saloon,
+    Mountain
     //TrainHorseMap2
 }
 public class SceneLoader : NetworkBehaviour
