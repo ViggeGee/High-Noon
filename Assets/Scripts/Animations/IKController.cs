@@ -27,7 +27,10 @@ public class IKController : NetworkBehaviour
     public NetworkVariable<Quaternion> networkCameraRotation = new NetworkVariable<Quaternion>(
       Quaternion.identity, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
-    public NetworkVariable<bool> isGunActive = new NetworkVariable<bool>(false); 
+    public NetworkVariable<bool> isGunActive = new NetworkVariable<bool>(false);
+
+    float aimingHeightOffset = 6.5f;
+    private bool previousReadyToShoot = false;
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -43,7 +46,12 @@ public class IKController : NetworkBehaviour
 
         if (GameManager.Instance.readyToShoot)
         {
-            ToggleGunServerRpc();
+            if (GameManager.Instance.readyToShoot && !isGunActive.Value)
+            {
+                ToggleGunServerRpc();
+            }
+
+        
             if (Input.GetMouseButtonDown(0) && !isRecoiling.Value && ammocount.Value < maxAmmo)
             {
                 RequestNextHandStateServerRpc();
@@ -97,36 +105,36 @@ public class IKController : NetworkBehaviour
                     break;
 
                 case HandState.Aiming:
-                    Vector3 aimingTargetPosition;
-                    Quaternion aimingTargetRotation;
+                    //Vector3 aimingTargetPosition;
+                    //Quaternion aimingTargetRotation;
 
-                
-                    if (IsOwner)
-                    {
-                        Transform camTransform = Camera.main.transform;
-                        aimingTargetPosition = camTransform.position + camTransform.forward * 20f;
-                        aimingTargetRotation = Quaternion.LookRotation(camTransform.forward);
-                    }
-                    else
-                    {
-                       
-                        aimingTargetPosition = transform.position + (networkCameraRotation.Value * Vector3.forward) * 20f;
-                        aimingTargetRotation = Quaternion.LookRotation(networkCameraRotation.Value * Vector3.forward);
-                    }
+                    //if (IsOwner)
+                    //{
+                    //    Transform camTransform = Camera.main.transform;
 
-                    Vector3 currentIKPosition = animator.GetIKPosition(AvatarIKGoal.RightHand);
-                    Quaternion currentIKRotation = animator.GetIKRotation(AvatarIKGoal.RightHand);
+                    //    aimingTargetPosition = camTransform.position + camTransform.forward * 20f + Vector3.up * aimingHeightOffset;
+                    //    aimingTargetRotation = Quaternion.LookRotation(camTransform.forward);
+                    //}
+                    //else
+                    //{
+                    //    aimingTargetPosition = transform.position + (networkCameraRotation.Value * Vector3.forward) * 20f + Vector3.up * aimingHeightOffset;
+                    //    aimingTargetRotation = Quaternion.LookRotation(networkCameraRotation.Value * Vector3.forward);
+                    //}
 
-                
-                    Vector3 newPosition = Vector3.Lerp(currentIKPosition, aimingTargetPosition, Time.deltaTime * 10f);
-                    Quaternion newRotation = Quaternion.Slerp(currentIKRotation, aimingTargetRotation, Time.deltaTime * 10f);
+                    //Vector3 currentIKPosition = animator.GetIKPosition(AvatarIKGoal.RightHand);
+                    //Quaternion currentIKRotation = animator.GetIKRotation(AvatarIKGoal.RightHand);
 
-              
+                    //Vector3 newPosition = Vector3.Lerp(currentIKPosition, aimingTargetPosition, Time.deltaTime * 10f);
+                    //Quaternion newRotation = Quaternion.Slerp(currentIKRotation, aimingTargetRotation, Time.deltaTime * 10f);
+
+                    ///
+                    target = rightHandTargets[1];
+                    ///
+
                     animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
                     animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
-                    animator.SetIKPosition(AvatarIKGoal.RightHand, newPosition);
-                    animator.SetIKRotation(AvatarIKGoal.RightHand, newRotation);
-
+                    animator.SetIKPosition(AvatarIKGoal.RightHand, target.position);
+                    animator.SetIKRotation(AvatarIKGoal.RightHand, target.rotation);
                     break;
                 case HandState.Recoil: target = rightHandTargets[2];
                     animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
