@@ -10,8 +10,8 @@ public enum Scenes
     JoinGameScene,
 
     //WesternTown,
-    TrainMap,
-    //TrainHorseMap,
+    //TrainMap,
+    TrainHorseMap,
     //Bison,
     //Saloon,
     //Mountain

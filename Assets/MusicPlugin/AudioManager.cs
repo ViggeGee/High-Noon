@@ -131,7 +131,12 @@ public class AudioManager : MonoBehaviour
                 PlayLoopedMusic(saloonMusic);
                 PlayLoopedAmbient(gunshotLoopSaloon);
                 break;
+            case "TrainHorseMap":
+                PlayLoopedMusic(trainMapMusic);
 
+                ambientSource.volume = trainMapAmbianceVolume;
+                PlayLoopedAmbient(trainMapAmbiance);
+                break;
 
             //CHOOSES A RANDOM ONE IF NONE IS DECIDED
             default:
@@ -169,6 +174,11 @@ public class AudioManager : MonoBehaviour
                 break;
         }
             
+    }
+
+    public void PlaySFXAtLocation(AudioClip sfx, Vector3 location, float volume)
+    {
+        AudioSource.PlayClipAtPoint(sfx, location, volume);
     }
 
     public void PlayLoopedAmbient(AudioClip ambient)
