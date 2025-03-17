@@ -176,9 +176,13 @@ public class AudioManager : MonoBehaviour
             
     }
 
-    public void PlaySFXAtLocation(AudioClip sfx, Vector3 location, float volume)
+    public void PlaySFXAtLocation(AudioClip sfx, Vector3 position, float volume)
     {
-        AudioSource.PlayClipAtPoint(sfx, location, volume);
+        AudioSource.PlayClipAtPoint(sfx, position, volume);
+    }    
+    public void PlaySFXAtLocation(AudioClip sfx, Transform transform, float volume)
+    {
+        AudioSource.PlayClipAtPoint(sfx, transform.position, volume);
     }
 
     public void PlayLoopedAmbient(AudioClip ambient)
