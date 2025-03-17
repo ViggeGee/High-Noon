@@ -308,6 +308,9 @@ MonoBehaviour:
   musicSource: {fileID: 2083653284113766704}
   sfxSource: {fileID: 2340065628459006661}
   ambientSource: {fileID: 999514657996312848}
+  musicVolume: 0.5
+  sfxVolume: 0.5
+  ambientVolume: 0.5
   randomSong: {fileID: 11400000, guid: 6b4e58c4936d7b2439517e841c6d2373, type: 2}
   mainMenuMusic: {fileID: 8300000, guid: 8a3592ac3f3af0d4d9c0d57cb9e709d8, type: 3}
   mainMenuAmbiance: {fileID: 8300000, guid: a72c29d9c94f70345a9ef286435afd7b, type: 3}

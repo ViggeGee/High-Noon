@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,20 +8,47 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
 
+    [Header("Audio Sources")]
     public AudioSource musicSource;
     public AudioSource sfxSource;
     public AudioSource ambientSource;
 
-    public SFX randomSong;
+    [Header("Volume Settings, only change on startup")]
+    [Range(0, 1)]
+    public float musicVolume = 0.5f;
 
-    [Header("Scene Music")]
+    [Range(0, 1)]
+    public float sfxVolume = 0.5f;
+
+    [Range(0, 1)]
+    public float ambientVolume = 0.5f;
+
+    [Header("Specific Scene Music")]
     public AudioClip mainMenuMusic;
+    public AudioClip westernTown;
+    public AudioClip TrainMap;
+    public AudioClip TrainHorseMap;
+    public AudioClip Bison;
+    public AudioClip Saloon;
+    public AudioClip Mountain;
 
-    [Header("Scene Ambiance")]
+    [Header("Sound Effects")]
+    public SFX deathSFX;
+
+    [Header("Specific Scene Ambiance")]
     public AudioClip mainMenuAmbiance;
+
+    [Header("Randomized")]
+    public SFX randomSong;
 
     private void Awake()
     {
+        SceneManager.sceneLoaded += NewSceneLoaded;
+
+        musicSource.volume = musicVolume;
+        sfxSource.volume = sfxVolume;
+        ambientSource.volume = ambientVolume;
+
         if (Instance == null)
         {
             Instance = this;
@@ -46,7 +75,7 @@ public class AudioManager : MonoBehaviour
         StartSceneAmbiance();
     }
 
-    public void OnLevelWasLoaded(int level)
+    public void NewSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         ResetAudio();
     }
@@ -94,6 +123,16 @@ public class AudioManager : MonoBehaviour
         Instance.sfxSource.clip = sfx;
         Instance.sfxSource.Play();
     }
+    public void PlaySFX(string sfx)
+    {
+        switch (sfx)
+        {
+            case "Death":
+                PlayRandomSFX(deathSFX);
+                break;
+        }
+            
+    }
 
     public void PlayLoopedAmbient(AudioClip ambient)
     {
@@ -116,6 +155,5 @@ public class AudioManager : MonoBehaviour
         int randomIndex = Random.Range(0, sfx.audioClips.Length);
         PlaySFX(sfx.audioClips[randomIndex]);
     }   
-
 }
 

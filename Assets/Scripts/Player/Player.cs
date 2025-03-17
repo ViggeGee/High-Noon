@@ -43,6 +43,7 @@ public class Player : NetworkBehaviour
     {
         if(health <= 0)
         {
+            AudioManager.Instance.PlaySFX("Death");
             SetDiedVariablesServerRpc();
         }
    
