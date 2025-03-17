@@ -38,6 +38,7 @@ public class AudioManager : MonoBehaviour
 
     [Header("Specific Scene Ambiance")]
     public AudioClip mainMenuAmbiance;
+    public AudioClip bison;
 
     [Header("Randomized")]
     public SFX randomSong;
@@ -70,10 +71,9 @@ public class AudioManager : MonoBehaviour
         ambientSource.Stop();
 
         //play predefined music for each scene, or choose random song
-        StartSceneMusic();
+        StartSceneSounds();
 
         //play predefined ambiance for each scene or dont play anything at all
-        StartSceneAmbiance();
     }
 
     public void NewSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -81,7 +81,7 @@ public class AudioManager : MonoBehaviour
         ResetAudio();
     }
 
-    public void StartSceneMusic()
+    public void StartSceneSounds()
     {
         switch(SceneManager.GetActiveScene().name)
         {
@@ -90,23 +90,19 @@ public class AudioManager : MonoBehaviour
             case "MainMenu":
                 PlayLoopedMusic(mainMenuMusic);
                 break;
+            case "JoinGameScene":
+                PlayLoopedMusic(mainMenuMusic);
+                break;   
+            case "Bison":
+                PlayLoopedMusic(randomSong);
+                PlayLoopedAmbient(Bison);
+                break;
             default:
                 PlayLoopedMusic(randomSong);
                 break;
         }
     }
 
-    public void StartSceneAmbiance()
-    {
-        switch(SceneManager.GetActiveScene().name)
-        {
-            case "MainMenu":
-                PlayLoopedAmbient(mainMenuAmbiance);
-                break;
-            default:
-                break;
-        }
-    }
     public void PlayLoopedMusic(AudioClip song)
     {
         Instance.musicSource.clip = song;
