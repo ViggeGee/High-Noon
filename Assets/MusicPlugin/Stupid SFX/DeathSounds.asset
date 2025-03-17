@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd76e64f799b2854ab519111abc5f33a, type: 3}
+  m_Name: DeathSounds
+  m_EditorClassIdentifier: 
+  audioClips:
+  - {fileID: 8300000, guid: 4867160efcfaeec4aa6ee7edc2719297, type: 3}
+  - {fileID: 8300000, guid: a10aed4a1beed9a41a2288c9f3498fc3, type: 3}
+  - {fileID: 8300000, guid: baf87db940a9de942ad44b5ded170698, type: 3}
+  - {fileID: 8300000, guid: 0c8dc282271cef5499dfc284963bd834, type: 3}
+  - {fileID: 8300000, guid: 2600edf692bc8ba428db6878549756c5, type: 3}
+  - {fileID: 8300000, guid: 9dff438e811c8e64b9b3f444c1327fde, type: 3}
+  - {fileID: 8300000, guid: d710743adbec0c649adccd4d4397cd7a, type: 3}
+  - {fileID: 8300000, guid: 60a1cb2cc91be41408deee90fb0dc7b8, type: 3}
+  - {fileID: 8300000, guid: 771233ccb132fe5458d5246b0345af4f, type: 3}
+  - {fileID: 8300000, guid: 44ff64f636eef284f948d2159aa723db, type: 3}
+  - {fileID: 8300000, guid: afa3faae70af51c41be0b691ba6d7406, type: 3}
+  - {fileID: 8300000, guid: f0758d58c4c95d548b139bf9b21beeff, type: 3}

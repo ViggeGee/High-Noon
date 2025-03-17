@@ -27,7 +27,10 @@ public class IKController : NetworkBehaviour
     public NetworkVariable<Quaternion> networkCameraRotation = new NetworkVariable<Quaternion>(
       Quaternion.identity, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
-    public NetworkVariable<bool> isGunActive = new NetworkVariable<bool>(false); 
+    public NetworkVariable<bool> isGunActive = new NetworkVariable<bool>(false);
+
+    float aimingHeightOffset = 6.5f;
+    private bool previousReadyToShoot = false;
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -43,7 +46,12 @@ public class IKController : NetworkBehaviour
 
         if (GameManager.Instance.readyToShoot)
         {
-            ToggleGunServerRpc();
+            if (GameManager.Instance.readyToShoot && !isGunActive.Value)
+            {
+                ToggleGunServerRpc();
+            }
+
+        
             if (Input.GetMouseButtonDown(0) && !isRecoiling.Value && ammocount.Value < maxAmmo)
             {
                 RequestNextHandStateServerRpc();
@@ -96,24 +104,37 @@ public class IKController : NetworkBehaviour
                     animator.SetIKRotation(AvatarIKGoal.RightHand, target.rotation);
                     break;
 
-                case HandState.Aiming: 
+                case HandState.Aiming:
+                    //Vector3 aimingTargetPosition;
+                    //Quaternion aimingTargetRotation;
+
+                    //if (IsOwner)
+                    //{
+                    //    Transform camTransform = Camera.main.transform;
+
+                    //    aimingTargetPosition = camTransform.position + camTransform.forward * 20f + Vector3.up * aimingHeightOffset;
+                    //    aimingTargetRotation = Quaternion.LookRotation(camTransform.forward);
+                    //}
+                    //else
+                    //{
+                    //    aimingTargetPosition = transform.position + (networkCameraRotation.Value * Vector3.forward) * 20f + Vector3.up * aimingHeightOffset;
+                    //    aimingTargetRotation = Quaternion.LookRotation(networkCameraRotation.Value * Vector3.forward);
+                    //}
+
+                    //Vector3 currentIKPosition = animator.GetIKPosition(AvatarIKGoal.RightHand);
+                    //Quaternion currentIKRotation = animator.GetIKRotation(AvatarIKGoal.RightHand);
+
+                    //Vector3 newPosition = Vector3.Lerp(currentIKPosition, aimingTargetPosition, Time.deltaTime * 10f);
+                    //Quaternion newRotation = Quaternion.Slerp(currentIKRotation, aimingTargetRotation, Time.deltaTime * 10f);
+
+                    ///
                     target = rightHandTargets[1];
-             
+                    ///
 
-                    Vector3 newTargetPosition = target.position + aimDirection * 0.5f;
-                    Quaternion newTargetRotation = Quaternion.LookRotation(aimDirection) * Quaternion.Euler(0, 0, -80);
-                    Vector3 aimUp = latestCameraRotation * Vector3.up;
-
-                    target.position = Vector3.Lerp(target.position, newTargetPosition, Time.deltaTime * 10f);
-                    target.rotation = Quaternion.Slerp(target.rotation, newTargetRotation, Time.deltaTime * 10f);
-
-                 
                     animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
                     animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
                     animator.SetIKPosition(AvatarIKGoal.RightHand, target.position);
                     animator.SetIKRotation(AvatarIKGoal.RightHand, target.rotation);
-
-              
                     break;
                 case HandState.Recoil: target = rightHandTargets[2];
                     animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
@@ -167,33 +188,18 @@ public class IKController : NetworkBehaviour
 
     private Vector3 GetCameraForward()
     {
-        CinemachineBrain brain = Camera.main.GetComponent<CinemachineBrain>();
-
-        if (brain != null && brain.ActiveVirtualCamera != null)
-        {
-            CinemachineVirtualCamera vCam = brain.ActiveVirtualCamera as CinemachineVirtualCamera;
-            if (vCam != null)
-            {
-                return vCam.transform.forward; 
-            }
-        }
-
-        return Camera.main.transform.forward; 
+        return Camera.main.transform.forward;
     }
+
     private Quaternion GetCameraRotation()
     {
-        CinemachineBrain brain = Camera.main.GetComponent<CinemachineBrain>();
+        return Camera.main.transform.rotation;
+    }
 
-        if (brain != null && brain.ActiveVirtualCamera != null)
-        {
-            CinemachineVirtualCamera vCam = brain.ActiveVirtualCamera as CinemachineVirtualCamera;
-            if (vCam != null)
-            {
-                return vCam.transform.rotation;
-            }
-        }
-
-        return Camera.main.transform.rotation; 
+    [ServerRpc]
+    private void UpdateCameraRotationServerRpc(Quaternion newRotation)
+    {
+        networkCameraRotation.Value = newRotation;
     }
 
     [ServerRpc]
@@ -212,11 +218,7 @@ public class IKController : NetworkBehaviour
         ammocount.Value++;
     }
 
-    [ServerRpc]
-    private void UpdateCameraRotationServerRpc(Quaternion newRotation)
-    {
-        networkCameraRotation.Value = newRotation;
-    }
+   
 
     [ServerRpc]
     private void ToggleGunServerRpc()
@@ -247,6 +249,39 @@ public class IKController : NetworkBehaviour
                 return;
 
             currentHandState.Value = newState;
+        }
+    }
+
+
+    void OnDrawGizmos()
+    {
+       
+        //if (Camera.main != null)
+        //{
+        //    CinemachineBrain brain = Camera.main.GetComponent<CinemachineBrain>();
+        //    if (brain != null && brain.ActiveVirtualCamera != null)
+        //    {
+        //        CinemachineVirtualCamera vCam = brain.ActiveVirtualCamera as CinemachineVirtualCamera;
+        //        if (vCam != null)
+        //        {
+                 
+        //            Vector3 camPos = vCam.transform.position;
+        //            Vector3 camForward = vCam.transform.forward;
+
+                 
+        //            Gizmos.color = Color.red;
+
+        //            Gizmos.DrawLine(camPos, camPos + camForward * 10f);
+        //        }
+        //    }
+        //}
+
+        if (Camera.main != null)
+        {
+            Transform camTransform = Camera.main.transform;
+            Gizmos.color = Color.red;
+  
+            Gizmos.DrawLine(camTransform.position, camTransform.position + camTransform.forward * 10f);
         }
     }
 }
