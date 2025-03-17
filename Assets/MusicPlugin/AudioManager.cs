@@ -25,12 +25,12 @@ public class AudioManager : MonoBehaviour
 
     [Header("Specific Scene Music")]
     public AudioClip mainMenuMusic;
-    public AudioClip westernTown;
-    public AudioClip TrainMap;
-    public AudioClip TrainHorseMap;
-    public AudioClip Bison;
-    public AudioClip Saloon;
-    public AudioClip Mountain;
+    public AudioClip westernTownMusic;
+    public AudioClip trainMapMusic;
+    public AudioClip trainHorseMapMusic;
+    public AudioClip bisonMusic;
+    public AudioClip saloonMusic;
+    public AudioClip mountainMusic;
 
     [Header("Sound Effects")]
     public SFX deathSFX;
@@ -38,7 +38,20 @@ public class AudioManager : MonoBehaviour
 
     [Header("Specific Scene Ambiance")]
     public AudioClip mainMenuAmbiance;
-    public AudioClip bison;
+    [Range(0, 1)]
+    public float mainMenuAmbianceVolume = 1;
+
+    public AudioClip westernTownAmbiance;
+    [Range(0, 1)] public float westernTownAmbianceVolume = 1;
+
+    public AudioClip bisonAmbiance;
+    [Range(0, 1)] public float bisonAmbianceVolume = 1;
+
+    public AudioClip trainMapAmbiance;
+    [Range(0, 1)] public float trainMapAmbianceVolume = 1;
+
+    public AudioClip gunshotLoopSaloon;
+    [Range(0, 1)] public float gunshotLoopSaloonVolume = 1;
 
     [Header("Randomized")]
     public SFX randomSong;
@@ -83,8 +96,11 @@ public class AudioManager : MonoBehaviour
 
     public void StartSceneSounds()
     {
+        ambientSource.volume = ambientVolume;
+
         switch(SceneManager.GetActiveScene().name)
         {
+            //NON GAMEPLAY SCENES
             case "StartGameScene":
                 break;
             case "MainMenu":
@@ -92,11 +108,32 @@ public class AudioManager : MonoBehaviour
                 break;
             case "JoinGameScene":
                 PlayLoopedMusic(mainMenuMusic);
-                break;   
+                break;
+
+
+            //GAMEPLAY SCENES
             case "Bison":
                 PlayLoopedMusic(randomSong);
-                PlayLoopedAmbient(Bison);
+                PlayLoopedAmbient(bisonMusic);
+
                 break;
+            case "WesternTown":
+                PlayLoopedMusic(randomSong);
+                PlayLoopedAmbient(bisonMusic);
+                break;
+            case "TrainMap":
+                PlayLoopedMusic(trainMapMusic);
+
+                ambientSource.volume = trainMapAmbianceVolume;
+                PlayLoopedAmbient(trainMapAmbiance);
+                break; 
+            case "Saloon":
+                PlayLoopedMusic(saloonMusic);
+                PlayLoopedAmbient(gunshotLoopSaloon);
+                break;
+
+
+            //CHOOSES A RANDOM ONE IF NONE IS DECIDED
             default:
                 PlayLoopedMusic(randomSong);
                 break;

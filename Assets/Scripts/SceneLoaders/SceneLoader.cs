@@ -9,12 +9,12 @@ public enum Scenes
     MainMenu,
     JoinGameScene,
 
-    WesternTown,
+    //WesternTown,
     TrainMap,
-    TrainHorseMap,
-    Bison,
-    Saloon,
-    Mountain
+    //TrainHorseMap,
+    //Bison,
+    //Saloon,
+    //Mountain
     //TrainHorseMap2
 }
 public class SceneLoader : NetworkBehaviour
