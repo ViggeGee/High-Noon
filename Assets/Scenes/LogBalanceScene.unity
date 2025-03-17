@@ -25161,6 +25161,10 @@ PrefabInstance:
       propertyPath: player2PivotAroundGameObject
       value: 
       objectReference: {fileID: 176193847491721550}
+    - target: {fileID: 4931753892660723467, guid: c853585142a3e0347b411542b2d61d20, type: 3}
+      propertyPath: _userData.configVars.runInEditMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7963637668008412168, guid: c853585142a3e0347b411542b2d61d20, type: 3}
       propertyPath: m_Name
       value: Motion Controller Manager
