@@ -51,7 +51,8 @@ public class Player : NetworkBehaviour
 
     public void TakeDamage(DamageType damageType)
     {  
-        switch(damageType)
+        AudioManager.Instance.PlaySFX("Hit");
+        switch (damageType)
         {
             case DamageType.Head:
 

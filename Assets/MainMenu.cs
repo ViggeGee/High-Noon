@@ -7,8 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    
-    public AudioSource gunShotAudio;
+
+    public AudioClip gunshotAudio;
     public AudioSource explosionAudio;
     public AudioSource deathAudio;
     public GameObject[] planks;
@@ -36,7 +36,7 @@ public class MainMenu : MonoBehaviour
 
     public void BreakPlank(int i)
     {
-        gunShotAudio.Play();
+        AudioManager.Instance.PlaySFX(gunshotAudio);
         StartCoroutine(Plankfalling(i));
         if (i == 0)
         {
@@ -65,17 +65,17 @@ public class MainMenu : MonoBehaviour
     public void BreakBarrel(int i)
     {
        
-        gunShotAudio.Play();
+        AudioManager.Instance.PlaySFX(gunshotAudio);
         StartCoroutine(ExplodeBarrel(i));
     }
     public void ShootWaterTower()
     {
-        gunShotAudio.Play();
+        AudioManager.Instance.PlaySFX(gunshotAudio);
         StartCoroutine(SpawnWaterParticleAtCursor());
     }
     public void KillCowboy()
     {
-        gunShotAudio.Play();
+        AudioManager.Instance.PlaySFX(gunshotAudio);
         StartCoroutine(CowboyDeath());
     }
 
@@ -130,7 +130,7 @@ public class MainMenu : MonoBehaviour
     {
         yield return new WaitForSeconds(0.6f);
         SpawnBloodParticleAtCursor();
-        deathAudio.Play();
+        AudioManager.Instance.PlaySFX("Death");
         cowboy.GetComponent<Animator>().enabled = false;
 
         cowboy.GetComponentInChildren<Rigidbody>().AddForce(new Vector3(0, 150, 150), ForceMode.Impulse);

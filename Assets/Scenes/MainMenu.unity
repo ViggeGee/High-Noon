@@ -23672,7 +23672,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1c85443962bdb84c983163dda556b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gunShotAudio: {fileID: 2034660215}
+  gunshotAudio: {fileID: 8300000, guid: 6456ccd44b6870843ab16fc5da96be9d, type: 3}
   explosionAudio: {fileID: 2034660216}
   deathAudio: {fileID: 2034660217}
   planks:

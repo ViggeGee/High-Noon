@@ -319,6 +319,7 @@ MonoBehaviour:
   Saloon: {fileID: 0}
   Mountain: {fileID: 0}
   deathSFX: {fileID: 11400000, guid: 6110781aeba181348b23c5cae2d2d2b9, type: 2}
+  hitSFX: {fileID: 11400000, guid: 1b991b449cd1ce640a11f8e496cade2b, type: 2}
   mainMenuAmbiance: {fileID: 8300000, guid: a72c29d9c94f70345a9ef286435afd7b, type: 3}
   randomSong: {fileID: 11400000, guid: 6b4e58c4936d7b2439517e841c6d2373, type: 2}
 --- !u!1 &6083453866942507955

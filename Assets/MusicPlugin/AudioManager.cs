@@ -34,6 +34,7 @@ public class AudioManager : MonoBehaviour
 
     [Header("Sound Effects")]
     public SFX deathSFX;
+    public SFX hitSFX;
 
     [Header("Specific Scene Ambiance")]
     public AudioClip mainMenuAmbiance;
@@ -129,6 +130,9 @@ public class AudioManager : MonoBehaviour
         {
             case "Death":
                 PlayRandomSFX(deathSFX);
+                break;
+            case "Hit":
+                PlayRandomSFX(hitSFX);
                 break;
         }
             
