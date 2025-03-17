@@ -305,9 +305,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfed5ef2687412342949900478cee873, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicSorce: {fileID: 2083653284113766704}
+  musicSource: {fileID: 2083653284113766704}
   sfxSource: {fileID: 2340065628459006661}
   ambientSource: {fileID: 999514657996312848}
+  randomSong: {fileID: 11400000, guid: 6b4e58c4936d7b2439517e841c6d2373, type: 2}
 --- !u!1 &6083453866942507955
 GameObject:
   m_ObjectHideFlags: 0
