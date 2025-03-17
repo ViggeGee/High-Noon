@@ -20,10 +20,6 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-        musicSource.Stop();
-        sfxSource.Stop();
-        ambientSource.Stop();
-
         if (Instance == null)
         {
             Instance = this;
@@ -34,6 +30,15 @@ public class AudioManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+        ResetAudio();
+    }
+
+    public void ResetAudio()
+    {
+        musicSource.Stop();
+        sfxSource.Stop();
+        ambientSource.Stop();
+
         //play predefined music for each scene, or choose random song
         StartSceneMusic();
 
@@ -41,10 +46,17 @@ public class AudioManager : MonoBehaviour
         StartSceneAmbiance();
     }
 
+    public void OnLevelWasLoaded(int level)
+    {
+        ResetAudio();
+    }
+
     public void StartSceneMusic()
     {
         switch(SceneManager.GetActiveScene().name)
         {
+            case "StartGameScene":
+                break;
             case "MainMenu":
                 PlayLoopedMusic(mainMenuMusic);
                 break;
