@@ -5948,9 +5948,10 @@ GameObject:
   - component: {fileID: 1686049804233717258}
   - component: {fileID: 376465196031020307}
   - component: {fileID: 4652772965602902434}
+  - component: {fileID: 2293229376226932727}
   m_Layer: 8
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6303,6 +6304,19 @@ MonoBehaviour:
   rotationSpeed: 5
   maxYaw: 90
   maxPitch: 20
+--- !u!114 &2293229376226932727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7300726634220589030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd85b6d1b849a7c468f29c78a6e4c90f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerBirds: 0
 --- !u!1 &7332766473351075120
 GameObject:
   m_ObjectHideFlags: 0

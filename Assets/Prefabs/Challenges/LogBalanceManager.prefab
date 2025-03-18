@@ -47,8 +47,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: {fileID: 0}
   challengeDuration: 50
-  minRotationSpeed: 15
-  maxRotationSpeed: 45
+  minRotationSpeed: 5
+  maxRotationSpeed: 25
 --- !u!65 &940491604101469332
 BoxCollider:
   m_ObjectHideFlags: 0

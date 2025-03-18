@@ -90,18 +90,22 @@ public class Motion_Controller : MonoBehaviour
 
     private Vector3 HandleDualShock4Controller(Joystick joystick)
     {
+        //Debug.Log("<color=blue>Inside HandleDualShock4Controller</color>");
+
         var ds4Ext = joystick.GetExtension<DualShock4Extension>();
         if (ds4Ext != null)
         {
             Vector3 gyroData = ds4Ext.GetGyroscopeValue();
+            //Debug.Log($"<color=purple>Gyroscope Data: {gyroData}</color>");
             return gyroData;
         }
         else
         {
-            Debug.LogWarning("<color=orange>DualShock 4 value is null.</color>");
+            Debug.LogWarning("<color=orange>DualShock 4 extension is NULL</color>");
             return Vector3.zero;
         }
     }
+
 
     private Vector3 HandleDualSenseController(Joystick joystick)
     {
@@ -123,7 +127,7 @@ public class Motion_Controller : MonoBehaviour
     {
         foreach (Joystick joystick in player.controllers.Joysticks)
         {
-            Debug.Log($"<color=yellow>Player: {player.name} Detected Controller: {joystick.name}</color>");
+            //Debug.Log($"<color=yellow>Player: {player.name} Detected Controller: {joystick.name}</color>");
 
             #region Not Working - Switch Controllers
             //if (joystick.name.Contains("Joy-Con (L)"))
@@ -140,10 +144,13 @@ public class Motion_Controller : MonoBehaviour
             //}
             #endregion
 
-            if (joystick.name.Contains("Dualshock 4") || joystick.name.Contains("Wireless Controller"))
+            if (joystick.name.Contains("Sony DualShock 4") || joystick.name.Contains("Wireless Controller"))
             {
+                //Debug.Log("<color=green>Calling HandleDualShock4Controller</color>");
                 Vector3 gyroData = HandleDualShock4Controller(joystick);
-                PivotObjectWithController("Dualshock 4", player, gyroData);
+                //Debug.Log($"<color=cyan>Gyro Data Received: {gyroData}</color>");
+
+                PivotObjectWithController("Sony DualShock 4", player, gyroData);
             }
             else if (joystick.name.Contains("Sony DualSense"))
             {
@@ -180,7 +187,7 @@ public class Motion_Controller : MonoBehaviour
         //Rotate character accordingly
         playerGameObject.transform.RotateAround(pivotPosition, finalRotationAxis, 1.0f); // 1.0f = fixed angle strength
 
-        Debug.Log($"Log Influence: {logRotationVelocity}, Player Counteraction: {gyroInfluence}");
+        //Debug.Log($"Log Influence: {logRotationVelocity}, Player Counteraction: {gyroInfluence}");
     }
 
 
