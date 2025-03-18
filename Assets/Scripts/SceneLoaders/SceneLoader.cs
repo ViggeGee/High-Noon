@@ -8,7 +8,7 @@ public enum Scenes
     StartGameScene,
     MainMenu,
     JoinGameScene,
-
+    Bird,
     //WesternTown,
     //TrainMap,
     TrainHorseMap,
