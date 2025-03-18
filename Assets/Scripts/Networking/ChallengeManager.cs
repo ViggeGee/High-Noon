@@ -16,6 +16,10 @@ public class ChallengeManager : NetworkBehaviour
     [SerializeField] private ChallengeWheel challengeWheel;
 
     public NetworkVariable<ChallengeType> currentChallengeType = new NetworkVariable<ChallengeType>();
+
+    public NetworkVariable<int> player1ProgressionInChallenge = new NetworkVariable<int>(0);
+    public NetworkVariable<int> player2ProgressionInChallenge = new NetworkVariable<int>(0);
+
     private GameObject currentChallengeObject;
 
     public int mistakesDuringChallenge = 0;
@@ -165,6 +169,20 @@ public class ChallengeManager : NetworkBehaviour
         }
 
         UIManager.Instance.StartCountDownServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void UpdatePlayerScoresServerRpc(ulong clientId, int score)
+    {
+        if(clientId == 0)
+        {
+            player1ProgressionInChallenge.Value = score;
+        }
+        else
+        {
+            player2ProgressionInChallenge.Value = score;
+        }
+        
     }
 }
 

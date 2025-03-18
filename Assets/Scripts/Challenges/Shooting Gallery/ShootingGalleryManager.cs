@@ -3,12 +3,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using TMPro;
+using Unity.Netcode;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 
-public class ShootingGalleryManager : MonoBehaviour
+public class ShootingGalleryManager : NetworkEventManager
 {
     public Transform parentButtonList;
     public Transform parentSpawnPointList;
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI opponentScoreText;
 
     private List<Button> targetButtonList;
     private List<Transform> spawnPointList;
@@ -30,8 +34,6 @@ public class ShootingGalleryManager : MonoBehaviour
 
     private void Start()
     {
-
-
         CreateLists();
 
         spawnOccupied = new bool[spawnPointList.Count];
@@ -41,12 +43,11 @@ public class ShootingGalleryManager : MonoBehaviour
             btn.gameObject.SetActive(false);
             btn.onClick.AddListener(() => OnButtonClicked(btn));
         }
-
         foreach (Button btn in targetButtonList)
         {
             StartCoroutine(ButtonRoutine(btn));
         }
-
+       
         foreach (Button btn in targetButtonList)
         {
             clickedFlags[btn] = false;
@@ -64,6 +65,8 @@ public class ShootingGalleryManager : MonoBehaviour
         {
             ShootingGallerySFX.Instance.PlayLeftClick();
         }
+
+        UpdateScoreText();
 
         if (score >= 30f)
         {
@@ -112,6 +115,7 @@ public class ShootingGalleryManager : MonoBehaviour
         return freeIndices[randomChoice];
     }
 
+   
     //-----------AKTIVERINGSFUNKTION FÖR EN KNAPP
     //OBS!!!---BRICKAR NÅGON DETTA FÅR NI LÖSA DET SJÄLVA!-----------
     private IEnumerator ButtonRoutine(Button btn)
@@ -169,24 +173,62 @@ public class ShootingGalleryManager : MonoBehaviour
         }
     }
 
+    int GetButtonIndex(Button targetButton)
+    {
+        int index = 0;
+        foreach (var key in targetButtonList)
+        {
+            if (key == targetButton)
+            {
+                return index;
+            }
+               
+            index++;
+        }
+        return -1; // Not found
+    }
+
+    private Button ReturnButtonFromIndex(int targetIndex)
+    {
+        if (targetIndex < 0 || targetIndex >= clickedFlags.Count)
+            return null; // Index out of bounds
+
+        int index = 0;
+        foreach (var key in targetButtonList)
+        {
+            if (index == targetIndex)
+                return key; // Found the button at the target index
+
+            index++;
+        }
+
+        return null; // If index was not found
+    }
+
     private void OnButtonClicked(Button clickedButton)
     {
         if (!GameManager.Instance.hasGameStarted.Value || !GameManager.Instance.isPlayer1Ready.Value || !GameManager.Instance.isPlayer2Ready.Value || GameManager.Instance.playerDied.Value) return;
 
         if (clickedButton.gameObject.activeSelf && !clickedFlags[clickedButton])
         {
-            clickedFlags[clickedButton] = true; 
+            int index = 0;
+            index = GetButtonIndex(clickedButton);
+
+            clickedFlags[clickedButton] = true;
             ShootingGallerySFX.Instance.PlayHitTarget();
             if (clickedButton.CompareTag("GoodButton"))
             {
                 score += normalAddScore;
+
+                
+                
             }
             else if (clickedButton.CompareTag("BadButton"))
             {
-                score += superAddScore;
+                score += superAddScore;           
                 ShootingGallerySFX.Instance.PlayRandomScream();
             }
-            UpdateScoreText();
+            
 
         }
     }
@@ -212,6 +254,18 @@ public class ShootingGalleryManager : MonoBehaviour
         if (scoreText != null)
         {
             scoreText.text = score.ToString();
+
+            
+            ChallengeManager.Instance.UpdatePlayerScoresServerRpc(NetworkManager.LocalClientId, score);
+
+            if (NetworkManager.LocalClientId == 0)
+            {
+                opponentScoreText.text = ChallengeManager.Instance.player2ProgressionInChallenge.Value.ToString();
+            }
+            else
+            {
+                opponentScoreText.text = ChallengeManager.Instance.player1ProgressionInChallenge.Value.ToString();
+            }
         }
     }
 }

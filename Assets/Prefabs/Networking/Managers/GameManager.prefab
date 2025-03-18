@@ -1411,6 +1411,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Challenge Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 8234014857922087408, guid: dd43f7cc039567e45a89e36effaf9d37, type: 3}
+      propertyPath: gameManagerPrefab
+      value: 
+      objectReference: {fileID: 6361280226579049707}
     m_RemovedComponents:
     - {fileID: -5887685350710154521, guid: dd43f7cc039567e45a89e36effaf9d37, type: 3}
     m_RemovedGameObjects: []
