@@ -13147,7 +13147,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7260838267974934671, guid: bc5ba55182f393b44b40480a94db2824, type: 3}
       propertyPath: isRandomScene
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8579863906499583437, guid: bc5ba55182f393b44b40480a94db2824, type: 3}
       propertyPath: m_LocalPosition.x
@@ -18896,7 +18896,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1c85443962bdb84c983163dda556b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gunShotAudio: {fileID: 1817935823}
+  gunshotAudio: {fileID: 0}
   explosionAudio: {fileID: 1817935822}
   deathAudio: {fileID: 0}
   planks:

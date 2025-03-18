@@ -43,6 +43,7 @@ public class Player : NetworkBehaviour
     {
         if(health <= 0)
         {
+            AudioManager.Instance.PlaySFX("Death");
             SetDiedVariablesServerRpc();
         }
    
@@ -50,7 +51,8 @@ public class Player : NetworkBehaviour
 
     public void TakeDamage(DamageType damageType)
     {  
-        switch(damageType)
+        AudioManager.Instance.PlaySFX("Hit");
+        switch (damageType)
         {
             case DamageType.Head:
 

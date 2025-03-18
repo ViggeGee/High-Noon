@@ -308,6 +308,28 @@ MonoBehaviour:
   musicSource: {fileID: 2083653284113766704}
   sfxSource: {fileID: 2340065628459006661}
   ambientSource: {fileID: 999514657996312848}
+  musicVolume: 0.5
+  sfxVolume: 0.5
+  ambientVolume: 0.5
+  mainMenuMusic: {fileID: 8300000, guid: 8a3592ac3f3af0d4d9c0d57cb9e709d8, type: 3}
+  westernTownMusic: {fileID: 8300000, guid: 8a3592ac3f3af0d4d9c0d57cb9e709d8, type: 3}
+  trainMapMusic: {fileID: 8300000, guid: 8a3592ac3f3af0d4d9c0d57cb9e709d8, type: 3}
+  trainHorseMapMusic: {fileID: 8300000, guid: 8a3592ac3f3af0d4d9c0d57cb9e709d8, type: 3}
+  bisonMusic: {fileID: 8300000, guid: 8a3592ac3f3af0d4d9c0d57cb9e709d8, type: 3}
+  saloonMusic: {fileID: 8300000, guid: 3864dcf9aaa3ec04890652962cd0dc90, type: 3}
+  mountainMusic: {fileID: 8300000, guid: 8a3592ac3f3af0d4d9c0d57cb9e709d8, type: 3}
+  deathSFX: {fileID: 11400000, guid: 6110781aeba181348b23c5cae2d2d2b9, type: 2}
+  hitSFX: {fileID: 11400000, guid: 1b991b449cd1ce640a11f8e496cade2b, type: 2}
+  mainMenuAmbiance: {fileID: 8300000, guid: a72c29d9c94f70345a9ef286435afd7b, type: 3}
+  mainMenuAmbianceVolume: 1
+  westernTownAmbiance: {fileID: 8300000, guid: a72c29d9c94f70345a9ef286435afd7b, type: 3}
+  westernTownAmbianceVolume: 1
+  bisonAmbiance: {fileID: 8300000, guid: 86a7a68deb5895a48aeb949f6c393df9, type: 3}
+  bisonAmbianceVolume: 1
+  trainMapAmbiance: {fileID: 8300000, guid: 8540aa3b01d33464f83a318ec57d6f84, type: 3}
+  trainMapAmbianceVolume: 0.15
+  gunshotLoopSaloon: {fileID: 8300000, guid: aef680539ae2e054e894e351a006e15c, type: 3}
+  gunshotLoopSaloonVolume: 1
   randomSong: {fileID: 11400000, guid: 6b4e58c4936d7b2439517e841c6d2373, type: 2}
 --- !u!1 &6083453866942507955
 GameObject:

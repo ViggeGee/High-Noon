@@ -8,14 +8,13 @@ public enum Scenes
     StartGameScene,
     MainMenu,
     JoinGameScene,
-
+    Bird,
     //WesternTown,
     //TrainMap,
-    //TrainHorseMap,
+    TrainHorseMap,
     //Bison,
     //Saloon,
-    //Mountain,
-    LogBalanceScene
+    //Mountain
     //TrainHorseMap2
 }
 public class SceneLoader : NetworkBehaviour
