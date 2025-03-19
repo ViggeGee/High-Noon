@@ -61,7 +61,7 @@ namespace VA_Controls
                 micDevice = availableMics[0]; // Default to first mic if only one is found
             }
 
-            //Debug.Log($"[{gameObject.name}] Using Microphone: {micDevice}");
+            Debug.Log($"[{gameObject.name}] Using Microphone: {micDevice}");
 
             // Start recording with the assigned microphone
             audioSource.clip = Microphone.Start(micDevice, true, 10, 44100);
@@ -77,7 +77,7 @@ namespace VA_Controls
         void Update()
         {
             DetectYell();
-            //Debug.Log("Mic Loudness: " + CalculateLoudness(sampleData));
+            Debug.Log("Mic Loudness: " + CalculateLoudness(sampleData));
         }
 
 
@@ -88,11 +88,11 @@ namespace VA_Controls
             audioSource.clip.GetData(sampleData, audioSource.timeSamples);
             float loudness = CalculateLoudness(sampleData);
 
-            //Debug.Log("Current Loudness: " + loudness);
+            Debug.Log("Current Loudness: " + loudness);
 
             if (loudness > yellThreshold)
             {
-                //Debug.LogWarning("YELL DETECTED! Triggering MoveBirds()");
+                Debug.LogWarning("YELL DETECTED! Triggering MoveBirds()");
                 MoveBirds(); // Call your action
             }
         }
@@ -111,7 +111,7 @@ namespace VA_Controls
 
         private void OnPhraseRecognized(PhraseRecognizedEventArgs args)
         {
-            //Debug.Log("Recognized: " + args.text);
+            Debug.Log("Recognized: " + args.text);
             if (keywords.ContainsKey(args.text))
             {
                 keywords[args.text].Invoke();

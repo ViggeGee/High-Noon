@@ -19,8 +19,7 @@ public class Motion_Controller : MonoBehaviour
 
     public float rotationAmount = 20;
     public float angle = 10;
-
-
+   
     private void Start()
     {
         player1 = ReInput.players.GetPlayer(0);
@@ -52,17 +51,37 @@ public class Motion_Controller : MonoBehaviour
 
     public void AssignPlayer(GameObject player, int playerIndex)
     {
+        if (player == null)
+        {
+            Debug.LogError($"[AssignPlayer] ERROR: Player {playerIndex} GameObject is NULL!");
+            return;
+        }
+
+        Debug.Log($"[AssignPlayer] Assigning Player {playerIndex}: {player.name}");
+
         if (playerIndex == 1)
         {
             player1GameObject = player;
-            player1PivotAroundGameObject = GameObject.Find("Log");
+            player1PivotAroundGameObject = player;
         }
         else if (playerIndex == 2)
         {
             player2GameObject = player;
-            player2PivotAroundGameObject = GameObject.Find("Log");
+            player2PivotAroundGameObject = player;
         }
+        else
+        {
+            Debug.LogError($"[AssignPlayer] ERROR: Invalid player index {playerIndex}!");
+            return;
+        }
+
+        Debug.Log($"[AssignPlayer] Player 1 GameObject: {player1GameObject?.name}");
+        Debug.Log($"[AssignPlayer] Player 2 GameObject: {player2GameObject?.name}");
     }
+
+
+
+
 
 
     void Update()
@@ -182,19 +201,25 @@ public class Motion_Controller : MonoBehaviour
         GameObject playerGameObject = GetPlayerGameObject(player);
         GameObject pivotAroundGameObject = GetPlayerPivotGameObject(player);
 
-        if (playerGameObject == null || pivotAroundGameObject == null)
+        if (playerGameObject == null)
         {
-            Debug.LogWarning("Pivot or player GameObject is null.");
+            Debug.LogWarning("Player GameObject is null.");
+            return;
+        }
+
+        if (pivotAroundGameObject == null)
+        {
+            Debug.LogWarning("Pivot GameObject is null.");
             return;
         }
 
         Vector3 pivotPosition = pivotAroundGameObject.transform.position;
 
         //Get log's rotation velocity
-        Vector3 logRotationVelocity = pivotAroundGameObject.transform.right * 30 * Time.deltaTime; // Adjust 30 if too strong
+        Vector3 logRotationVelocity = pivotAroundGameObject.transform.forward * 30 * Time.deltaTime; // Adjust 30 if too strong
 
         //Use gyro to counteract log movement
-        Vector3 gyroInfluence = gyroData.z * rotationAmount * Time.deltaTime * pivotAroundGameObject.transform.right;
+        Vector3 gyroInfluence = gyroData.z * rotationAmount * Time.deltaTime * pivotAroundGameObject.transform.forward;
 
         //Combine both forces
         Vector3 finalRotationAxis = logRotationVelocity + gyroInfluence;

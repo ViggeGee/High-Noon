@@ -24,9 +24,14 @@ public class PlayerManager : NetworkBehaviour
         else Destroy(gameObject);
     }
 
+    private void Start()
+    {
+        Debug.Log(FindAnyObjectByType<Motion_Controller>());
+    }
+
     private void Update()
     {
-        if(!hasDeactivatedSpawnPoints)
+        if (!hasDeactivatedSpawnPoints)
         {
             hasDeactivatedSpawnPoints = true;
 
@@ -54,48 +59,51 @@ public class PlayerManager : NetworkBehaviour
             OnPlayersJoined?.Invoke(playersJoined.Value);
         }
 
-        
+
     }
 
     public void HandlePlayerSpawnOnSceneChange()
     {
-       
-        if(IsServer)
+        if (!IsServer) return;
+
+        Motion_Controller motionController = FindAnyObjectByType<Motion_Controller>();
+
+        int currentPlayerIndex = playersJoined.Value + 1; 
+
+        Transform spawnPoint = (currentPlayerIndex == 1) ? player1SpawnPoint.transform : player2SpawnPoint.transform;
+
+        GameObject player = Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
+        player.GetComponent<NetworkObject>().SpawnAsPlayerObject(NetworkManager.Singleton.LocalClientId);
+        player.GetComponent<NetworkObject>().DestroyWithScene = true;
+
+        Debug.Log($"[HandlePlayerSpawn] Spawned Player {currentPlayerIndex} at {spawnPoint.position}");
+
+        // Assign the player to Motion_Controller
+        if (motionController != null)
         {
-            foreach (var client in NetworkManager.Singleton.ConnectedClients)
-            {
-                ulong clientId = client.Key; // ClientId is the dictionary key
-
-                if (playersJoined.Value >= 2) return;
-
-                Transform spawnPoint = (playersJoined.Value == 0) ? player1SpawnPoint.transform : player2SpawnPoint.transform;
-                GameObject player = Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
-                player.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
-                player.GetComponent<NetworkObject>().DestroyWithScene = true;
-
-                playersJoined.Value++;
-
-                // Assign player object to Motion_Controller
-                Motion_Controller motionController = FindFirstObjectByType<Motion_Controller>();
-                if (motionController != null)
-                {
-                    motionController.AssignPlayer(player, playersJoined.Value);
-                }
-
-                OnPlayersJoined?.Invoke(playersJoined.Value);
-            }
+            Debug.Log($"[HandlePlayerSpawn] Assigning Player {currentPlayerIndex} to Motion_Controller");
+            motionController.AssignPlayer(player, currentPlayerIndex);
+        }
+        else
+        {
+            Debug.LogError("[HandlePlayerSpawn] Motion_Controller not found. Player assignment skipped.");
         }
 
-       
+        playersJoined.Value++; 
+        OnPlayersJoined?.Invoke(playersJoined.Value);
     }
+
+
+
+
 
     public void HandlePlayerDisconnect(ulong clientId)
     {
-        if(!IsServer) return;   
+        if (!IsServer) return;
 
         playersJoined.Value--;
     }
 
-    
+
 }
 
