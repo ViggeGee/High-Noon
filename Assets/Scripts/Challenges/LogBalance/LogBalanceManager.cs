@@ -1,29 +1,55 @@
 using System.Collections;
+using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 
-public class LogBalanceManager : MonoBehaviour
+public class LogBalanceManager : NetworkBehaviour
 {
 
     [SerializeField] private Transform log;
     [SerializeField] private float challengeDuration;
     [SerializeField] private int minRotationSpeed;
     [SerializeField] private int maxRotationSpeed;
+
+    [SerializeField] private TextMeshProUGUI tmp_instructions;
+    [SerializeField] private TextMeshProUGUI countdownText;
+    [SerializeField] private Canvas UICanvas;
+
     private bool challengeOver = false;
     private bool challengeCompleted = false;
 
-
-    public bool ChallengeOver { get { return challengeOver; } set { challengeOver = value; } }
+    private NetworkVariable<float> countdown = new NetworkVariable<float>(5); // Store challenge index
+    private bool ChallengeOver { get { return challengeOver; } set { challengeOver = value; } }
 
     RotateLog logBehavior;
     void Start()
     {
         logBehavior = new RotateLog(log);
-        StartCoroutine(RandomLogRotation());
+
+        // Subscribe to countdown changes for all clients
+        countdown.OnValueChanged += OnCountdownChanged;
+
+        if (IsServer)
+        {
+            StartCoroutine(RandomLogRotation());
+        }
     }
+
 
     // Update is called once per frame
     void Update()
     {
+        if (IsServer)
+        {
+            countdown.Value -= Time.deltaTime;
+            countdownText.text = Mathf.CeilToInt(countdown.Value).ToString(); // Rounds up to whole number
+        }
+
+
+
+        if (countdown.Value >= 0) return;
+        UICanvas.gameObject.SetActive(false);
+
         if (challengeOver||challengeCompleted)//either if a player fell or if both players survived
         {
             foreach (var component in FindObjectsByType<PlayerLogSlip>(FindObjectsSortMode.None))
@@ -36,8 +62,18 @@ public class LogBalanceManager : MonoBehaviour
         }
     }
 
+    private void OnCountdownChanged(float oldValue, float newValue)
+    {
+        countdownText.text = Mathf.CeilToInt(newValue).ToString(); // Update UI on all clients
+    }
+
     IEnumerator RandomLogRotation()//Coroutine that rotates the log a random amount of times for the duration of the challenge
     {
+        while (countdown.Value > 0)
+        {
+            yield return null;
+        }
+
         float elapsedTime = 0f;
         while (elapsedTime < challengeDuration)
         {
@@ -61,8 +97,7 @@ public class LogBalanceManager : MonoBehaviour
     public void OnTriggerEnter(Collider other)
     {
         if(other.transform.tag == "Player")
-        {
-            
+        { 
             challengeOver = true;
         }
     }

@@ -29,6 +29,8 @@ TagManager:
   - GoodButton
   - WaterTower
   - ShootingGallery
+  - Spin
+  - Log
   layers:
   - Default
   - TransparentFX

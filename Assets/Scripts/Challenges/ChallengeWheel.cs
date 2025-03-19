@@ -3,7 +3,9 @@ using System.Collections;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static Challenge;
 
 
 public class ChallengeWheel : NetworkBehaviour
@@ -29,10 +31,23 @@ public class ChallengeWheel : NetworkBehaviour
     private NetworkVariable<int> selectedChallengeIndex = new NetworkVariable<int>(-1); // Store challenge index
     private NetworkVariable<float> currentRotation = new NetworkVariable<float>(0);  // Sync rotation angle across the network
 
-    private void Start()
+    private void Awake()
     {
         challengeText.gameObject.SetActive(false);
         parentCanvas = transform.parent.gameObject.GetComponent<Canvas>();
+    }
+    private void Start()
+    {
+       
+        if (IsServer)
+        {
+            if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName(Scenes.LogBalanceScene.ToString()))
+            {
+                ChallengeManager.Instance.currentChallengeType.Value = ChallengeType.LogBalance;
+                CloseChallengeWheelServerRpc();
+                return;
+            }
+        }
 
         // Listen for challenge selection changes
         selectedChallengeIndex.OnValueChanged += (oldValue, newValue) =>
@@ -46,6 +61,7 @@ public class ChallengeWheel : NetworkBehaviour
 
     void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.Space) && IsHost)
         {
             RotateServerRpc();
@@ -147,8 +163,11 @@ public class ChallengeWheel : NetworkBehaviour
         OnChallengeSelected?.Invoke(gameObject);
 
         HideChallengeWheelClientRpc();
-
-
+    }
+    [ServerRpc]
+    private void CloseChallengeWheelServerRpc()
+    {
+        HideChallengeWheelClientRpc();
     }
 }
 

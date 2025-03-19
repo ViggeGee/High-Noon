@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47733ff7d704a364bb4b2b61f074be1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  challengeType: 3
+  challengeType: 2
 --- !u!1 &2778471760164707584
 GameObject:
   m_ObjectHideFlags: 0
@@ -252,7 +252,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47733ff7d704a364bb4b2b61f074be1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  challengeType: 1
+  challengeType: 2
 --- !u!1 &2956022275343045410
 GameObject:
   m_ObjectHideFlags: 0
@@ -702,7 +702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47733ff7d704a364bb4b2b61f074be1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  challengeType: 1
+  challengeType: 2
 --- !u!1 &4661895938850771348
 GameObject:
   m_ObjectHideFlags: 0
@@ -847,7 +847,7 @@ GameObject:
   - component: {fileID: 5719620123138361637}
   - component: {fileID: 3147996628785342515}
   m_Layer: 5
-  m_Name: Button Smash (2)
+  m_Name: Spin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1052,7 +1052,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47733ff7d704a364bb4b2b61f074be1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  challengeType: 3
+  challengeType: 2
 --- !u!1 &9047500324602333786
 GameObject:
   m_ObjectHideFlags: 0

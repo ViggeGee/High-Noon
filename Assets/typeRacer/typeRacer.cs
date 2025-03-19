@@ -22,6 +22,10 @@ public class typeRacer : NetworkBehaviour
     public GameObject letterPrefab;
     private List<GameObject> PrefabLettersInWord = new List<GameObject>();
     private List<char> charLettersInWord = new List<char>();
+
+    private List<GameObject> PrefabLettersInWordOpponent = new List<GameObject>();
+    private List<char> charLettersInWordOpponent = new List<char>();
+
     public InputField playerInput;
 
     public string randomWord = "Not Working";
@@ -87,103 +91,139 @@ public class typeRacer : NetworkBehaviour
 
     public void SpawnWord()
     {
-        ClearWords();
-       
-        float baseLetterSpacing = Screen.width * 0.03f; // Dynamic spacing based on screen width
-        float spaceSpacing = baseLetterSpacing * 1.5f; // Extra spacing for spaces between words
+        ClearWords(); // Ensures no previous words exist
+        ClearWordsOpponent();
+
+        float baseLetterSpacing = Screen.width * 0.03f;
+        float spaceSpacing = baseLetterSpacing * 1.5f;
+        float yOffset = -50f; // Controls vertical offset of duplicate word
 
         List<float> letterPositions = new List<float>();
         float totalWidth = 0f;
 
-        // Calculate total width of the sentence
+        // Calculate total width first
         for (int i = 0; i < randomWord.Length; i++)
         {
-            if (randomWord[i] == ' ')
-            {
-                totalWidth += spaceSpacing;
-            }
-            else
-            {
-                totalWidth += baseLetterSpacing;
-            }
             letterPositions.Add(totalWidth);
+            totalWidth += (randomWord[i] == ' ') ? spaceSpacing : baseLetterSpacing;
         }
 
-        // Center the sentence on the X-axis
+        // Center the sentence
         float startX = spawnPoint.position.x - (totalWidth / 2f);
+        float originalY = spawnPoint.position.y;
+        float duplicateY = originalY + yOffset;
+
+        // Clear existing lists to prevent double spawns
+        PrefabLettersInWord.Clear();
+        charLettersInWord.Clear();
+        PrefabLettersInWordOpponent.Clear();
+        charLettersInWordOpponent.Clear();
+
 
         for (int i = 0; i < randomWord.Length; i++)
         {
-            if (randomWord[i] == ' ')
-            {
-                continue; // Skip rendering actual space characters
-            }
+            if (randomWord[i] == ' ') continue; // Skip spaces
 
-            Vector3 letterPosition = new Vector3(startX + letterPositions[i], spawnPoint.position.y, spawnPoint.position.z);
-            GameObject newLetter = Instantiate(letterPrefab, letterPosition, Quaternion.identity, canvas.transform);
+            char letter = char.ToLower(randomWord[i]);
+            Vector3 originalPosition = new Vector3(startX + letterPositions[i], originalY, spawnPoint.position.z);
+            Vector3 duplicatePosition = new Vector3(startX + letterPositions[i], duplicateY, spawnPoint.position.z);
 
-            char letter = char.ToLower(randomWord[i]); // Ensure lowercase lookup
+            // **Spawn original letter**
+            GameObject newLetter = Instantiate(letterPrefab, originalPosition, Quaternion.identity, canvas.transform);
             if (letterDictionary.ContainsKey(letter))
             {
                 newLetter.GetComponent<Image>().sprite = letterDictionary[letter];
             }
-
             PrefabLettersInWord.Add(newLetter);
             charLettersInWord.Add(letter);
+
+            // **Spawn duplicate letter**
+            GameObject duplicateLetter = Instantiate(letterPrefab, duplicatePosition, Quaternion.identity, canvas.transform);
+            if (letterDictionary.ContainsKey(letter))
+            {
+                duplicateLetter.GetComponent<Image>().sprite = letterDictionary[letter];
+            }
+            PrefabLettersInWordOpponent.Add(duplicateLetter);
+            charLettersInWordOpponent.Add(letter);
+
+            // Ensure duplicate is non-interactable & slightly faded
+            Image duplicateImage = duplicateLetter.GetComponent<Image>();
+            duplicateImage.color = new Color(1f, 1f, 1f, 0.3f); // Set transparency
+            duplicateImage.raycastTarget = false; // Make it non-interactable         
         }
 
+        // **Ensure only one listener is attached**
+        playerInput.onValueChanged.RemoveAllListeners();
         playerInput.onValueChanged.AddListener(delegate { CheckInput(); });
     }
+
     public void PickRandomWord()
     {
-        
-        ClearWords();
+        ClearWords(); // Ensures no previous words exist
+        ClearWordsOpponent();
 
         randomWord = wordsList[Random.Range(0, wordsList.Count)];
 
-        float baseLetterSpacing = Screen.width * 0.03f; // Dynamic spacing based on screen width
-        float spaceSpacing = baseLetterSpacing * 1.5f; // Extra spacing for spaces between words
+        float baseLetterSpacing = Screen.width * 0.03f;
+        float spaceSpacing = baseLetterSpacing * 1.5f;
+        float yOffset = -50f; // Controls vertical offset of duplicate word
 
         List<float> letterPositions = new List<float>();
         float totalWidth = 0f;
 
-        // Calculate total width of the sentence
+        // Calculate total width first
         for (int i = 0; i < randomWord.Length; i++)
         {
-            if (randomWord[i] == ' ')
-            {
-                totalWidth += spaceSpacing;
-            }
-            else
-            {
-                totalWidth += baseLetterSpacing;
-            }
             letterPositions.Add(totalWidth);
+            totalWidth += (randomWord[i] == ' ') ? spaceSpacing : baseLetterSpacing;
         }
 
-        // Center the sentence on the X-axis
+        // Center the sentence
         float startX = spawnPoint.position.x - (totalWidth / 2f);
+        float originalY = spawnPoint.position.y;
+        float duplicateY = originalY + yOffset;
+
+        // Clear existing lists to prevent double spawns
+        PrefabLettersInWord.Clear();
+        charLettersInWord.Clear();
+        PrefabLettersInWordOpponent.Clear();
+        charLettersInWordOpponent.Clear();
+
 
         for (int i = 0; i < randomWord.Length; i++)
         {
-            if (randomWord[i] == ' ')
-            {
-                continue; // Skip rendering actual space characters
-            }
+            if (randomWord[i] == ' ') continue; // Skip spaces
 
-            Vector3 letterPosition = new Vector3(startX + letterPositions[i], spawnPoint.position.y, spawnPoint.position.z);
-            GameObject newLetter = Instantiate(letterPrefab, letterPosition, Quaternion.identity, canvas.transform);
+            char letter = char.ToLower(randomWord[i]);
+            Vector3 originalPosition = new Vector3(startX + letterPositions[i], originalY, spawnPoint.position.z);
+            Vector3 duplicatePosition = new Vector3(startX + letterPositions[i], duplicateY, spawnPoint.position.z);
 
-            char letter = char.ToLower(randomWord[i]); // Ensure lowercase lookup
+            // **Spawn original letter**
+            GameObject newLetter = Instantiate(letterPrefab, originalPosition, Quaternion.identity, canvas.transform);
             if (letterDictionary.ContainsKey(letter))
             {
                 newLetter.GetComponent<Image>().sprite = letterDictionary[letter];
             }
-
             PrefabLettersInWord.Add(newLetter);
             charLettersInWord.Add(letter);
+
+            // **Spawn duplicate letter**
+            GameObject duplicateLetter = Instantiate(letterPrefab, duplicatePosition, Quaternion.identity, canvas.transform);
+            if (letterDictionary.ContainsKey(letter))
+            {
+                duplicateLetter.GetComponent<Image>().sprite = letterDictionary[letter];
+            }
+            PrefabLettersInWordOpponent.Add(duplicateLetter);
+            charLettersInWordOpponent.Add(letter);
+
+            // Ensure duplicate is non-interactable & slightly faded
+            Image duplicateImage = duplicateLetter.GetComponent<Image>();
+            duplicateImage.color = new Color(1f, 1f, 1f, 0.3f); // Set transparency
+            duplicateImage.raycastTarget = false; // Make it non-interactable         
         }
 
+        // **Ensure only one listener is attached**
+        playerInput.onValueChanged.RemoveAllListeners();
         playerInput.onValueChanged.AddListener(delegate { CheckInput(); });
     }
 
@@ -206,10 +246,11 @@ public class typeRacer : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        UpdateOpponentWordColors();
         if (!GameManager.Instance.hasGameStarted.Value || !GameManager.Instance.isPlayer1Ready.Value || !GameManager.Instance.isPlayer2Ready.Value || GameManager.Instance.playerDied.Value) return;
 
         playerInput.Select();
-
+        
         // Check if player finished the word
         if (playerTyped.Replace(" ", "") == randomWord.ToUpper().Replace(" ", ""))
         {
@@ -221,8 +262,13 @@ public class typeRacer : NetworkBehaviour
             {
                 finnishRaceSound.Play();
                 GameManager.Instance.readyToShoot = true;
+                nrCorrectLetters = PrefabLettersInWord.Count;
+                ChallengeManager.Instance.UpdatePlayerScoresServerRpc(NetworkManager.LocalClientId, nrCorrectLetters);
                 ClearWords();
+                ClearWordsOpponent();
                 CinematicManager.Instance.StopCinematic();
+
+             
             }
         }
 
@@ -243,10 +289,26 @@ public class typeRacer : NetworkBehaviour
             PrefabLettersInWord.Clear();
         }
     }
-
+    public void ClearWordsOpponent()
+    {
+        if (charLettersInWordOpponent.Count > 0)
+        {
+            charLettersInWordOpponent.Clear();
+        }
+        if (PrefabLettersInWordOpponent.Count > 0)
+        {
+            for (int i = 0; i < PrefabLettersInWordOpponent.Count; i++)
+            {
+                PrefabLettersInWordOpponent[i].gameObject.SetActive(false);
+            }
+            PrefabLettersInWordOpponent.Clear();
+        }
+    }
+    private int nrCorrectLetters = 1;
     void CheckInput()
     {
-       playerTyped = playerInput.text.ToUpper();
+        playerTyped = playerInput.text.ToUpper();
+        int newCorrectLetters = 0; // Local variable to track correct letters in this input
 
         for (int i = 0; i < PrefabLettersInWord.Count; i++)
         {
@@ -257,12 +319,11 @@ public class typeRacer : NetworkBehaviour
                 if (char.ToLower(playerTyped[i]) == charLettersInWord[i])
                 {
                     letterImage.color = Color.green; // Correct letter
+                    newCorrectLetters++;
                 }
-                else if (char.ToLower(playerTyped[i]) != charLettersInWord[i])
+                else
                 {
                     letterImage.color = Color.red; // Incorrect letter
-                    nrFailLetters++;
-                    
                 }
             }
             else
@@ -270,7 +331,40 @@ public class typeRacer : NetworkBehaviour
                 letterImage.color = Color.white; // Reset color for remaining letters
             }
         }
+
+        // Update nrCorrectLetters only once per input
+        nrCorrectLetters = newCorrectLetters;
+
+        ChallengeManager.Instance.UpdatePlayerScoresServerRpc(NetworkManager.LocalClientId, nrCorrectLetters);
     }
-   
+
+
+    private void UpdateOpponentWordColors()
+    {
+        float opponentProgress = (NetworkManager.LocalClientId == 0)
+            ? ChallengeManager.Instance.player2ProgressionInChallenge.Value
+            : ChallengeManager.Instance.player1ProgressionInChallenge.Value;
+
+        for (int i = 0; i < PrefabLettersInWordOpponent.Count; i++)
+        {
+            // If the character is within the opponent's progress, make it green with 0.5 alpha
+            if (i < opponentProgress)
+            {
+                // Set color to green with alpha = 0.5
+                PrefabLettersInWordOpponent[i].GetComponent<Image>().color = new Color(0f, 1f, 0f, 0.5f); // RGBA: Green with 50% transparency
+                if (opponentProgress >= PrefabLettersInWordOpponent.Count)
+                {
+                    ClearWordsOpponent();
+                }
+            }
+            // Otherwise, make it white with 0.5 alpha
+            else
+            {
+                // Set color to white with alpha = 0.5
+                PrefabLettersInWordOpponent[i].GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.5f); // RGBA: White with 50% transparency
+            }
+        }
+    }
+
 }
 

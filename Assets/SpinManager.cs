@@ -1,17 +1,19 @@
 using System;
 using System.Linq;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SpinManager : MonoBehaviour
+public class SpinManager : NetworkBehaviour
 {
     [SerializeField] private Image[] buttons;
     [SerializeField] private SpinKey[] keys;
     [SerializeField] private Image emptyBar;
-    [SerializeField] private Image loadingBar;
+    [SerializeField] private Image emptyBarOpponent;
+    [SerializeField] private Image fillBar;
+    [SerializeField] private Image fillBarOpponent;
     [SerializeField] private TextMeshProUGUI tmp_instructions;
-    [SerializeField] private int timer = 5;
     [SerializeField] private bool isSinglePlayer;
 
     public int nextButtonIndex = 0;
@@ -20,12 +22,32 @@ public class SpinManager : MonoBehaviour
     void Update()
     {
 
+        if (NetworkManager.LocalClientId == 0)
+        {
+            fillBarOpponent.fillAmount = ChallengeManager.Instance.player2ProgressionInChallenge.Value;
+        }
+        else
+        {
+            fillBarOpponent.fillAmount = ChallengeManager.Instance.player1ProgressionInChallenge.Value;
+        }
+
+        if (fillBarOpponent.fillAmount >= 1)
+        {
+            fillBarOpponent.gameObject.SetActive(false);
+            emptyBarOpponent.gameObject.SetActive(false);
+        }
+
         CanvasSettings();
         SetColor();
 
         if (!challengeCompleted)
         {
+            ChallengeManager.Instance.UpdatePlayerScoresServerRpc(NetworkManager.LocalClientId, fillBar.fillAmount);
             SpinActivated();
+        }
+        else
+        {
+            ChallengeManager.Instance.UpdatePlayerScoresServerRpc(NetworkManager.LocalClientId, 1);
         }
 
     }
@@ -46,7 +68,10 @@ public class SpinManager : MonoBehaviour
         //loadingBar.rectTransform.sizeDelta = new Vector2(barWidth, loadingBar.rectTransform.sizeDelta.y);
         if (challengeCompleted)
         {
-            loadingBar.gameObject.SetActive(false);
+            fillBar.gameObject.SetActive(false);
+            emptyBar.gameObject.SetActive(false);
+            emptyBarOpponent.gameObject.SetActive(false);
+            fillBarOpponent.gameObject.SetActive(false);
             foreach (var item in buttons)
             {
                 item.gameObject.SetActive(false);
@@ -59,7 +84,8 @@ public class SpinManager : MonoBehaviour
         }
         else
         {
-            loadingBar.gameObject.SetActive(true);
+            fillBar.gameObject.SetActive(true);
+            emptyBar.gameObject.SetActive(true);
             foreach (var item in buttons)
             {
                 item.gameObject.SetActive(true);
@@ -70,18 +96,12 @@ public class SpinManager : MonoBehaviour
 
     private void SpinActivated()
     {
-        if (!isSinglePlayer)
-        {
-            if (!GameManager.Instance.hasGameStarted.Value ||
-                !GameManager.Instance.isPlayer1Ready.Value ||
-                !GameManager.Instance.isPlayer2Ready.Value ||
-                GameManager.Instance.playerDied.Value)
-                return;
-        }
+        if (!GameManager.Instance.hasGameStarted.Value || !GameManager.Instance.isPlayer1Ready.Value || !GameManager.Instance.isPlayer2Ready.Value || GameManager.Instance.playerDied.Value) return;
+
 
         bool buttonPressed = keys[nextButtonIndex].IsKeyDown();
 
-        loadingBar.fillAmount -= 0.05f * Time.deltaTime;
+        fillBar.fillAmount -= 0.05f * Time.deltaTime;
 
         if (buttonPressed)
         {
@@ -89,9 +109,9 @@ public class SpinManager : MonoBehaviour
             if (nextButtonIndex >= buttons.Length)
                 nextButtonIndex = 0;
 
-            loadingBar.fillAmount += 1f * Time.deltaTime;
+            fillBar.fillAmount += 2f * Time.deltaTime;
 
-            if (loadingBar.fillAmount >= 1)
+            if (fillBar.fillAmount >= 1)
             {
                 challengeCompleted = true;
                 GameManager.Instance.readyToShoot = true;

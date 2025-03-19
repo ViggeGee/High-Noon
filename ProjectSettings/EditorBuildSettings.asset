@@ -44,7 +44,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Production_Ready/Bison.unity
     guid: e6851e1b2994d914588da632c7dd1e20
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Birds.unity
     guid: b624960289d55e842a4e2751834bc4ef
   - enabled: 1

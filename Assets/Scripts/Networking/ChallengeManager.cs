@@ -16,6 +16,10 @@ public class ChallengeManager : NetworkBehaviour
     [SerializeField] private ChallengeWheel challengeWheel;
 
     public NetworkVariable<ChallengeType> currentChallengeType = new NetworkVariable<ChallengeType>();
+
+    public NetworkVariable<float> player1ProgressionInChallenge = new NetworkVariable<float>(0);
+    public NetworkVariable<float> player2ProgressionInChallenge = new NetworkVariable<float>(0);
+
     private GameObject currentChallengeObject;
 
     public int mistakesDuringChallenge = 0;
@@ -27,7 +31,7 @@ public class ChallengeManager : NetworkBehaviour
     private typeRacer typeRacer;
     private ButtonSmashManager buttonSmash;
     private ShootingGalleryManager shootingGallery;
-
+    private SpinManager spinManager;
     #endregion
 
     private void Awake()
@@ -73,6 +77,13 @@ public class ChallengeManager : NetworkBehaviour
         else if (currentChallengeType.Value == Challenge.ChallengeType.ShootingGallery)
         {
             if (shootingGallery != null)
+            {
+                // NR OF MISTAKES FOR BUTTON SMASH
+            }
+        }
+        else if (currentChallengeType.Value == Challenge.ChallengeType.Spin)
+        {
+            if (spinManager != null)
             {
                 // NR OF MISTAKES FOR BUTTON SMASH
             }
@@ -162,9 +173,34 @@ public class ChallengeManager : NetworkBehaviour
                     StartCoroutine(CinematicManager.Instance.WaitForChallengeInitialization(challenge, currentChallengeType.Value));
                 }
             }
+            else if (currentChallengeType.Value == Challenge.ChallengeType.Spin)
+            {
+
+                if (challenge.CompareTag("Spin"))
+                {
+                    challenge.SetActive(true);
+                    spinManager = challenge.GetComponent<SpinManager>();
+                    StartCoroutine(CinematicManager.Instance.PlayCinematic());
+                    StartCoroutine(CinematicManager.Instance.WaitForChallengeInitialization(challenge, currentChallengeType.Value));
+                }
+            }
         }
 
         UIManager.Instance.StartCountDownServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void UpdatePlayerScoresServerRpc(ulong clientId, float score)
+    {
+        if(clientId == 0)
+        {
+            player1ProgressionInChallenge.Value = score;
+        }
+        else
+        {
+            player2ProgressionInChallenge.Value = score;
+        }
+        
     }
 }
 
