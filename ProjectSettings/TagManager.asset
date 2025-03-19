@@ -31,6 +31,7 @@ TagManager:
   - ShootingGallery
   - Spin
   - Log
+  - LogBase
   layers:
   - Default
   - TransparentFX
