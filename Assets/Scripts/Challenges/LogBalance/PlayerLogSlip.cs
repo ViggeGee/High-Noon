@@ -1,11 +1,28 @@
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
-public class PlayerLogSlip : MonoBehaviour
+public class PlayerLogSlip : NetworkBehaviour
 {
-   [SerializeField] private Transform parentLog;
+   private Transform parentLog;
     private int rotationSpeed = 75;
+
+    private void Start()
+    {
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName(Scenes.LogBalanceScene.ToString())) return;
+        parentLog = GameObject.FindGameObjectWithTag("Log").transform;
+
+        if(IsServer)
+        {
+            transform.SetParent(parentLog);
+        }
+        
+    }
     public void Update()
     {
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName(Scenes.LogBalanceScene.ToString())) return;
+
         CheckTiltAngle();
 
         RotatePlayerWKeyBoard();
@@ -17,7 +34,8 @@ public class PlayerLogSlip : MonoBehaviour
 
         if (angle >= 55f) // Check if angle is close to 20 degrees
         {
-            GetComponent<Rigidbody>().useGravity = true;
+            Player player = GetComponent<Player>();
+            player.TakeDamage(Player.DamageType.Head);
         }
         
     }

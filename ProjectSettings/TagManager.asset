@@ -30,6 +30,7 @@ TagManager:
   - WaterTower
   - ShootingGallery
   - Spin
+  - Log
   layers:
   - Default
   - TransparentFX
