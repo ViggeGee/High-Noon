@@ -25,6 +25,10 @@ TagManager:
   - Chest
   - Head
   - NPC
+  - BadButton
+  - GoodButton
+  - WaterTower
+  - ShootingGallery
   layers:
   - Default
   - TransparentFX

@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/Animations.meta
+guid: f70ec82c9128a5341b1ec82fdc96d5a4
+folderAsset: yes
+========
 guid: 0761fff1b420a8645bab170597c9ecc4
+>>>>>>>> main:Assets/PolygonBowCrossbow/Scenes/Overview.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

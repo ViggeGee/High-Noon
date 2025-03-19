@@ -1219,5 +1219,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player1GameObject: {fileID: 0}
+  player1PivotAroundGameObject: {fileID: 0}
+  twoPlayers: 1
   player2GameObject: {fileID: 0}
-  rotationAmount: 20
+  player2PivotAroundGameObject: {fileID: 0}
+  rotationAmount: 35
+  angle: 10

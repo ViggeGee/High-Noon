@@ -33,6 +33,9 @@ public class GameManager : NetworkBehaviour
 
     public bool readyToShoot { get; set; } = false;
 
+    //public NetworkVariable<bool> readyToShoot = 
+    //    new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
     private NetworkVariable<bool> hasSomeoneWon = new NetworkVariable<bool>(false);
     
     private bool hasStoppedCinematic;

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Rewired;
 using Rewired.ControllerExtensions;
 using System.Collections.Generic;
@@ -90,18 +90,22 @@ public class Motion_Controller : MonoBehaviour
 
     private Vector3 HandleDualShock4Controller(Joystick joystick)
     {
+        //Debug.Log("<color=blue>Inside HandleDualShock4Controller</color>");
+
         var ds4Ext = joystick.GetExtension<DualShock4Extension>();
         if (ds4Ext != null)
         {
             Vector3 gyroData = ds4Ext.GetGyroscopeValue();
+            //Debug.Log($"<color=purple>Gyroscope Data: {gyroData}</color>");
             return gyroData;
         }
         else
         {
-            Debug.LogWarning("<color=orange>DualShock 4 value is null.</color>");
+            Debug.LogWarning("<color=orange>DualShock 4 extension is NULL</color>");
             return Vector3.zero;
         }
     }
+
 
     private Vector3 HandleDualSenseController(Joystick joystick)
     {
@@ -123,7 +127,7 @@ public class Motion_Controller : MonoBehaviour
     {
         foreach (Joystick joystick in player.controllers.Joysticks)
         {
-            Debug.Log($"<color=yellow>Player: {player.name} Detected Controller: {joystick.name}</color>");
+            //Debug.Log($"<color=yellow>Player: {player.name} Detected Controller: {joystick.name}</color>");
 
             #region Not Working - Switch Controllers
             //if (joystick.name.Contains("Joy-Con (L)"))
@@ -140,10 +144,13 @@ public class Motion_Controller : MonoBehaviour
             //}
             #endregion
 
-            if (joystick.name.Contains("Dualshock 4") || joystick.name.Contains("Wireless Controller"))
+            if (joystick.name.Contains("Sony DualShock 4") || joystick.name.Contains("Wireless Controller"))
             {
+                //Debug.Log("<color=green>Calling HandleDualShock4Controller</color>");
                 Vector3 gyroData = HandleDualShock4Controller(joystick);
-                PivotObjectWithController("Dualshock 4", player, gyroData);
+                //Debug.Log($"<color=cyan>Gyro Data Received: {gyroData}</color>");
+
+                PivotObjectWithController("Sony DualShock 4", player, gyroData);
             }
             else if (joystick.name.Contains("Sony DualSense"))
             {
@@ -155,27 +162,36 @@ public class Motion_Controller : MonoBehaviour
 
     private void PivotObjectWithController(string controllerType, Rewired.Player player, Vector3 gyroData)
     {
-        if (gyroData.sqrMagnitude < 0.01f)
-        {
-            return;
-        }
-
-        //gameObject.transform.Rotate(gyroData * Time.deltaTime * 10);
-
-        Vector3 gyroDataX = new Vector3(gyroData.x, 0, 0);
-        Vector3 gyroDataY = new Vector3(0, gyroData.y, 0);
-        Vector3 gyroDataZ = new Vector3(0, 0, gyroData.z);
-
-        //player1GameObject.transform.RotateAround(player1PivotAroundGameObject.transform.position, gyroDataX * Time.deltaTime * rotationAmount, angle);
-        //player1GameObject.transform.RotateAround(player1PivotAroundGameObject.transform.position, gyroDataY * Time.deltaTime * rotationAmount, angle);
-
+        if (gyroData.sqrMagnitude < 0.01f) return; // Ignore small gyro movements
 
         GameObject playerGameObject = GetPlayerGameObject(player);
         GameObject pivotAroundGameObject = GetPlayerPivotGameObject(player);
-        playerGameObject.transform.RotateAround(pivotAroundGameObject.transform.position, rotationAmount * Time.deltaTime * gyroDataX - new Vector3(gyroDataX.x/2, 0,0), angle);
 
-        Debug.Log($"<color=cyan>Player: {player.name} has {controllerType} Gyro: {gyroData}</color>");
+        if (playerGameObject == null || pivotAroundGameObject == null)
+        {
+            Debug.LogWarning("Pivot or player GameObject is null.");
+            return;
+        }
+
+        Vector3 pivotPosition = pivotAroundGameObject.transform.position;
+
+        //Get log's rotation velocity
+        Vector3 logRotationVelocity = pivotAroundGameObject.transform.right * 30 * Time.deltaTime; // Adjust 30 if too strong
+
+        //Use gyro to counteract log movement
+        Vector3 gyroInfluence = gyroData.z * rotationAmount * Time.deltaTime * pivotAroundGameObject.transform.right;
+
+        //Combine both forces
+        Vector3 finalRotationAxis = logRotationVelocity + gyroInfluence;
+
+        //Rotate character accordingly
+        playerGameObject.transform.RotateAround(pivotPosition, finalRotationAxis, 1.0f); // 1.0f = fixed angle strength
+
+        //Debug.Log($"Log Influence: {logRotationVelocity}, Player Counteraction: {gyroInfluence}");
     }
+
+
+
     private void RotateObjectWithController(string controllerType, Rewired.Player player, Vector3 gyroData)
     {
         //gameObject.transform.Rotate(gyroData * Time.deltaTime * 10);

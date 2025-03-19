@@ -26,6 +26,7 @@ public class ChallengeManager : NetworkBehaviour
 
     private typeRacer typeRacer;
     private ButtonSmashManager buttonSmash;
+    private ShootingGalleryManager shootingGallery;
 
     #endregion
 
@@ -69,7 +70,13 @@ public class ChallengeManager : NetworkBehaviour
                 // NR OF MISTAKES FOR BUTTON SMASH
             }
         }
-
+        else if (currentChallengeType.Value == Challenge.ChallengeType.ShootingGallery)
+        {
+            if (shootingGallery != null)
+            {
+                // NR OF MISTAKES FOR BUTTON SMASH
+            }
+        }
         //// Add other mistake references for other challenges here
     }
 
@@ -140,6 +147,17 @@ public class ChallengeManager : NetworkBehaviour
                 {
                     challenge.SetActive(true);
                     buttonSmash = challenge.GetComponent<ButtonSmashManager>();
+                    StartCoroutine(CinematicManager.Instance.PlayCinematic());
+                    StartCoroutine(CinematicManager.Instance.WaitForChallengeInitialization(challenge, currentChallengeType.Value));
+                }
+            }
+            else if (currentChallengeType.Value == Challenge.ChallengeType.ShootingGallery)
+            {
+
+                if (challenge.CompareTag("ShootingGallery"))
+                {
+                    challenge.SetActive(true);
+                    shootingGallery = challenge.GetComponent<ShootingGalleryManager>();
                     StartCoroutine(CinematicManager.Instance.PlayCinematic());
                     StartCoroutine(CinematicManager.Instance.WaitForChallengeInitialization(challenge, currentChallengeType.Value));
                 }

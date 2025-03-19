@@ -7,7 +7,7 @@ public class TrainSmoker : MonoBehaviour
     [SerializeField] float smokeDuration;
     [SerializeField] float minTimeBetweenSmoke;
     [SerializeField] float maxTimeBetweenSmoke;
-    [SerializeField] AudioSource steamWhistle;
+    [SerializeField] AudioClip steamWhistle;
     [SerializeField] ParticleSystem steam;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -25,7 +25,7 @@ public class TrainSmoker : MonoBehaviour
     public void ActivateSmoke()
     {
         steam.startColor = new Color(255, 255, 255, 255);
-        steamWhistle.Play();
+        AudioManager.Instance.PlaySFX(steamWhistle);
         StartCoroutine(DeactivateSmoke());
     }
     public IEnumerator DeactivateSmoke()
