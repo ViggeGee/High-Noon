@@ -17,6 +17,8 @@ namespace VA_Controls
         private const int sampleDataLength = 1024;
         private float[] sampleData;
 
+
+
         void Start()
         {
 #if UNITY_STANDALONE_WIN || UNITY_WSA
@@ -28,6 +30,11 @@ namespace VA_Controls
             keywordRecognizer.Start();
 
             // Yell Detection
+            if (GetComponent<TriggerBird>() == null)
+            {
+                Debug.LogError($"[{gameObject.name}] TriggerBird component NOT FOUND on this GameObject!");
+            }
+
             sampleData = new float[sampleDataLength];
             StartMicrophone();
 #else
@@ -106,7 +113,7 @@ namespace VA_Controls
             }
             float rmsValue = Mathf.Sqrt(sum / data.Length); // Root Mean Square (RMS)
 
-            return rmsValue * 10; // Scale up the loudness
+            return rmsValue * 100; // Scale up the loudness
         }
 
         private void OnPhraseRecognized(PhraseRecognizedEventArgs args)
@@ -120,10 +127,19 @@ namespace VA_Controls
 
         private void MoveBirds()
         {
+            TriggerBird triggerBird = gameObject.GetComponent<TriggerBird>();
 
-            GetComponent<TriggerBird>().triggerBirds = true;
-
+            if (triggerBird != null)
+            {
+                triggerBird.triggerBirds = true;
+                Debug.Log($"[{gameObject.name}] MoveBirds() called! triggerBirds set to TRUE.");
+            }
+            else
+            {
+                Debug.LogError($"[{gameObject.name}] ERROR: TriggerBird component is missing!");
+            }
         }
+
 
         private void OnDestroy()
         {
