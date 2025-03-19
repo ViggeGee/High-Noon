@@ -38,7 +38,7 @@ namespace VA_Controls
         {
             // Get all available microphones
             string[] availableMics = Microphone.devices;
-            //Debug.Log("Available Microphones: " + string.Join(", ", availableMics));
+            Debug.Log("Available Microphones: " + string.Join(", ", availableMics));
 
             if (availableMics.Length == 0)
             {
@@ -88,9 +88,9 @@ namespace VA_Controls
             audioSource.clip.GetData(sampleData, audioSource.timeSamples);
             float loudness = CalculateLoudness(sampleData);
 
-            Debug.Log("Current Loudness: " + loudness);
+            Debug.Log("Current Loudness: " + loudness + "/" + yellThreshold);
 
-            if (loudness > yellThreshold)
+            if (loudness >= yellThreshold)
             {
                 Debug.LogWarning("YELL DETECTED! Triggering MoveBirds()");
                 MoveBirds(); // Call your action
@@ -120,10 +120,9 @@ namespace VA_Controls
 
         private void MoveBirds()
         {
-            if (this != null)
-            {
-                GetComponent<TriggerBird>().triggerBirds = true;
-            }
+
+            GetComponent<TriggerBird>().triggerBirds = true;
+
         }
 
         private void OnDestroy()
