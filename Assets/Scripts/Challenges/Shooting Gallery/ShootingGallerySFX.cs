@@ -7,7 +7,7 @@ public class ShootingGallerySFX : MonoBehaviour
     public AudioSource audioSource; // Reference to the AudioSource component
     public AudioClip airGunShoot; // Sound for left clicking on screen
     public AudioClip hitTarget;
-    public AudioClip[] screams; // Sound for hitting a button
+    public SFX screams; // Sound for hitting a button
 
 
 
@@ -30,7 +30,8 @@ public class ShootingGallerySFX : MonoBehaviour
     {
         if (airGunShoot != null)
         {
-            audioSource.PlayOneShot(airGunShoot);
+            //audioSource.PlayOneShot(airGunShoot);
+            AudioManager.Instance.PlaySFX(airGunShoot);
         }
     }
 
@@ -39,17 +40,19 @@ public class ShootingGallerySFX : MonoBehaviour
     {
         if (hitTarget != null)
         {
-            audioSource.PlayOneShot(hitTarget);
+            //audioSource.PlayOneShot(hitTarget);
+            AudioManager.Instance.PlaySFX(hitTarget);
         }
     }
 
     public void PlayRandomScream()
     {
-        int randomIndex = Random.Range(0, screams.Length);
+        //int randomIndex = Random.Range(0, screams.audioClips.Length);
 
-        if (screams[randomIndex] != null)
-        {
-            audioSource.PlayOneShot(screams[randomIndex]);
-        }
+        //if (screams.audioClips[randomIndex] != null)
+        //{
+            //audioSource.PlayOneShot(screams.audioClips[randomIndex]);
+            AudioManager.Instance.PlaySFX("Scream");
+        //}
     }
 }

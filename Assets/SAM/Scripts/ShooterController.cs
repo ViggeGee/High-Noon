@@ -38,6 +38,9 @@ public class ShooterController : NetworkBehaviour
     private PlayerCamera playerCamera;
 
     private const int MAX_NUMBER_OF_BULLETS = 6;
+
+    [Header("Sound Effects")]
+    [SerializeField] private SFX gunShotSFX;
     public override void OnNetworkSpawn()
     {
         if (IsOwner) // Only apply changes for the owning client
@@ -131,6 +134,7 @@ public class ShooterController : NetworkBehaviour
                 numberOfBulletsFired++;
                 lastBulletShot = Time.time;
 
+                AudioManager.Instance.PlaySFX(gunShotSFX);
                 ShootBulletServerRpc(bulletSpawnPosition.position, aimDir);
 
                 playerCamera.AddRecoil();
