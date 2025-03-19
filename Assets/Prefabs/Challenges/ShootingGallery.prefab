@@ -369,11 +369,7 @@ MonoBehaviour:
   audioSource: {fileID: 8820978284375609026}
   airGunShoot: {fileID: 8300000, guid: d02a1bcfb3b3dea469e20ff37ebea009, type: 3}
   hitTarget: {fileID: 8300000, guid: 1e683d4526cd2504097de6a8f4d6ca7f, type: 3}
-  screams:
-  - {fileID: 8300000, guid: f6a94712b3b45404298e40573a7c4bce, type: 3}
-  - {fileID: 8300000, guid: 1ef2e9d0d7fe07d478a2c049e562f7e5, type: 3}
-  - {fileID: 8300000, guid: 0c6822f0580bf7a4788f1246c9c00182, type: 3}
-  - {fileID: 8300000, guid: 40e971dbdbb1e3f4aa16e24056d8c151, type: 3}
+  screams: {fileID: 11400000, guid: ae76b97bd6e1b274aa87aa6ea9e2fa93, type: 2}
 --- !u!1 &370388904489489514
 GameObject:
   m_ObjectHideFlags: 0
