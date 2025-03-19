@@ -28116,7 +28116,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db8cca55eb7a15342b6a5d5c8f97c055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerRigidbody: {fileID: 1194079628}
   audioSource: {fileID: 1194079635}
   yellThreshold: 0.5
 --- !u!82 &1194079635
@@ -48722,6 +48721,14 @@ PrefabInstance:
     - target: {fileID: 5476122062282863149, guid: ed8eaf8bf21ffa440a3a6a5eb0a4c9aa, type: 3}
       propertyPath: m_Name
       value: AudioManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 9054537068559382428, guid: ed8eaf8bf21ffa440a3a6a5eb0a4c9aa, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 519022007
+      objectReference: {fileID: 0}
+    - target: {fileID: 9054537068559382428, guid: ed8eaf8bf21ffa440a3a6a5eb0a4c9aa, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1267979277
       objectReference: {fileID: 0}
     - target: {fileID: 9202284351996796947, guid: ed8eaf8bf21ffa440a3a6a5eb0a4c9aa, type: 3}
       propertyPath: m_LocalPosition.x

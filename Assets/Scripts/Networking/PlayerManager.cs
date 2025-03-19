@@ -75,6 +75,13 @@ public class PlayerManager : NetworkBehaviour
 
                 playersJoined.Value++;
 
+                // Assign player object to Motion_Controller
+                Motion_Controller motionController = FindFirstObjectByType<Motion_Controller>();
+                if (motionController != null)
+                {
+                    motionController.AssignPlayer(player, playersJoined.Value);
+                }
+
                 OnPlayersJoined?.Invoke(playersJoined.Value);
             }
         }

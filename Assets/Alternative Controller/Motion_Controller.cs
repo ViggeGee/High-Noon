@@ -6,14 +6,14 @@ using System.Collections.Generic;
 public class Motion_Controller : MonoBehaviour
 {
     private Rewired.Player player1;
-    public GameObject player1GameObject;
-    public GameObject player1PivotAroundGameObject;
+    GameObject player1GameObject;
+    GameObject player1PivotAroundGameObject;
 
-    public bool twoPlayers;
+    bool twoPlayers = true;
 
     private Rewired.Player player2;
-    public GameObject player2GameObject;
-    public GameObject player2PivotAroundGameObject;
+    GameObject player2GameObject;
+    GameObject player2PivotAroundGameObject;
 
     private List<Rewired.Player> players = new List<Rewired.Player>();
 
@@ -49,6 +49,21 @@ public class Motion_Controller : MonoBehaviour
         //if (twoPlayers)
         //    Debug.Log("<color=green>Player 2: " + player2.name + "</color>");
     }
+
+    public void AssignPlayer(GameObject player, int playerIndex)
+    {
+        if (playerIndex == 1)
+        {
+            player1GameObject = player;
+            player1PivotAroundGameObject = GameObject.Find("Log");
+        }
+        else if (playerIndex == 2)
+        {
+            player2GameObject = player;
+            player2PivotAroundGameObject = GameObject.Find("Log");
+        }
+    }
+
 
     void Update()
     {
