@@ -10,12 +10,12 @@ public enum Scenes
     JoinGameScene,
 
     //Bird,
-    WesternTown,
-    TrainMap,
-    TrainHorseMap,
-    Bison,
-    Saloon,
-    Mountain,
+    //WesternTown,
+    //TrainMap,
+    //TrainHorseMap,
+    //Bison,
+    //Saloon,
+    //Mountain,
     LogBalanceScene
     //TrainHorseMap2
 }
