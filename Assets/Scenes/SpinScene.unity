@@ -21450,11 +21450,16 @@ MonoBehaviour:
   - {fileID: 1114980666}
   - {fileID: 92340490}
   - {fileID: 477046003}
-  keys: 77000000640000007300000061000000
+  keys:
+  - Keys: 7700000011010000
+  - Keys: 6400000013010000
+  - Keys: 7300000012010000
+  - Keys: 6100000014010000
   emptyBar: {fileID: 1376946950}
   loadingBar: {fileID: 1949738388}
   tmp_instructions: {fileID: 985292171}
   timer: 5
+  isSinglePlayer: 1
   nextButtonIndex: 0
   challengeCompleted: 0
 --- !u!4 &1672186621 stripped

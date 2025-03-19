@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -5,11 +7,12 @@ using UnityEngine.UI;
 public class SpinManager : MonoBehaviour
 {
     [SerializeField] private Image[] buttons;
-    [SerializeField] private KeyCode[] keys;
+    [SerializeField] private SpinKey[] keys;
     [SerializeField] private Image emptyBar;
     [SerializeField] private Image loadingBar;
     [SerializeField] private TextMeshProUGUI tmp_instructions;
     [SerializeField] private int timer = 5;
+    [SerializeField] private bool isSinglePlayer;
 
     public int nextButtonIndex = 0;
     public bool challengeCompleted = false;
@@ -67,13 +70,16 @@ public class SpinManager : MonoBehaviour
 
     private void SpinActivated()
     {
-        if (!GameManager.Instance.hasGameStarted.Value ||
-            !GameManager.Instance.isPlayer1Ready.Value ||
-            !GameManager.Instance.isPlayer2Ready.Value ||
-            GameManager.Instance.playerDied.Value)
-            return;
+        if (!isSinglePlayer)
+        {
+            if (!GameManager.Instance.hasGameStarted.Value ||
+                !GameManager.Instance.isPlayer1Ready.Value ||
+                !GameManager.Instance.isPlayer2Ready.Value ||
+                GameManager.Instance.playerDied.Value)
+                return;
+        }
 
-        bool buttonPressed = Input.GetKeyDown(keys[nextButtonIndex]);
+        bool buttonPressed = keys[nextButtonIndex].IsKeyDown();
 
         loadingBar.fillAmount -= 0.05f * Time.deltaTime;
 
@@ -92,5 +98,24 @@ public class SpinManager : MonoBehaviour
                 CinematicManager.Instance.StopCinematic();
             }
         }
+    }
+}
+
+[Serializable]
+public class SpinKey
+{
+    [SerializeField] private KeyCode[] Keys;
+    public KeyCode[] keys => Keys;
+
+    public bool IsKeyDown()
+    {
+        foreach (var item in Keys)
+        {
+            if (Input.GetKeyDown(item))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
