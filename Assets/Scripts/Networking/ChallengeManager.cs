@@ -17,8 +17,8 @@ public class ChallengeManager : NetworkBehaviour
 
     public NetworkVariable<ChallengeType> currentChallengeType = new NetworkVariable<ChallengeType>();
 
-    public NetworkVariable<int> player1ProgressionInChallenge = new NetworkVariable<int>(0);
-    public NetworkVariable<int> player2ProgressionInChallenge = new NetworkVariable<int>(0);
+    public NetworkVariable<float> player1ProgressionInChallenge = new NetworkVariable<float>(0);
+    public NetworkVariable<float> player2ProgressionInChallenge = new NetworkVariable<float>(0);
 
     private GameObject currentChallengeObject;
 
@@ -172,7 +172,7 @@ public class ChallengeManager : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void UpdatePlayerScoresServerRpc(ulong clientId, int score)
+    public void UpdatePlayerScoresServerRpc(ulong clientId, float score)
     {
         if(clientId == 0)
         {

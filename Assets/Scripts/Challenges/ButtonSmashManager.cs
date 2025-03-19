@@ -2,15 +2,17 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 using StarterAssets;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ButtonSmashManager : MonoBehaviour
+public class ButtonSmashManager : NetworkBehaviour
 {
     [SerializeField] private Image button1;
     [SerializeField] private Image button2;
     [SerializeField] private Image emptyBar;
-    [SerializeField] private Image loadingBar;
+    [SerializeField] private Image fillBar;
+    [SerializeField] private Image fillBarOpponent;
     [SerializeField] private TextMeshProUGUI tmp_instructions;
     [SerializeField] private int timer = 5;
 
@@ -24,12 +26,33 @@ public class ButtonSmashManager : MonoBehaviour
     void Update()
     {
 
+       
+
+        if (NetworkManager.LocalClientId == 0)
+        {
+            fillBarOpponent.fillAmount = ChallengeManager.Instance.player2ProgressionInChallenge.Value;
+        }
+        else
+        {
+            fillBarOpponent.fillAmount = ChallengeManager.Instance.player1ProgressionInChallenge.Value;
+        }
+
+        if (fillBarOpponent.fillAmount >= 1)
+        {
+            fillBarOpponent.gameObject.SetActive(false);
+        }
+
         CanvasSettings();
         SetColor();
 
         if (!challengeCompleted)
         {
+            ChallengeManager.Instance.UpdatePlayerScoresServerRpc(NetworkManager.LocalClientId, fillBar.fillAmount);
             ButtonSmashActivated();
+        }
+        else
+        {
+            ChallengeManager.Instance.UpdatePlayerScoresServerRpc(NetworkManager.LocalClientId, 1);
         }
 
     }
@@ -53,7 +76,8 @@ public class ButtonSmashManager : MonoBehaviour
         //loadingBar.rectTransform.sizeDelta = new Vector2(barWidth, loadingBar.rectTransform.sizeDelta.y);
         if (challengeCompleted)
         {
-            loadingBar.gameObject.SetActive(false);
+            fillBar.gameObject.SetActive(false);
+            fillBarOpponent.gameObject.SetActive(false);
             button1.gameObject.SetActive(false);
             button2.gameObject.SetActive(false);
 
@@ -64,7 +88,7 @@ public class ButtonSmashManager : MonoBehaviour
         }
         else
         {
-            loadingBar.gameObject.SetActive(true);
+            fillBar.gameObject.SetActive(true);
             button1.gameObject.SetActive(true);
             button2.gameObject.SetActive(true);
             tmp_instructions.gameObject.SetActive(true);
@@ -79,7 +103,7 @@ public class ButtonSmashManager : MonoBehaviour
         bool pressedButton1 = Input.GetKeyDown(KeyCode.Q) && nextIsButton1;
         bool pressedButton2 = Input.GetKeyDown(KeyCode.E) && !nextIsButton1;
 
-        loadingBar.fillAmount -= 0.05f * Time.deltaTime;
+        fillBar.fillAmount -= 0.05f * Time.deltaTime;
 
         if (pressedButton1 || pressedButton2)
         {
@@ -87,15 +111,17 @@ public class ButtonSmashManager : MonoBehaviour
             if (pressedButton1)
             {
                 nextIsButton1 = false;
-                loadingBar.fillAmount += 1f * Time.deltaTime;
+                fillBar.fillAmount += 1f * Time.deltaTime;
+
             }
             else
             {
                 nextIsButton1 = true;
-                loadingBar.fillAmount += 1f * Time.deltaTime;
+                fillBar.fillAmount += 1f * Time.deltaTime;
             }
+            
 
-            if (loadingBar.fillAmount >= 1)
+            if (fillBar.fillAmount >= 1)
             {
                 challengeCompleted = true;
                 GameManager.Instance.readyToShoot = true;
