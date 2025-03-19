@@ -21459,7 +21459,7 @@ MonoBehaviour:
   loadingBar: {fileID: 1949738388}
   tmp_instructions: {fileID: 985292171}
   timer: 5
-  isSinglePlayer: 1
+  isSinglePlayer: 0
   nextButtonIndex: 0
   challengeCompleted: 0
 --- !u!4 &1672186621 stripped
