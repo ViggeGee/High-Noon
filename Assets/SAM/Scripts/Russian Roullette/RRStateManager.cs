@@ -6,20 +6,22 @@ public class RRStateManager : MonoBehaviour
     //-----------FSM STATES-------------
     public BaseState currentState;
 
-    IdleState idleState = new();
-    SpinChamberState spinChamberState = new();
-    AimRevolverState aimRevolverState = new();
-    MissBulletState missBulletState = new();
-    HitBulletState hitBulletState = new();
-    DeathState deathState = new();
+    public StartState startState = new ();
+    public IdleState idleState = new();
+    public SpinChamberState spinChamberState = new();
+    public AimRevolverState aimRevolverState = new();
+    public MissBulletState missBulletState = new();
+    public HitBulletState hitBulletState = new();
+    public DeathState deathState = new();
 
     //-----------COMPONENTS---------------
 
-    Animator animator;
+    public Animator animator;
 
     void Start()
     {
         animator = GetComponent<Animator>();
+        currentState = startState;
         currentState.EnterState(this);
 
     }
