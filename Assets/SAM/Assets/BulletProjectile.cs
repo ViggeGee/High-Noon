@@ -44,7 +44,7 @@ public class BulletProjectile : NetworkBehaviour
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            Transform rootParent = GetRootParent(other.transform); // Get the highest parent
+            Transform rootParent = GetRootPlayerParent(other.transform); // Get the highest parent
             NetworkObject networkObject = rootParent.GetComponent<NetworkObject>();
 
             damageType = HitPoint(other.tag);
@@ -73,14 +73,26 @@ public class BulletProjectile : NetworkBehaviour
         }
         DestroyBulletServerRpc();
     }
-    private Transform GetRootParent(Transform child)
+    private Transform GetRootPlayerParent(Transform child)
     {
+        if (child.GetComponent<Player>() != null) 
+        {
+            return child; 
+        }
+
         while (child.parent != null)
         {
-            child = child.parent;
+            if (child.parent.GetComponent<Player>() != null) // Check for Player component
+            {
+                return child.parent; // Return the first parent with the Player component
+            }
+            child = child.parent; // Move up the hierarchy
         }
-        return child; // Returns the top-most parent
+
+        return null; // Return null if no parent with Player component is found
     }
+
+
     private Player.DamageType HitPoint(string tag)
     {
         if(tag == "Head")

@@ -95,7 +95,9 @@ public class ChallengeManager : NetworkBehaviour
     {
         if (!IsServer) return;
 
-        if(PlayerManager.Instance.PlayersJoined == 2 && !hasStartedWheelRotation)
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName(Scenes.LogBalanceScene.ToString())) return;
+
+        if (PlayerManager.Instance.PlayersJoined == 2 && !hasStartedWheelRotation)
         {
             hasStartedWheelRotation = true;
             challengeWheel.RotateServerRpc();
