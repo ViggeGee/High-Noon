@@ -67,7 +67,11 @@ public class SpinManager : MonoBehaviour
 
     private void SpinActivated()
     {
-        if (!GameManager.Instance.hasGameStarted.Value || !GameManager.Instance.isPlayer1Ready.Value || !GameManager.Instance.isPlayer2Ready.Value || GameManager.Instance.playerDied.Value) return;
+        if (!GameManager.Instance.hasGameStarted.Value ||
+            !GameManager.Instance.isPlayer1Ready.Value ||
+            !GameManager.Instance.isPlayer2Ready.Value ||
+            GameManager.Instance.playerDied.Value)
+            return;
 
         bool buttonPressed = Input.GetKeyDown(keys[nextButtonIndex]);
 
