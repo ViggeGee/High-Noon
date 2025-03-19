@@ -346,25 +346,25 @@ public class typeRacer : NetworkBehaviour
             : ChallengeManager.Instance.player1ProgressionInChallenge.Value;
 
         for (int i = 0; i < PrefabLettersInWordOpponent.Count; i++)
-        {          
-            // If the character is within the opponent's progress, make it green
+        {
+            // If the character is within the opponent's progress, make it green with 0.5 alpha
             if (i < opponentProgress)
             {
-                PrefabLettersInWordOpponent[i].GetComponent<Image>().color = Color.green;
+                // Set color to green with alpha = 0.5
+                PrefabLettersInWordOpponent[i].GetComponent<Image>().color = new Color(0f, 1f, 0f, 0.5f); // RGBA: Green with 50% transparency
                 if (opponentProgress >= PrefabLettersInWordOpponent.Count)
                 {
                     ClearWordsOpponent();
                 }
             }
-            // Otherwise, make it white
+            // Otherwise, make it white with 0.5 alpha
             else
             {
-                PrefabLettersInWordOpponent[i].GetComponent<Image>().color = Color.white;
+                // Set color to white with alpha = 0.5
+                PrefabLettersInWordOpponent[i].GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.5f); // RGBA: White with 50% transparency
             }
         }
-       
     }
-
 
 }
 
