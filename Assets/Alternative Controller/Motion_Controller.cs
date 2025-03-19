@@ -45,9 +45,9 @@ public class Motion_Controller : MonoBehaviour
                 players.Add(player2);
         }
 
-        Debug.Log("<color=green>Player 1: " + player1.name + "</color>");
-        if (twoPlayers)
-            Debug.Log("<color=green>Player 2: " + player2.name + "</color>");
+        //Debug.Log("<color=green>Player 1: " + player1.name + "</color>");
+        //if (twoPlayers)
+        //    Debug.Log("<color=green>Player 2: " + player2.name + "</color>");
     }
 
     void Update()
