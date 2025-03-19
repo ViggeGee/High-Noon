@@ -10,8 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd76e64f799b2854ab519111abc5f33a, type: 3}
-  m_Name: RandomSong
+  m_Name: ScreamSounds
   m_EditorClassIdentifier: 
   audioClips:
-  - {fileID: 8300000, guid: 8a3592ac3f3af0d4d9c0d57cb9e709d8, type: 3}
-  - {fileID: 8300000, guid: e05a9447c3988f042865ea22ec6019a1, type: 3}
+  - {fileID: 8300000, guid: f6a94712b3b45404298e40573a7c4bce, type: 3}
+  - {fileID: 8300000, guid: 1ef2e9d0d7fe07d478a2c049e562f7e5, type: 3}
+  - {fileID: 8300000, guid: 0c6822f0580bf7a4788f1246c9c00182, type: 3}
+  - {fileID: 8300000, guid: 40e971dbdbb1e3f4aa16e24056d8c151, type: 3}
+  - {fileID: 8300000, guid: 8cb2cd008a0860440bf6d755dfea2703, type: 3}

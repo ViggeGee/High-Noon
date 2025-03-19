@@ -6089,6 +6089,7 @@ MonoBehaviour:
   shrinkSpeed: 6
   normalSize: 100
   expandedSize: 500
+  gunShotSFX: {fileID: 11400000, guid: 7ed27542c3a06ef40bfe02d81ece6949, type: 2}
 --- !u!114 &1923011903233108162
 MonoBehaviour:
   m_ObjectHideFlags: 0

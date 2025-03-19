@@ -268,6 +268,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9202284351996796947}
   - component: {fileID: 8172801146582128269}
+  - component: {fileID: 9054537068559382428}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -308,8 +309,9 @@ MonoBehaviour:
   musicSource: {fileID: 2083653284113766704}
   sfxSource: {fileID: 2340065628459006661}
   ambientSource: {fileID: 999514657996312848}
+  masterVolume: 0.5
   musicVolume: 0.5
-  sfxVolume: 0.5
+  sfxVolume: 1
   ambientVolume: 0.5
   mainMenuMusic: {fileID: 8300000, guid: 8a3592ac3f3af0d4d9c0d57cb9e709d8, type: 3}
   westernTownMusic: {fileID: 8300000, guid: 8a3592ac3f3af0d4d9c0d57cb9e709d8, type: 3}
@@ -320,6 +322,7 @@ MonoBehaviour:
   mountainMusic: {fileID: 8300000, guid: 8a3592ac3f3af0d4d9c0d57cb9e709d8, type: 3}
   deathSFX: {fileID: 11400000, guid: 6110781aeba181348b23c5cae2d2d2b9, type: 2}
   hitSFX: {fileID: 11400000, guid: 1b991b449cd1ce640a11f8e496cade2b, type: 2}
+  screamSFX: {fileID: 11400000, guid: ae76b97bd6e1b274aa87aa6ea9e2fa93, type: 2}
   mainMenuAmbiance: {fileID: 8300000, guid: a72c29d9c94f70345a9ef286435afd7b, type: 3}
   mainMenuAmbianceVolume: 1
   westernTownAmbiance: {fileID: 8300000, guid: a72c29d9c94f70345a9ef286435afd7b, type: 3}
@@ -331,6 +334,31 @@ MonoBehaviour:
   gunshotLoopSaloon: {fileID: 8300000, guid: aef680539ae2e054e894e351a006e15c, type: 3}
   gunshotLoopSaloonVolume: 1
   randomSong: {fileID: 11400000, guid: 6b4e58c4936d7b2439517e841c6d2373, type: 2}
+--- !u!114 &9054537068559382428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5476122062282863149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1267979277
+  InScenePlacedSourceGlobalObjectIdHash: 4016562666
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &6083453866942507955
 GameObject:
   m_ObjectHideFlags: 0
