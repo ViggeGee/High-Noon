@@ -1006,9 +1006,14 @@ MonoBehaviour:
   - {fileID: 5399071422460463905}
   - {fileID: 3282994390481750343}
   - {fileID: 6989536732645148843}
+  - {fileID: 9007924251091469222}
   challengeWheelCanvas: {fileID: 807678640972736859}
   challengeWheel: {fileID: 9187142474011012843}
   currentChallengeType:
+    m_InternalValue: 0
+  player1ProgressionInChallenge:
+    m_InternalValue: 0
+  player2ProgressionInChallenge:
     m_InternalValue: 0
   mistakesDuringChallenge: 0
 --- !u!1 &6908256340603542493
@@ -1403,6 +1408,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: -157
       objectReference: {fileID: 0}
+    - target: {fileID: 6798498098929049587, guid: dd43f7cc039567e45a89e36effaf9d37, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7617513019807012724, guid: dd43f7cc039567e45a89e36effaf9d37, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -1450,6 +1459,11 @@ RectTransform:
 --- !u!1 &6989536732645148843 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4874125980611990782, guid: dd43f7cc039567e45a89e36effaf9d37, type: 3}
+  m_PrefabInstance: {fileID: 2547785462449871957}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &9007924251091469222 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6798498098929049587, guid: dd43f7cc039567e45a89e36effaf9d37, type: 3}
   m_PrefabInstance: {fileID: 2547785462449871957}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3564826187237451649

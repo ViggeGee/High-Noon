@@ -11,6 +11,7 @@ public class ButtonSmashManager : NetworkBehaviour
     [SerializeField] private Image button1;
     [SerializeField] private Image button2;
     [SerializeField] private Image emptyBar;
+    [SerializeField] private Image emptyBarOpponent;
     [SerializeField] private Image fillBar;
     [SerializeField] private Image fillBarOpponent;
     [SerializeField] private TextMeshProUGUI tmp_instructions;
@@ -40,6 +41,7 @@ public class ButtonSmashManager : NetworkBehaviour
         if (fillBarOpponent.fillAmount >= 1)
         {
             fillBarOpponent.gameObject.SetActive(false);
+            emptyBarOpponent.gameObject.SetActive(false);
         }
 
         CanvasSettings();
@@ -78,6 +80,8 @@ public class ButtonSmashManager : NetworkBehaviour
         {
             fillBar.gameObject.SetActive(false);
             fillBarOpponent.gameObject.SetActive(false);
+            emptyBar.gameObject.SetActive(false);
+            emptyBarOpponent.gameObject.SetActive(false);
             button1.gameObject.SetActive(false);
             button2.gameObject.SetActive(false);
 

@@ -847,7 +847,7 @@ GameObject:
   - component: {fileID: 5719620123138361637}
   - component: {fileID: 3147996628785342515}
   m_Layer: 5
-  m_Name: Button Smash (2)
+  m_Name: Spin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

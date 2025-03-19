@@ -81,6 +81,12 @@ public class CinematicManager : MonoBehaviour
             ShootingGalleryManager shootingGallery = challenge.GetComponentInChildren<ShootingGalleryManager>();
             GameManager.Instance.UpdateCurrentGameStateServerRpc(GameState.Playing);
         }
+        else if (ChallengeManager.Instance.currentChallengeType.Value == Challenge.ChallengeType.Spin)
+        {
+            yield return new WaitUntil(() => challenge.GetComponentInChildren<SpinManager>() != null);
+            SpinManager spin = challenge.GetComponentInChildren<SpinManager>();
+            GameManager.Instance.UpdateCurrentGameStateServerRpc(GameState.Playing);
+        }
     }
 }
 
