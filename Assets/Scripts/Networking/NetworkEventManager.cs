@@ -72,7 +72,7 @@ public class NetworkEventManager : NetworkBehaviour
                     SpawnGameManager();
                     PlayerManager.Instance.HandlePlayerSpawnOnSceneChange();
 
-                    if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName(Scenes.LogBalanceScene.ToString()))
+                    if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("LogBalanceScene"))
                     {
                         GameManager.Instance.UpdateCurrentGameStateServerRpc(GameState.ChoosingChallenge);
                     }

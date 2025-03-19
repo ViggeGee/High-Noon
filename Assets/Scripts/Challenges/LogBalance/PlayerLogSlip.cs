@@ -13,7 +13,7 @@ public class PlayerLogSlip : NetworkBehaviour
 
     private void Start()
     {
-        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName(Scenes.LogBalanceScene.ToString())) return;
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("LogBalanceScene")) return;
         parentLog = GameObject.FindGameObjectWithTag("LogBase").transform;
 
         log = GameObject.FindGameObjectWithTag("Log").transform;
@@ -27,7 +27,7 @@ public class PlayerLogSlip : NetworkBehaviour
     }
     public void Update()
     {
-        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName(Scenes.LogBalanceScene.ToString())) return;
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("LogBalanceScene")) return;
 
        // if (!GameManager.Instance.hasGameStarted.Value || !GameManager.Instance.isPlayer1Ready.Value || !GameManager.Instance.isPlayer2Ready.Value || GameManager.Instance.playerDied.Value) return;
 

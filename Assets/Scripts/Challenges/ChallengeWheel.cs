@@ -41,7 +41,7 @@ public class ChallengeWheel : NetworkBehaviour
        
         if (IsServer)
         {
-            if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName(Scenes.LogBalanceScene.ToString()))
+            if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("LogBalanceScene"))
             {
                 ChallengeManager.Instance.currentChallengeType.Value = ChallengeType.LogBalance;
                 CloseChallengeWheelServerRpc();

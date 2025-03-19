@@ -134,7 +134,11 @@ public class ShooterController : NetworkBehaviour
                 numberOfBulletsFired++;
                 lastBulletShot = Time.time;
 
-                AudioManager.Instance.PlaySFX(gunShotSFX);
+                if(AudioManager.Instance != null && gunShotSFX != null)
+                {
+                    AudioManager.Instance.PlaySFX(gunShotSFX);
+                }
+               
                 ShootBulletServerRpc(bulletSpawnPosition.position, aimDir);
 
                 playerCamera.AddRecoil();
