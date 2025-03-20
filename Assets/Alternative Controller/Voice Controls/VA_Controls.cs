@@ -10,93 +10,139 @@ namespace VA_Controls
         private KeywordRecognizer keywordRecognizer;
         private Dictionary<string, System.Action> keywords = new Dictionary<string, System.Action>();
 
-        public Rigidbody playerRigidbody;
-        public float jumpForce = 5f;
         private bool isGrounded = true;
+
+        public AudioSource audioSource;
+        public float yellThreshold = 0.01f; // Adjust sensitivity
+        private const int sampleDataLength = 1024;
+        private float[] sampleData;
+
+
 
         void Start()
         {
-#if UNITY_STANDALONE_WIN || UNITY_WSA
-            // Define keyword and corresponding action for jump only
-            keywords.Add("jump", PerformJump);
-            keywords.Add("Move Forward", PerformMoveForward);
-            keywords.Add("Move Backward", PerformMoveBackward);
-            keywords.Add("Move Left", PerformMoveLeft);
-            keywords.Add("Move Right", PerformMoveRight);
+//#if UNITY_STANDALONE_WIN || UNITY_WSA
+//            //Voice Recognition Detection
+//            keywords.Add("MOVE", MoveBirds);
 
-            // Initialize the KeywordRecognizer with the keywords
-            keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
-            keywordRecognizer.OnPhraseRecognized += OnPhraseRecognized;
-            keywordRecognizer.Start();
-#else
-            Debug.LogWarning("Speech recognition is not supported on this platform.");
-#endif
+//            keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
+//            keywordRecognizer.OnPhraseRecognized += OnPhraseRecognized;
+//            keywordRecognizer.Start();
+
+//            // Yell Detection
+//            if (GetComponent<TriggerBird>() == null)
+//            {
+//                Debug.LogError($"[{gameObject.name}] TriggerBird component NOT FOUND on this GameObject!");
+//            }
+
+//            sampleData = new float[sampleDataLength];
+//            StartMicrophone();
+//#else
+//            Debug.LogWarning("Speech recognition is not supported on this platform.");
+//#endif
+        }
+        private void StartMicrophone()
+        {
+            // Get all available microphones
+            string[] availableMics = Microphone.devices;
+            Debug.Log("Available Microphones: " + string.Join(", ", availableMics));
+
+            if (availableMics.Length == 0)
+            {
+                Debug.LogError("No microphones detected!");
+                return;
+            }
+
+            // Assign a microphone based on player name or other unique identifier
+            string micDevice;
+            if (gameObject.name == "Player1" && availableMics.Length > 0)
+            {
+                micDevice = availableMics[0]; // Assign first mic to Player 1
+            }
+            else if (gameObject.name == "Player2" && availableMics.Length > 1)
+            {
+                micDevice = availableMics[1]; // Assign second mic to Player 2
+            }
+            else
+            {
+                micDevice = availableMics[0]; // Default to first mic if only one is found
+            }
+
+            Debug.Log($"[{gameObject.name}] Using Microphone: {micDevice}");
+
+            // Start recording with the assigned microphone
+            audioSource.clip = Microphone.Start(micDevice, true, 10, 44100);
+            audioSource.loop = true;
+            audioSource.mute = true;
+
+            while (!(Microphone.GetPosition(micDevice) > 0)) { } // Wait for mic to start
+            audioSource.Play();
+        }
+
+
+
+        void Update()
+        {
+            if (sampleData == null) return;
+
+            DetectYell();
+            Debug.Log("Mic Loudness: " + CalculateLoudness(sampleData));
+        }
+
+
+        private void DetectYell()
+        {
+
+            if (audioSource == null || audioSource.clip == null) return;
+
+            audioSource.clip.GetData(sampleData, audioSource.timeSamples);
+            float loudness = CalculateLoudness(sampleData);
+
+            Debug.Log("Current Loudness: " + loudness + "/" + yellThreshold);
+
+            if (loudness >= yellThreshold)
+            {
+                Debug.LogWarning("YELL DETECTED! Triggering MoveBirds()");
+                MoveBirds(); // Call your action
+            }
+        }
+
+        private float CalculateLoudness(float[] data)
+        {
+            float sum = 0f;
+            for (int i = 0; i < data.Length; i++)
+            {
+                sum += data[i] * data[i]; // Square the sample values
+            }
+            float rmsValue = Mathf.Sqrt(sum / data.Length); // Root Mean Square (RMS)
+
+            return rmsValue * 100; // Scale up the loudness
         }
 
         private void OnPhraseRecognized(PhraseRecognizedEventArgs args)
         {
-            Debug.Log("Recognized: " + args.text);
-            if (keywords.ContainsKey(args.text))
-            {
-                keywords[args.text].Invoke();
-            }
+            //Debug.Log("Recognized: " + args.text);
+            //if (keywords.ContainsKey(args.text))
+            //{
+            //    keywords[args.text].Invoke();
+            //}
         }
 
-        private void PerformJump()
+        private void MoveBirds()
         {
-            if (isGrounded && playerRigidbody != null)
+            TriggerBird triggerBird = gameObject.GetComponent<TriggerBird>();
+
+            if (triggerBird != null)
             {
-                playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-                Debug.Log("Jump action executed.");
-                isGrounded = false;
+                triggerBird.triggerBirds = true;
+                Debug.Log($"[{gameObject.name}] MoveBirds() called! triggerBirds set to TRUE.");
+            }
+            else
+            {
+                Debug.LogError($"[{gameObject.name}] ERROR: TriggerBird component is missing!");
             }
         }
 
-        private void PerformMoveForward()
-        {
-
-            if (playerRigidbody != null)
-            {
-                playerRigidbody.AddForce(Vector3.forward * 2, ForceMode.Impulse);
-                Debug.Log("Move Forward action executed.");
-                
-            }
-        }
-
-        private void PerformMoveBackward()
-        {
-            if (playerRigidbody != null)
-            {
-                playerRigidbody.AddForce(Vector3.back * 2, ForceMode.Impulse);
-                Debug.Log("Move Backward action executed.");
-            }
-        }
-
-        private void PerformMoveLeft()
-        {
-            if (playerRigidbody != null)
-            {
-                playerRigidbody.AddForce(Vector3.left * 2, ForceMode.Impulse);
-                Debug.Log("Move Left action executed.");
-            }
-        }
-
-        private void PerformMoveRight()
-        {
-            if (playerRigidbody != null)
-            {
-                playerRigidbody.AddForce(Vector3.right * 2, ForceMode.Impulse);
-                Debug.Log("Move Right action executed.");
-            }
-        }
-
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (collision.gameObject.CompareTag("Ground"))
-            {
-                isGrounded = true;
-            }
-        }
 
         private void OnDestroy()
         {

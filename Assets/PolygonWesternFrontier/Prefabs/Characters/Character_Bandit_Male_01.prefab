@@ -741,7 +741,7 @@ GameObject:
   - component: {fileID: 95273092081178644}
   m_Layer: 0
   m_Name: Character_Bandit_Male_01
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

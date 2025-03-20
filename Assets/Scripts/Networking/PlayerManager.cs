@@ -2,6 +2,7 @@ using System;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerManager : NetworkBehaviour
 {
@@ -64,6 +65,8 @@ public class PlayerManager : NetworkBehaviour
         {
             foreach (var client in NetworkManager.Singleton.ConnectedClients)
             {
+                Motion_Controller motionController = FindAnyObjectByType<Motion_Controller>();
+                
                 ulong clientId = client.Key; // ClientId is the dictionary key
 
                 if (playersJoined.Value >= 2) return;
@@ -73,6 +76,21 @@ public class PlayerManager : NetworkBehaviour
                 player.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
                 player.GetComponent<NetworkObject>().DestroyWithScene = true;
 
+                if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("LogBalanceScene"))
+                {
+                    if (motionController != null)
+                    {
+                        Debug.Log($"[HandlePlayerSpawn] Assigning Player {(int)clientId + 1} to Motion_Controller");
+                        motionController.AssignPlayer(player, (int)clientId + 1);
+                    }
+                    else
+                    {
+                        Debug.LogError("[HandlePlayerSpawn] Motion_Controller not found. Player assignment skipped.");
+                    }
+                }
+                
+
+
                 playersJoined.Value++;
 
                 OnPlayersJoined?.Invoke(playersJoined.Value);
@@ -81,6 +99,37 @@ public class PlayerManager : NetworkBehaviour
 
        
     }
+
+    //public void HandlePlayerSpawnOnSceneChange()
+    //{
+    //    if (!IsServer) return;
+
+    //    //Motion_Controller motionController = FindAnyObjectByType<Motion_Controller>();
+
+    //    int currentPlayerIndex = playersJoined.Value + 1;
+
+    //    Transform spawnPoint = (currentPlayerIndex == 1) ? player1SpawnPoint.transform : player2SpawnPoint.transform;
+
+    //    GameObject player = Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
+    //    player.GetComponent<NetworkObject>().SpawnAsPlayerObject(NetworkManager.Singleton.LocalClientId);
+    //    player.GetComponent<NetworkObject>().DestroyWithScene = true;
+
+    //    Debug.Log($"[HandlePlayerSpawn] Spawned Player {currentPlayerIndex} at {spawnPoint.position}");
+
+    //    //// Assign the player to Motion_Controller
+    //    //if (motionController != null)
+    //    //{
+    //    //    Debug.Log($"[HandlePlayerSpawn] Assigning Player {currentPlayerIndex} to Motion_Controller");
+    //    //    motionController.AssignPlayer(player, currentPlayerIndex);
+    //    //}
+    //    //else
+    //    //{
+    //    //    Debug.LogError("[HandlePlayerSpawn] Motion_Controller not found. Player assignment skipped.");
+    //    //}
+
+    //    playersJoined.Value++;
+    //    OnPlayersJoined?.Invoke(playersJoined.Value);
+    //}
 
     public void HandlePlayerDisconnect(ulong clientId)
     {
