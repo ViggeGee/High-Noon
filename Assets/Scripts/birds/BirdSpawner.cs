@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Netcode;
 using System.Collections;
+using Rewired;
 
 public class BirdSpawner : NetworkBehaviour
 {
@@ -24,6 +25,7 @@ public class BirdSpawner : NetworkBehaviour
             Vector3 spawnPosition = transform.position + Random.insideUnitSphere * 2f;
             GameObject bird = Instantiate(birdPrefab, spawnPosition, Quaternion.identity);
             bird.GetComponent<NetworkObject>().Spawn();
+            bird.GetComponent<NetworkObject>().DestroyWithScene = true;
         }
     }
 }

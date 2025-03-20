@@ -22,10 +22,10 @@ public class BulletProjectile : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (IsServer) // Only the server controls movement
-        {
-            bulletRigidbody.linearVelocity = transform.forward * speed;
-        }
+        //if (IsServer) // Only the server controls movement
+        //{
+        //    bulletRigidbody.linearVelocity = transform.forward * speed;
+        //}
     }
 
     private void FixedUpdate()
