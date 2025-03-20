@@ -1,20 +1,24 @@
 using UnityEngine;
 using Unity.Netcode;
+using System.Collections;
 
 public class BirdSpawner : NetworkBehaviour
 {
     public GameObject birdPrefab;
     public int birdCount = 10;
-    private void Start()
-    {
-        
-    }
+    float spawnDelay = 2.5f;
+
     public override void OnNetworkSpawn()
     {
         if (!IsServer) return;
+        StartCoroutine(DelayedSpawn());
+    }
 
-        Debug.Log("BirdSpawner: Spawning birds...");
-
+    private IEnumerator DelayedSpawn()
+    {
+       // yield return new WaitUntil(() => NetworkManager.Singleton.ConnectedClients.Count >= 2);
+        yield return new WaitForSeconds(spawnDelay);
+      
         for (int i = 0; i < birdCount; i++)
         {
             Vector3 spawnPosition = transform.position + Random.insideUnitSphere * 2f;

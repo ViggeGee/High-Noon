@@ -21,25 +21,25 @@ namespace VA_Controls
 
         void Start()
         {
-//#if UNITY_STANDALONE_WIN || UNITY_WSA
-//            //Voice Recognition Detection
-//            keywords.Add("MOVE", MoveBirds);
+#if UNITY_STANDALONE_WIN || UNITY_WSA
+            //Voice Recognition Detection
+            keywords.Add("MOVE", MoveBirds);
 
-//            keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
-//            keywordRecognizer.OnPhraseRecognized += OnPhraseRecognized;
-//            keywordRecognizer.Start();
+            keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
+            keywordRecognizer.OnPhraseRecognized += OnPhraseRecognized;
+            keywordRecognizer.Start();
 
-//            // Yell Detection
-//            if (GetComponent<TriggerBird>() == null)
-//            {
-//                Debug.LogError($"[{gameObject.name}] TriggerBird component NOT FOUND on this GameObject!");
-//            }
+            // Yell Detection
+            if (GetComponent<TriggerBird>() == null)
+            {
+                Debug.LogError($"[{gameObject.name}] TriggerBird component NOT FOUND on this GameObject!");
+            }
 
-//            sampleData = new float[sampleDataLength];
-//            StartMicrophone();
-//#else
-//            Debug.LogWarning("Speech recognition is not supported on this platform.");
-//#endif
+            sampleData = new float[sampleDataLength];
+            StartMicrophone();
+#else
+            Debug.LogWarning("Speech recognition is not supported on this platform.");
+#endif
         }
         private void StartMicrophone()
         {
@@ -83,8 +83,6 @@ namespace VA_Controls
 
         void Update()
         {
-            if (sampleData == null) return;
-
             DetectYell();
             Debug.Log("Mic Loudness: " + CalculateLoudness(sampleData));
         }
@@ -92,8 +90,7 @@ namespace VA_Controls
 
         private void DetectYell()
         {
-
-            if (audioSource == null || audioSource.clip == null) return;
+            if (audioSource.clip == null) return;
 
             audioSource.clip.GetData(sampleData, audioSource.timeSamples);
             float loudness = CalculateLoudness(sampleData);
@@ -121,11 +118,11 @@ namespace VA_Controls
 
         private void OnPhraseRecognized(PhraseRecognizedEventArgs args)
         {
-            //Debug.Log("Recognized: " + args.text);
-            //if (keywords.ContainsKey(args.text))
-            //{
-            //    keywords[args.text].Invoke();
-            //}
+            Debug.Log("Recognized: " + args.text);
+            if (keywords.ContainsKey(args.text))
+            {
+                keywords[args.text].Invoke();
+            }
         }
 
         private void MoveBirds()
