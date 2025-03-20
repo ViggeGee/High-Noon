@@ -7,7 +7,7 @@ public class BirdSpawner : NetworkBehaviour
 {
     public GameObject birdPrefab;
     public int birdCount = 10;
-    float spawnDelay = 2.5f;
+    float spawnDelay = 10.0f;
 
     public override void OnNetworkSpawn()
     {
